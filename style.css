@@ -1,0 +1,864 @@
+/* =========================
+   GENERAL PAGE
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f5eee6;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 30px;
+}
+
+h1 {
+    color: #4b2e1f;
+    font-size: 40px;
+}
+
+p {
+    color: #6b5143;
+    font-size: 20px;
+}
+
+
+/* =========================
+   GENERAL BUTTON
+========================= */
+
+button {
+    background-color: #4b2e1f;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+
+/* =========================
+   MENU
+========================= */
+
+#menu {
+    max-width: 800px;
+    margin: 40px auto;
+}
+
+#menu > h2 {
+    color: #4b2e1f;
+    font-size: 28px;
+    margin-top: 50px;
+}
+
+.menu-item {
+    background-color: #fffaf5;
+    width: 90%;
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+}
+
+.menu-item h3 {
+    color: #4b2e1f;
+    font-size: 21px;
+    margin-bottom: 10px;
+}
+
+.menu-item p {
+    font-size: 16px;
+    margin: 5px;
+}
+
+
+/* =========================
+   PRODUCT POPUP OVERLAY
+========================= */
+
+#productOverlay {
+    display: none;
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: rgba(0, 0, 0, 0.60);
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    z-index: 1000;
+}
+
+
+/* =========================
+   PRODUCT POPUP
+========================= */
+
+#productPopup {
+    position: relative;
+
+    width: 100%;
+    max-width: 460px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background-color: #f5eee6;
+
+    border-radius: 18px;
+
+    padding: 30px;
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+
+    text-align: center;
+}
+
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+
+#closePopup {
+    position: absolute;
+
+    top: 12px;
+    right: 15px;
+
+    background: transparent;
+
+    color: #4b2e1f;
+
+    font-size: 28px;
+
+    padding: 5px 10px;
+
+    border-radius: 50%;
+}
+
+#closePopup:hover {
+    background-color: rgba(75, 46, 31, 0.1);
+
+    opacity: 1;
+}
+
+
+/* =========================
+   PRODUCT NAME
+========================= */
+
+#selectedProduct {
+    color: #4b2e1f;
+
+    font-size: 28px;
+
+    margin-top: 10px;
+
+    margin-bottom: 5px;
+}
+
+#selectedCategory {
+    color: #6b5143;
+
+    font-size: 17px;
+
+    margin-top: 0;
+}
+
+
+/* =========================
+   POPUP HEADINGS
+========================= */
+
+#productPopup h3 {
+    color: #4b2e1f;
+
+    font-size: 18px;
+
+    margin-top: 25px;
+
+    margin-bottom: 12px;
+}
+
+
+/* =========================
+   SIZE BUTTONS
+========================= */
+
+#sizeButtons {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+#sizeButtons button {
+    min-width: 90px;
+
+    padding: 13px 20px;
+}
+
+.selected-size {
+    outline: 3px solid #8b4513;
+
+    outline-offset: 2px;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   ADD-ONS
+========================= */
+
+#espressoOption,
+#matchaOption,
+#chocolateOption {
+    margin-top: 15px;
+}
+
+#espressoButton,
+#matchaButton,
+#chocolateButton {
+    width: 100%;
+
+    max-width: 350px;
+
+    padding: 12px;
+
+    background-color: #6b4030;
+}
+
+
+/* =========================
+   QUANTITY
+========================= */
+
+.quantity-controls {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 10px;
+}
+
+.quantity-controls button {
+    width: 45px;
+    height: 45px;
+
+    padding: 0;
+
+    font-size: 22px;
+}
+
+#quantity {
+    display: inline-block;
+
+    min-width: 35px;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    color: #4b2e1f;
+}
+
+
+/* =========================
+   ADD TO CART
+========================= */
+
+#addToCartButton {
+    width: 100%;
+
+    margin-top: 25px;
+
+    padding: 15px;
+
+    font-size: 18px;
+
+    background-color: #4b2e1f;
+}
+
+
+/* =========================
+   SIDE CART
+========================= */
+
+#sideCart {
+    position: fixed;
+
+    top: 20px;
+    right: 20px;
+
+    width: 300px;
+
+    max-height: 80vh;
+
+    overflow-y: auto;
+
+    background-color: #fffaf5;
+
+    border-radius: 15px;
+
+    padding: 20px;
+
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
+
+    z-index: 1100;
+
+    text-align: left;
+}
+
+
+/* =========================
+   CART HEADER
+========================= */
+
+.cart-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 10px;
+
+    border-bottom: 2px solid #ddd;
+
+    padding-bottom: 12px;
+}
+
+.cart-header h2 {
+    margin: 0;
+
+    color: #4b2e1f;
+
+    font-size: 20px;
+}
+
+#cartCount {
+    color: #6b5143;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   CART ITEMS
+========================= */
+
+.cart-item {
+    padding: 15px 0;
+
+    border-bottom: 1px solid #ddd;
+}
+
+.cart-item-name {
+    color: #4b2e1f;
+
+    font-weight: bold;
+
+    font-size: 17px;
+}
+
+.cart-item-options {
+    color: #6b5143;
+
+    font-size: 13px;
+
+    margin-top: 6px;
+
+    line-height: 1.5;
+}
+
+.cart-item-price {
+    color: #4b2e1f;
+
+    font-weight: bold;
+
+    margin-top: 6px;
+}
+
+
+/* =========================
+   CART CONTROLS
+========================= */
+
+.cart-controls {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 10px;
+
+    flex-wrap: wrap;
+}
+
+.cart-controls button {
+    padding: 5px 10px;
+
+    font-size: 15px;
+}
+
+.remove-button {
+    background-color: #8b4513 !important;
+
+    font-size: 13px !important;
+}
+
+
+/* =========================
+   CART FOOTER
+========================= */
+
+.cart-footer {
+    border-top: 2px solid #ddd;
+
+    margin-top: 10px;
+
+    padding-top: 10px;
+}
+
+.cart-footer h3 {
+    color: #4b2e1f;
+
+    margin: 0;
+}
+
+
+/* =========================
+   ORDER NOTICE
+========================= */
+
+#orderNotice {
+    display: none;
+
+    position: fixed;
+
+    top: 20px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    background-color: #4b2e1f;
+
+    color: white;
+
+    padding: 14px 25px;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+
+    z-index: 2000;
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 800px) {
+
+    body {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+
+    #sideCart {
+        width: 260px;
+
+        right: 10px;
+        top: 10px;
+
+        max-height: 60vh;
+    }
+
+    #productPopup {
+        max-width: 420px;
+
+        padding: 25px 20px;
+    }
+}
+
+
+@media (max-width: 500px) {
+
+    #sideCart {
+        width: calc(100% - 20px);
+
+        right: 10px;
+    }
+
+    #productOverlay {
+        padding: 10px;
+    }
+
+    #productPopup {
+        max-height: 85vh;
+    }
+}
+
+/* =====================================================
+   SNACK POPUP
+===================================================== */
+
+#snackPopupContent {
+
+    background-color: white;
+
+    width: 90%;
+    max-width: 450px;
+
+    padding: 30px;
+
+    border-radius: 15px;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+
+    text-align: center;
+
+    position: relative;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =====================================================
+   SNACK POPUP CLOSE BUTTON
+===================================================== */
+
+#closeSnackPopup {
+
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    width: 35px;
+    height: 35px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background-color: #4b2e1f;
+
+    color: white;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+}
+
+
+/* =====================================================
+   SNACK CHOICE BUTTONS
+===================================================== */
+
+.snack-choice-button,
+.snack-flavor-button {
+
+    display: block;
+
+    width: 100%;
+
+    padding: 12px;
+
+    margin: 8px 0;
+
+    border: 2px solid #ddd;
+
+    border-radius: 8px;
+
+    background-color: #f5eee6;
+
+    color: #4b2e1f;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+}
+
+
+/* Hover */
+
+.snack-choice-button:hover,
+.snack-flavor-button:hover {
+
+    background-color: #eadbca;
+
+}
+
+
+/* =====================================================
+   SELECTED SNACK
+===================================================== */
+
+.snack-choice-button.selected-snack,
+.snack-flavor-button.selected-snack {
+
+    outline: 3px solid #8B4513;
+
+    outline-offset: 3px;
+
+    background-color: #eadbca;
+
+    font-weight: bold;
+
+}
+
+
+/* =====================================================
+   SNACK QUANTITY
+===================================================== */
+
+#snackPopupContent .quantity-controls {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 15px;
+
+}
+
+
+#snackPopupContent .quantity-controls button {
+
+    width: 40px;
+
+    height: 40px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background-color: #4b2e1f;
+
+    color: white;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+}
+
+
+#snackPopupContent .quantity-controls span {
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    min-width: 30px;
+
+}
+
+
+/* =====================================================
+   ADD TO CART
+===================================================== */
+
+#addSnackToCartButton {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background-color: #4b2e1f;
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+#addSnackToCartButton:hover {
+
+    background-color: #3a2217;
+
+}
+
+/* =====================================================
+   MEAL POPUP
+===================================================== */
+
+#mealPopupContent {
+
+    background-color: white;
+
+    width: 90%;
+
+    max-width: 450px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 30px;
+
+    border-radius: 15px;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+
+    text-align: center;
+
+    position: relative;
+
+}
+
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+
+#closeMealPopup {
+
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    width: 35px;
+    height: 35px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background-color: #4b2e1f;
+
+    color: white;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================
+   MEAL OPTIONS
+========================= */
+
+.meal-option-button {
+
+    display: block;
+
+    width: 100%;
+
+    padding: 12px;
+
+    margin: 8px 0;
+
+    border: 2px solid #ddd;
+
+    border-radius: 8px;
+
+    background-color: #f5eee6;
+
+    color: #4b2e1f;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================
+   SELECTED MEAL OPTION
+========================= */
+
+.meal-option-button.selected-meal {
+
+    outline: 3px solid #8b4513;
+
+    outline-offset: 3px;
+
+    background-color: #eadbca;
+
+    font-weight: bold;
+
+}
+
+
+/* =========================
+   ADD TO CART
+========================= */
+
+#addMealToCartButton {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background-color: #4b2e1f;
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
