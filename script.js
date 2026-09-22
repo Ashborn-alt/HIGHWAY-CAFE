@@ -225,9 +225,9 @@ const drinkData = {
         name: "Green Apple",
         category: "Highway Coolers",
         type: "size12-16-22",
+        p12: 29,
         p16: 39,
         p22: 59,
-        p12: 29,
         addons: "none"
     },
 
@@ -235,9 +235,9 @@ const drinkData = {
         name: "Lychee",
         category: "Highway Coolers",
         type: "size12-16-22",
+        p12: 29,
         p16: 39,
         p22: 59,
-        p12: 29,
         addons: "none"
     },
 
@@ -245,9 +245,9 @@ const drinkData = {
         name: "Strawberry",
         category: "Highway Coolers",
         type: "size12-16-22",
+        p12: 29,
         p16: 39,
         p22: 59,
-        p12: 29,
         addons: "none"
     },
 
@@ -255,9 +255,9 @@ const drinkData = {
         name: "Blueberry",
         category: "Highway Coolers",
         type: "size12-16-22",
+        p12: 29,
         p16: 39,
         p22: 59,
-        p12: 29,
         addons: "none"
     },
 
