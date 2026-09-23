@@ -5,13 +5,11 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>HIGHWAY CAFE - Admin</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 
     <style>
 
@@ -19,41 +17,26 @@
             box-sizing: border-box;
         }
 
-
         body {
-
             margin: 0;
-
             padding: 20px;
-
             font-family: Arial, sans-serif;
-
             background: #f5eee6;
-
             color: #3d281e;
         }
-
 
         h1,
         h2,
         h3 {
-
             margin-top: 0;
         }
 
-
         button {
-
             cursor: pointer;
-
             border: none;
-
             border-radius: 8px;
-
             padding: 10px 16px;
-
             font-size: 15px;
-
             font-weight: bold;
         }
 
@@ -65,46 +48,33 @@
         #loginScreen {
 
             max-width: 420px;
-
             margin: 80px auto;
-
             background: white;
-
             padding: 30px;
-
             border-radius: 15px;
 
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, 0.15);
 
             text-align: center;
         }
 
-
         #loginScreen h1 {
-
             color: #4b2e1f;
-
             margin-bottom: 5px;
         }
 
-
         #loginScreen p {
-
             color: #765c4d;
-
             margin-bottom: 25px;
         }
-
 
         #loginForm {
 
             display: flex;
-
             flex-direction: column;
-
             gap: 12px;
         }
-
 
         #loginForm input {
 
@@ -117,20 +87,11 @@
             font-size: 15px;
         }
 
-
         #loginButton {
 
             background: #4b2e1f;
-
             color: white;
         }
-
-
-        #loginButton:hover {
-
-            background: #633d2a;
-        }
-
 
         #loginError {
 
@@ -143,23 +104,18 @@
 
 
         /* =====================================================
-           ADMIN DASHBOARD
+           DASHBOARD
         ===================================================== */
 
         #adminDashboard {
-
             display: none;
-
             max-width: 1100px;
-
             margin: 0 auto;
         }
-
 
         .admin-header {
 
             background: #4b2e1f;
-
             color: white;
 
             padding: 20px;
@@ -177,32 +133,22 @@
             margin-bottom: 20px;
         }
 
-
         .admin-header h1 {
-
             margin: 0;
-
             font-size: 28px;
         }
 
-
         .admin-header small {
-
             display: block;
-
             margin-top: 5px;
-
             opacity: 0.8;
         }
-
 
         #logoutButton {
 
             background: white;
-
             color: #4b2e1f;
         }
-
 
         .admin-card {
 
@@ -214,7 +160,8 @@
 
             margin-bottom: 20px;
 
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+            box-shadow:
+                0 3px 12px rgba(0, 0, 0, 0.08);
         }
 
 
@@ -235,7 +182,6 @@
             flex-wrap: wrap;
         }
 
-
         #shopStatus {
 
             font-size: 20px;
@@ -243,18 +189,13 @@
             font-weight: bold;
         }
 
-
         .shop-open {
-
             color: #16833a;
         }
 
-
         .shop-closed {
-
             color: #b00020;
         }
-
 
         #shopToggleButton {
 
@@ -278,7 +219,6 @@
             gap: 12px;
         }
 
-
         .menu-item {
 
             border: 1px solid #ddd;
@@ -298,24 +238,17 @@
             gap: 10px;
         }
 
-
         .menu-item-name {
-
             font-weight: bold;
         }
 
-
         .available {
-
             color: #16833a;
         }
 
-
         .sold-out {
-
             color: #b00020;
         }
-
 
         .menu-toggle {
 
@@ -346,7 +279,6 @@
             flex-wrap: wrap;
         }
 
-
         .refresh-button {
 
             background: #4b2e1f;
@@ -354,12 +286,9 @@
             color: white;
         }
 
-
         #ordersContainer {
-
             margin-top: 15px;
         }
-
 
         .order-card {
 
@@ -371,15 +300,15 @@
 
             margin-bottom: 15px;
 
-            background: #fff;
+            background: white;
 
             position: relative;
-
-            transition: 0.2s;
         }
 
 
-        /* NEW ORDER HIGHLIGHT */
+        /* =====================================================
+           NEW ORDER CARD
+        ===================================================== */
 
         .order-card.new-order {
 
@@ -391,9 +320,9 @@
                 0 0 0 3px rgba(214, 40, 40, 0.12),
                 0 5px 20px rgba(214, 40, 40, 0.18);
 
-            animation: newOrderPulse 1.5s infinite;
+            animation:
+                newOrderPulse 1.5s infinite;
         }
-
 
         @keyframes newOrderPulse {
 
@@ -416,7 +345,6 @@
             }
         }
 
-
         .new-order-badge {
 
             display: inline-block;
@@ -434,19 +362,12 @@
             font-weight: bold;
 
             margin-bottom: 10px;
-
-            animation: badgePulse 1s infinite;
         }
 
 
-        @keyframes badgePulse {
-
-            50% {
-
-                transform: scale(1.05);
-            }
-        }
-
+        /* =====================================================
+           ORDER DETAILS
+        ===================================================== */
 
         .order-top {
 
@@ -461,7 +382,6 @@
             flex-wrap: wrap;
         }
 
-
         .order-number {
 
             font-size: 20px;
@@ -470,7 +390,6 @@
 
             color: #4b2e1f;
         }
-
 
         .order-date {
 
@@ -481,14 +400,12 @@
             margin-top: 5px;
         }
 
-
         .order-info {
 
             margin-top: 15px;
 
             line-height: 1.6;
         }
-
 
         .order-items {
 
@@ -503,7 +420,6 @@
             white-space: pre-line;
         }
 
-
         .order-total {
 
             margin-top: 15px;
@@ -514,7 +430,6 @@
 
             color: #4b2e1f;
         }
-
 
         .order-status-row {
 
@@ -529,7 +444,6 @@
             align-items: center;
         }
 
-
         .status-select {
 
             padding: 9px;
@@ -541,14 +455,12 @@
             font-size: 14px;
         }
 
-
         .update-status-button {
 
             background: #4b2e1f;
 
             color: white;
         }
-
 
         .empty-orders {
 
@@ -561,152 +473,7 @@
 
 
         /* =====================================================
-           NEW ORDER CENTER POPUP
-        ===================================================== */
-
-        #newOrderOverlay {
-
-            display: none;
-
-            position: fixed;
-
-            inset: 0;
-
-            background: rgba(0, 0, 0, 0.60);
-
-            z-index: 9999;
-
-            justify-content: center;
-
-            align-items: center;
-
-            padding: 20px;
-        }
-
-
-        #newOrderPopup {
-
-            width: 100%;
-
-            max-width: 430px;
-
-            background: white;
-
-            border-radius: 18px;
-
-            padding: 30px;
-
-            text-align: center;
-
-            box-shadow:
-                0 10px 50px rgba(0, 0, 0, 0.35);
-
-            border: 5px solid #d62828;
-
-            animation: popupAppear 0.3s ease;
-        }
-
-
-        @keyframes popupAppear {
-
-            from {
-
-                opacity: 0;
-
-                transform: scale(0.8);
-            }
-
-            to {
-
-                opacity: 1;
-
-                transform: scale(1);
-            }
-        }
-
-
-        .popup-bell {
-
-            font-size: 55px;
-
-            animation: bellShake 0.7s infinite;
-        }
-
-
-        @keyframes bellShake {
-
-            0% {
-                transform: rotate(0deg);
-            }
-
-            25% {
-                transform: rotate(-10deg);
-            }
-
-            50% {
-                transform: rotate(10deg);
-            }
-
-            75% {
-                transform: rotate(-10deg);
-            }
-
-            100% {
-                transform: rotate(0deg);
-            }
-        }
-
-
-        #newOrderPopup h2 {
-
-            color: #d62828;
-
-            font-size: 30px;
-
-            margin: 10px 0;
-        }
-
-
-        #newOrderCount {
-
-            font-size: 19px;
-
-            font-weight: bold;
-
-            margin-bottom: 20px;
-        }
-
-
-        .popup-buttons {
-
-            display: flex;
-
-            gap: 10px;
-
-            justify-content: center;
-
-            flex-wrap: wrap;
-        }
-
-
-        #viewOrderButton {
-
-            background: #4b2e1f;
-
-            color: white;
-        }
-
-
-        #acknowledgeOrderButton {
-
-            background: #d62828;
-
-            color: white;
-        }
-
-
-        /* =====================================================
-           TOP NEW ORDER INDICATOR
+           TOP ALERT
         ===================================================== */
 
         #newOrderAlert {
@@ -733,7 +500,146 @@
 
             font-weight: bold;
 
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, 0.25);
+        }
+
+
+        /* =====================================================
+           CENTER POPUP
+        ===================================================== */
+
+        #newOrderOverlay {
+
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(0, 0, 0, 0.65);
+
+            z-index: 9999;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 20px;
+        }
+
+        #newOrderPopup {
+
+            width: 100%;
+
+            max-width: 430px;
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 30px;
+
+            text-align: center;
+
+            box-shadow:
+                0 10px 50px rgba(0, 0, 0, 0.35);
+
+            border: 5px solid #d62828;
+
+            animation:
+                popupAppear 0.3s ease;
+        }
+
+        @keyframes popupAppear {
+
+            from {
+
+                opacity: 0;
+
+                transform: scale(0.8);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: scale(1);
+            }
+        }
+
+        .popup-bell {
+
+            font-size: 55px;
+
+            animation:
+                bellShake 0.7s infinite;
+        }
+
+        @keyframes bellShake {
+
+            0% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(-10deg);
+            }
+
+            50% {
+                transform: rotate(10deg);
+            }
+
+            75% {
+                transform: rotate(-10deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+
+        #newOrderPopup h2 {
+
+            color: #d62828;
+
+            font-size: 30px;
+
+            margin: 10px 0;
+        }
+
+        #newOrderCount {
+
+            font-size: 19px;
+
+            font-weight: bold;
+
+            margin-bottom: 20px;
+        }
+
+        .popup-buttons {
+
+            display: flex;
+
+            gap: 10px;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+        }
+
+        #viewOrderButton {
+
+            background: #4b2e1f;
+
+            color: white;
+        }
+
+        #acknowledgeOrderButton {
+
+            background: #d62828;
+
+            color: white;
         }
 
 
@@ -744,10 +650,8 @@
         @media (max-width: 600px) {
 
             body {
-
                 padding: 10px;
             }
-
 
             .admin-header {
 
@@ -756,45 +660,31 @@
                 align-items: flex-start;
             }
 
-
             .admin-header h1 {
-
                 font-size: 23px;
             }
 
-
             #logoutButton {
-
                 width: 100%;
             }
 
-
             .admin-card {
-
                 padding: 15px;
             }
 
-
             .order-card {
-
                 padding: 14px;
             }
 
-
             #newOrderPopup {
-
                 padding: 25px 18px;
             }
 
-
             #newOrderPopup h2 {
-
                 font-size: 25px;
             }
 
-
             .popup-buttons button {
-
                 width: 100%;
             }
 
@@ -809,12 +699,17 @@
 
 
     <!-- =====================================================
-         NEW ORDER TOP INDICATOR
+         TOP ALERT
     ===================================================== -->
 
     <div id="newOrderAlert">
 
-        🔔 <span id="topNewOrderCount">0</span>
+        🔔
+
+        <span id="topNewOrderCount">
+            0
+        </span>
+
         NEW ORDER(S)!
 
     </div>
@@ -832,7 +727,9 @@
                 🔔
             </div>
 
-            <h2>NEW ORDER!</h2>
+            <h2>
+                NEW ORDER!
+            </h2>
 
             <div id="newOrderCount">
                 1 new order received
@@ -869,12 +766,14 @@
 
 
     <!-- =====================================================
-         LOGIN SCREEN
+         LOGIN
     ===================================================== -->
 
     <div id="loginScreen">
 
-        <h1>HIGHWAY CAFE</h1>
+        <h1>
+            HIGHWAY CAFE
+        </h1>
 
         <p>
             Admin Dashboard
@@ -919,8 +818,6 @@
 
     <div id="adminDashboard">
 
-
-        <!-- HEADER -->
 
         <div class="admin-header">
 
@@ -982,7 +879,7 @@
 
 
         <!-- =================================================
-             MENU AVAILABILITY
+             MENU
         ================================================= -->
 
         <div class="admin-card">
@@ -992,8 +889,7 @@
             </h2>
 
             <p>
-                Turn menu items on or off when they are
-                unavailable.
+                Turn menu items on or off when unavailable.
             </p>
 
 
@@ -1040,7 +936,6 @@
 
         </div>
 
-
     </div>
 
 
@@ -1052,7 +947,6 @@
 
         const SUPABASE_URL =
             "https://qfnjegsbyxxqsdaelqqa.supabase.co";
-
 
         const SUPABASE_KEY =
             "sb_publishable_ttu1AyOaylp3J4x7iTqaNg_1VLOdHoE";
@@ -1066,7 +960,7 @@
 
 
         /* =====================================================
-           VARIABLES
+           NEW ORDER VARIABLES
         ===================================================== */
 
         let firstOrdersLoaded = false;
@@ -1077,11 +971,241 @@
 
         let orderCheckInterval = null;
 
-        let notificationInterval = null;
+        let ringInterval = null;
 
         let audioContext = null;
 
-        let notificationAudioReady = false;
+
+        /* =====================================================
+           CREATE SIMPLE RING SOUND
+        ===================================================== */
+
+        function playRingSound() {
+
+            try {
+
+                /*
+                 * Create AudioContext only when needed.
+                 */
+
+                if (!audioContext) {
+
+                    const AudioContext =
+                        window.AudioContext ||
+                        window.webkitAudioContext;
+
+                    if (!AudioContext) {
+
+                        return;
+                    }
+
+                    audioContext =
+                        new AudioContext();
+                }
+
+
+                if (
+                    audioContext.state ===
+                    "suspended"
+                ) {
+
+                    audioContext.resume();
+                }
+
+
+                /*
+                 * First tone
+                 */
+
+                const oscillator1 =
+                    audioContext.createOscillator();
+
+
+                const gain1 =
+                    audioContext.createGain();
+
+
+                oscillator1.type =
+                    "sine";
+
+
+                oscillator1.frequency.setValueAtTime(
+                    880,
+                    audioContext.currentTime
+                );
+
+
+                gain1.gain.setValueAtTime(
+                    0.0001,
+                    audioContext.currentTime
+                );
+
+
+                gain1.gain.exponentialRampToValueAtTime(
+                    0.35,
+                    audioContext.currentTime + 0.02
+                );
+
+
+                gain1.gain.exponentialRampToValueAtTime(
+                    0.0001,
+                    audioContext.currentTime + 0.35
+                );
+
+
+                oscillator1.connect(gain1);
+
+                gain1.connect(
+                    audioContext.destination
+                );
+
+
+                oscillator1.start();
+
+                oscillator1.stop(
+                    audioContext.currentTime + 0.35
+                );
+
+
+                /*
+                 * Second tone
+                 */
+
+                const oscillator2 =
+                    audioContext.createOscillator();
+
+
+                const gain2 =
+                    audioContext.createGain();
+
+
+                oscillator2.type =
+                    "sine";
+
+
+                oscillator2.frequency.setValueAtTime(
+                    1175,
+                    audioContext.currentTime + 0.18
+                );
+
+
+                gain2.gain.setValueAtTime(
+                    0.0001,
+                    audioContext.currentTime + 0.18
+                );
+
+
+                gain2.gain.exponentialRampToValueAtTime(
+                    0.35,
+                    audioContext.currentTime + 0.20
+                );
+
+
+                gain2.gain.exponentialRampToValueAtTime(
+                    0.0001,
+                    audioContext.currentTime + 0.55
+                );
+
+
+                oscillator2.connect(gain2);
+
+                gain2.connect(
+                    audioContext.destination
+                );
+
+
+                oscillator2.start(
+                    audioContext.currentTime + 0.18
+                );
+
+
+                oscillator2.stop(
+                    audioContext.currentTime + 0.55
+                );
+
+            }
+
+            catch (error) {
+
+                console.log(
+                    "Ring sound error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           START REPEATING RING
+        ===================================================== */
+
+        function startRingAlert() {
+
+            /*
+             * Don't create another interval
+             * if one is already running.
+             */
+
+            if (ringInterval) {
+
+                return;
+            }
+
+
+            /*
+             * Ring immediately.
+             */
+
+            playRingSound();
+
+
+            /*
+             * Ring every 3 seconds.
+             */
+
+            ringInterval =
+                setInterval(
+                    function() {
+
+                        if (
+                            newOrderIds.size > 0
+                        ) {
+
+                            playRingSound();
+
+                        }
+                        else {
+
+                            stopRingAlert();
+
+                        }
+
+                    },
+                    3000
+                );
+
+        }
+
+
+        /* =====================================================
+           STOP REPEATING RING
+        ===================================================== */
+
+        function stopRingAlert() {
+
+            if (ringInterval) {
+
+                clearInterval(
+                    ringInterval
+                );
+
+                ringInterval = null;
+
+            }
+
+        }
 
 
         /* =====================================================
@@ -1090,56 +1214,105 @@
 
         document
             .getElementById("loginForm")
-            .addEventListener("submit", async function(event) {
+            .addEventListener(
+                "submit",
+                async function(event) {
 
-                event.preventDefault();
-
-
-                const email =
-                    document
-                        .getElementById("loginEmail")
-                        .value
-                        .trim();
+                    event.preventDefault();
 
 
-                const password =
-                    document
-                        .getElementById("loginPassword")
-                        .value;
+                    const email =
+                        document
+                            .getElementById(
+                                "loginEmail"
+                            )
+                            .value
+                            .trim();
 
 
-                const errorBox =
-                    document
-                        .getElementById("loginError");
+                    const password =
+                        document
+                            .getElementById(
+                                "loginPassword"
+                            )
+                            .value;
 
 
-                errorBox.textContent = "";
+                    const errorBox =
+                        document
+                            .getElementById(
+                                "loginError"
+                            );
 
 
-                const {
-                    data,
-                    error
-                } = await supabaseClient.auth.signInWithPassword({
-
-                    email: email,
-
-                    password: password
-
-                });
+                    errorBox.textContent = "";
 
 
-                if (error) {
+                    const {
+                        error
+                    } =
+                        await supabaseClient
+                            .auth
+                            .signInWithPassword({
 
-                    errorBox.textContent =
-                        error.message;
+                                email: email,
 
-                    return;
+                                password: password
+
+                            });
+
+
+                    if (error) {
+
+                        errorBox.textContent =
+                            error.message;
+
+                        return;
+                    }
+
+
+                    /*
+                     * User interaction has happened,
+                     * so the browser can allow audio.
+                     */
+
+                    try {
+
+                        if (!audioContext) {
+
+                            const AudioContext =
+                                window.AudioContext ||
+                                window.webkitAudioContext;
+
+                            if (AudioContext) {
+
+                                audioContext =
+                                    new AudioContext();
+
+                            }
+
+                        }
+
+
+                        if (
+                            audioContext &&
+                            audioContext.state ===
+                                "suspended"
+                        ) {
+
+                            await audioContext.resume();
+
+                        }
+
+                    }
+                    catch (error) {
+
+                        console.log(error);
+
+                    }
+
                 }
-
-
-                enableNotificationAudio();
-
-            });
+            );
 
 
         /* =====================================================
@@ -1151,9 +1324,12 @@
 
                 if (session) {
 
-                    showAdminDashboard(session);
+                    showAdminDashboard(
+                        session
+                    );
 
-                } else {
+                }
+                else {
 
                     showLoginScreen();
 
@@ -1164,7 +1340,7 @@
 
 
         /* =====================================================
-           CHECK EXISTING SESSION
+           CHECK SESSION
         ===================================================== */
 
         async function checkAdminSession() {
@@ -1173,14 +1349,20 @@
                 data: {
                     session
                 }
-            } = await supabaseClient.auth.getSession();
+            } =
+                await supabaseClient
+                    .auth
+                    .getSession();
 
 
             if (session) {
 
-                showAdminDashboard(session);
+                showAdminDashboard(
+                    session
+                );
 
-            } else {
+            }
+            else {
 
                 showLoginScreen();
 
@@ -1193,30 +1375,32 @@
            SHOW DASHBOARD
         ===================================================== */
 
-        function showAdminDashboard(session) {
+        function showAdminDashboard(
+            session
+        ) {
 
             document
-                .getElementById("loginScreen")
-                .style.display = "none";
+                .getElementById(
+                    "loginScreen"
+                )
+                .style.display =
+                "none";
 
 
             document
-                .getElementById("adminDashboard")
-                .style.display = "block";
+                .getElementById(
+                    "adminDashboard"
+                )
+                .style.display =
+                "block";
 
 
             document
-                .getElementById("loggedInEmail")
+                .getElementById(
+                    "loggedInEmail"
+                )
                 .textContent =
                 session.user.email;
-
-
-            /*
-             * The login/session interaction gives the browser
-             * permission to initialize our audio system.
-             */
-
-            enableNotificationAudio();
 
 
             loadShopStatus();
@@ -1237,18 +1421,24 @@
         function showLoginScreen() {
 
             document
-                .getElementById("loginScreen")
-                .style.display = "block";
+                .getElementById(
+                    "loginScreen"
+                )
+                .style.display =
+                "block";
 
 
             document
-                .getElementById("adminDashboard")
-                .style.display = "none";
+                .getElementById(
+                    "adminDashboard"
+                )
+                .style.display =
+                "none";
 
 
             stopOrderChecking();
 
-            stopNotificationSound();
+            stopRingAlert();
 
         }
 
@@ -1261,439 +1451,12 @@
 
             stopOrderChecking();
 
-            stopNotificationSound();
+            stopRingAlert();
 
 
-            await supabaseClient.auth.signOut();
-
-        }
-
-
-        /* =====================================================
-           AUDIO INITIALIZATION
-        ===================================================== */
-
-        function enableNotificationAudio() {
-
-            try {
-
-                if (!audioContext) {
-
-                    const AudioContext =
-                        window.AudioContext ||
-                        window.webkitAudioContext;
-
-
-                    if (!AudioContext) {
-
-                        return;
-                    }
-
-
-                    audioContext =
-                        new AudioContext();
-
-                }
-
-
-                if (audioContext.state === "suspended") {
-
-                    audioContext.resume();
-
-                }
-
-
-                notificationAudioReady = true;
-
-            } catch (error) {
-
-                console.log(
-                    "Audio could not be initialized:",
-                    error
-                );
-
-            }
-
-        }
-
-
-        /* =====================================================
-           PLAY NOTIFICATION SOUND
-        ===================================================== */
-
-        function playNewOrderSound() {
-
-            if (!notificationAudioReady) {
-
-                enableNotificationAudio();
-
-            }
-
-
-            if (!audioContext) {
-
-                return;
-            }
-
-
-            try {
-
-                if (audioContext.state === "suspended") {
-
-                    audioContext.resume();
-
-                }
-
-
-                const now =
-                    audioContext.currentTime;
-
-
-                /*
-                 * First tone
-                 */
-
-                const oscillator1 =
-                    audioContext.createOscillator();
-
-
-                const gain1 =
-                    audioContext.createGain();
-
-
-                oscillator1.type = "sine";
-
-                oscillator1.frequency.setValueAtTime(
-                    880,
-                    now
-                );
-
-
-                gain1.gain.setValueAtTime(
-                    0.0001,
-                    now
-                );
-
-
-                gain1.gain.exponentialRampToValueAtTime(
-                    0.25,
-                    now + 0.02
-                );
-
-
-                gain1.gain.exponentialRampToValueAtTime(
-                    0.0001,
-                    now + 0.35
-                );
-
-
-                oscillator1.connect(gain1);
-
-                gain1.connect(
-                    audioContext.destination
-                );
-
-
-                oscillator1.start(now);
-
-                oscillator1.stop(
-                    now + 0.35
-                );
-
-
-                /*
-                 * Second tone
-                 */
-
-                const oscillator2 =
-                    audioContext.createOscillator();
-
-
-                const gain2 =
-                    audioContext.createGain();
-
-
-                oscillator2.type = "sine";
-
-                oscillator2.frequency.setValueAtTime(
-                    1175,
-                    now + 0.18
-                );
-
-
-                gain2.gain.setValueAtTime(
-                    0.0001,
-                    now + 0.18
-                );
-
-
-                gain2.gain.exponentialRampToValueAtTime(
-                    0.25,
-                    now + 0.20
-                );
-
-
-                gain2.gain.exponentialRampToValueAtTime(
-                    0.0001,
-                    now + 0.55
-                );
-
-
-                oscillator2.connect(gain2);
-
-                gain2.connect(
-                    audioContext.destination
-                );
-
-
-                oscillator2.start(
-                    now + 0.18
-                );
-
-                oscillator2.stop(
-                    now + 0.55
-                );
-
-
-            } catch (error) {
-
-                console.log(
-                    "Notification sound error:",
-                    error
-                );
-
-            }
-
-        }
-
-
-        /* =====================================================
-           START REPEATING NOTIFICATION SOUND
-        ===================================================== */
-
-        function startNotificationSound() {
-
-            if (notificationInterval) {
-
-                return;
-            }
-
-
-            /*
-             * Play immediately.
-             */
-
-            playNewOrderSound();
-
-
-            /*
-             * Repeat every 4 seconds until
-             * the admin acknowledges the order.
-             */
-
-            notificationInterval =
-                setInterval(function() {
-
-                    if (newOrderIds.size > 0) {
-
-                        playNewOrderSound();
-
-                    } else {
-
-                        stopNotificationSound();
-
-                    }
-
-                }, 4000);
-
-        }
-
-
-        /* =====================================================
-           STOP NOTIFICATION SOUND
-        ===================================================== */
-
-        function stopNotificationSound() {
-
-            if (notificationInterval) {
-
-                clearInterval(
-                    notificationInterval
-                );
-
-                notificationInterval = null;
-
-            }
-
-        }
-
-
-        /* =====================================================
-           SHOW NEW ORDER POPUP
-        ===================================================== */
-
-        function showNewOrderAlert() {
-
-            const count =
-                newOrderIds.size;
-
-
-            if (count <= 0) {
-
-                hideNewOrderAlert();
-
-                return;
-            }
-
-
-            const countText =
-                count === 1
-                    ? "1 new order received"
-                    : count + " new orders received";
-
-
-            document
-                .getElementById("newOrderCount")
-                .textContent =
-                countText;
-
-
-            document
-                .getElementById("topNewOrderCount")
-                .textContent =
-                count;
-
-
-            document
-                .getElementById("newOrderOverlay")
-                .style.display =
-                "flex";
-
-
-            document
-                .getElementById("newOrderAlert")
-                .style.display =
-                "block";
-
-
-            startNotificationSound();
-
-        }
-
-
-        /* =====================================================
-           HIDE NEW ORDER POPUP
-        ===================================================== */
-
-        function hideNewOrderAlert() {
-
-            document
-                .getElementById("newOrderOverlay")
-                .style.display =
-                "none";
-
-
-            document
-                .getElementById("newOrderAlert")
-                .style.display =
-                "none";
-
-
-            stopNotificationSound();
-
-        }
-
-
-        /* =====================================================
-           ACKNOWLEDGE NEW ORDERS
-        ===================================================== */
-
-        function acknowledgeNewOrders() {
-
-            /*
-             * Remove the alert status.
-             *
-             * The orders themselves remain in the database
-             * and remain visible in the order list.
-             */
-
-            newOrderIds.clear();
-
-
-            hideNewOrderAlert();
-
-
-            updateNewOrderCounter();
-
-
-            renderCurrentNewOrderBadges();
-
-        }
-
-
-        /* =====================================================
-           VIEW NEW ORDERS
-        ===================================================== */
-
-        function viewNewOrders() {
-
-            /*
-             * Close the center popup but DON'T acknowledge.
-             * This means the sound continues.
-             */
-
-            document
-                .getElementById("newOrderOverlay")
-                .style.display =
-                "none";
-
-
-            document
-                .getElementById("ordersCard")
-                .scrollIntoView({
-
-                    behavior: "smooth",
-
-                    block: "start"
-
-                });
-
-        }
-
-
-        /* =====================================================
-           UPDATE COUNTER
-        ===================================================== */
-
-        function updateNewOrderCounter() {
-
-            const count =
-                newOrderIds.size;
-
-
-            document
-                .getElementById("topNewOrderCount")
-                .textContent =
-                count;
-
-
-            if (count > 0) {
-
-                document
-                    .getElementById("newOrderAlert")
-                    .style.display =
-                    "block";
-
-            } else {
-
-                document
-                    .getElementById("newOrderAlert")
-                    .style.display =
-                    "none";
-
-                stopNotificationSound();
-
-            }
+            await supabaseClient
+                .auth
+                .signOut();
 
         }
 
@@ -1707,35 +1470,31 @@
             const {
                 data,
                 error
-            } = await supabaseClient
-                .from("shop_settings")
-                .select("*")
-                .limit(1)
-                .single();
+            } =
+                await supabaseClient
+                    .from("shop_settings")
+                    .select("*")
+                    .limit(1)
+                    .single();
 
 
             if (error) {
 
-                console.log(
-                    "Shop status error:",
-                    error
-                );
-
                 document
-                    .getElementById("shopStatus")
+                    .getElementById(
+                        "shopStatus"
+                    )
                     .textContent =
                     "Unable to load shop status";
+
+                console.log(error);
 
                 return;
             }
 
 
-            const isOpen =
-                data.is_open;
-
-
             updateShopStatusDisplay(
-                isOpen
+                data.is_open
             );
 
         }
@@ -1745,16 +1504,22 @@
            SHOP STATUS DISPLAY
         ===================================================== */
 
-        function updateShopStatusDisplay(isOpen) {
+        function updateShopStatusDisplay(
+            isOpen
+        ) {
 
             const status =
                 document
-                    .getElementById("shopStatus");
+                    .getElementById(
+                        "shopStatus"
+                    );
 
 
             const button =
                 document
-                    .getElementById("shopToggleButton");
+                    .getElementById(
+                        "shopToggleButton"
+                    );
 
 
             if (isOpen) {
@@ -1765,18 +1530,17 @@
                 status.className =
                     "shop-open";
 
-
                 button.textContent =
                     "🔴 CLOSE SHOP";
 
-            } else {
+            }
+            else {
 
                 status.textContent =
                     "🔴 SHOP IS CLOSED";
 
                 status.className =
                     "shop-closed";
-
 
                 button.textContent =
                     "🟢 OPEN SHOP";
@@ -1795,11 +1559,12 @@
             const {
                 data,
                 error
-            } = await supabaseClient
-                .from("shop_settings")
-                .select("*")
-                .limit(1)
-                .single();
+            } =
+                await supabaseClient
+                    .from("shop_settings")
+                    .select("*")
+                    .limit(1)
+                    .single();
 
 
             if (error) {
@@ -1818,14 +1583,19 @@
 
             const {
                 error: updateError
-            } = await supabaseClient
-                .from("shop_settings")
-                .update({
+            } =
+                await supabaseClient
+                    .from("shop_settings")
+                    .update({
 
-                    is_open: newStatus
+                        is_open:
+                            newStatus
 
-                })
-                .eq("id", data.id);
+                    })
+                    .eq(
+                        "id",
+                        data.id
+                    );
 
 
             if (updateError) {
@@ -1857,7 +1627,9 @@
 
             const container =
                 document
-                    .getElementById("menuContainer");
+                    .getElementById(
+                        "menuContainer"
+                    );
 
 
             container.innerHTML =
@@ -1867,11 +1639,12 @@
             const {
                 data,
                 error
-            } = await supabaseClient
-                .from("menu_items")
-                .select("*")
-                .order("category")
-                .order("name");
+            } =
+                await supabaseClient
+                    .from("menu_items")
+                    .select("*")
+                    .order("category")
+                    .order("name");
 
 
             if (error) {
@@ -1879,15 +1652,16 @@
                 container.innerHTML =
                     "<p>Unable to load menu.</p>";
 
-                console.log(
-                    error
-                );
+                console.log(error);
 
                 return;
             }
 
 
-            if (!data || data.length === 0) {
+            if (
+                !data ||
+                data.length === 0
+            ) {
 
                 container.innerHTML =
                     "<p>No menu items found.</p>";
@@ -1899,62 +1673,76 @@
             container.innerHTML = "";
 
 
-            data.forEach(function(item) {
+            data.forEach(
+                function(item) {
 
-                const div =
-                    document.createElement("div");
-
-
-                div.className =
-                    "menu-item";
-
-
-                const statusText =
-                    item.is_available
-                        ? "AVAILABLE"
-                        : "SOLD OUT";
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
 
 
-                const statusClass =
-                    item.is_available
-                        ? "available"
-                        : "sold-out";
+                    div.className =
+                        "menu-item";
 
 
-                div.innerHTML = `
+                    const statusText =
+                        item.is_available
+                            ? "AVAILABLE"
+                            : "SOLD OUT";
 
-                    <div>
 
-                        <div class="menu-item-name">
-                            ${escapeHTML(item.name)}
+                    const statusClass =
+                        item.is_available
+                            ? "available"
+                            : "sold-out";
+
+
+                    div.innerHTML = `
+
+                        <div>
+
+                            <div class="menu-item-name">
+
+                                ${escapeHTML(
+                                    item.name
+                                )}
+
+                            </div>
+
+                            <div class="${statusClass}">
+
+                                ${statusText}
+
+                            </div>
+
                         </div>
 
-                        <div class="${statusClass}">
-                            ${statusText}
-                        </div>
 
-                    </div>
+                        <button
+                            class="menu-toggle"
+                            onclick="toggleMenuItem(
+                                '${item.id}',
+                                ${item.is_available}
+                            )">
 
+                            ${
+                                item.is_available
+                                    ? "Mark Sold Out"
+                                    : "Make Available"
+                            }
 
-                    <button
-                        class="menu-toggle"
-                        onclick="toggleMenuItem(
-                            '${item.id}',
-                            ${item.is_available}
-                        )">
+                        </button>
 
-                        ${item.is_available
-                            ? "Mark Sold Out"
-                            : "Make Available"}
-
-                    </button>
-
-                `;
+                    `;
 
 
-                container.appendChild(div);
+                    container.appendChild(
+                        div
+                    );
 
-            });
+                }
+            );
 
         }
 
@@ -1970,15 +1758,19 @@
 
             const {
                 error
-            } = await supabaseClient
-                .from("menu_items")
-                .update({
+            } =
+                await supabaseClient
+                    .from("menu_items")
+                    .update({
 
-                    is_available:
-                        !currentStatus
+                        is_available:
+                            !currentStatus
 
-                })
-                .eq("id", id);
+                    })
+                    .eq(
+                        "id",
+                        id
+                    );
 
 
             if (error) {
@@ -1987,9 +1779,7 @@
                     "Could not update menu item."
                 );
 
-                console.log(
-                    error
-                );
+                console.log(error);
 
                 return;
             }
@@ -2004,7 +1794,9 @@
            LOAD ORDERS
         ===================================================== */
 
-        async function loadOrders(options = {}) {
+        async function loadOrders(
+            options = {}
+        ) {
 
             const automatic =
                 options.automatic === true;
@@ -2012,21 +1804,24 @@
 
             const container =
                 document
-                    .getElementById("ordersContainer");
+                    .getElementById(
+                        "ordersContainer"
+                    );
 
 
             const {
                 data: orders,
                 error
-            } = await supabaseClient
-                .from("orders")
-                .select("*")
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                );
+            } =
+                await supabaseClient
+                    .from("orders")
+                    .select("*")
+                    .order(
+                        "created_at",
+                        {
+                            ascending: false
+                        }
+                    );
 
 
             if (error) {
@@ -2034,9 +1829,7 @@
                 container.innerHTML =
                     "<p>Unable to load orders.</p>";
 
-                console.log(
-                    error
-                );
+                console.log(error);
 
                 return;
             }
@@ -2045,16 +1838,16 @@
             const currentIds =
                 new Set(
                     (orders || [])
-                        .map(order => order.id)
+                        .map(
+                            order =>
+                                order.id
+                        )
                 );
 
 
-            /*
-             * FIRST LOAD
-             *
-             * Existing orders are NOT treated
-             * as new orders.
-             */
+            /* =================================================
+               FIRST LOAD
+            ================================================= */
 
             if (!firstOrdersLoaded) {
 
@@ -2063,43 +1856,58 @@
 
                 firstOrdersLoaded = true;
 
-            } else {
+            }
+            else if (automatic) {
 
 
-                /*
-                 * AUTOMATIC CHECK
-                 *
-                 * Only automatic checks trigger
-                 * the new-order notification.
-                 */
+                /* =============================================
+                   FIND NEW ORDERS
+                ============================================= */
 
-                if (automatic) {
+                const newlyArrived =
+                    (orders || [])
+                        .filter(
+                            function(order) {
 
-                    const newlyArrived =
-                        (orders || []).filter(function(order) {
+                                return (
 
-                            return (
-                                !knownOrderIds.has(order.id) &&
-                                order.status === "New"
-                            );
+                                    !knownOrderIds
+                                        .has(
+                                            order.id
+                                        )
 
-                        });
+                                    &&
+
+                                    order.status ===
+                                        "New"
+
+                                );
+
+                            }
+                        );
 
 
-                    newlyArrived.forEach(function(order) {
+                newlyArrived.forEach(
+                    function(order) {
 
                         newOrderIds.add(
                             order.id
                         );
 
-                    });
-
-
-                    if (newlyArrived.length > 0) {
-
-                        showNewOrderAlert();
-
                     }
+                );
+
+
+                /*
+                 * If at least one new order arrived,
+                 * show the popup and start ringing.
+                 */
+
+                if (
+                    newlyArrived.length > 0
+                ) {
+
+                    showNewOrderAlert();
 
                 }
 
@@ -2110,24 +1918,25 @@
             }
 
 
-            /*
-             * Remove notification status when
-             * an order is no longer New.
-             */
+            /* =================================================
+               REMOVE NOTIFICATION WHEN STATUS CHANGES
+            ================================================= */
 
-            (orders || []).forEach(function(order) {
+            (orders || []).forEach(
+                function(order) {
 
-                if (
-                    order.status !== "New"
-                ) {
+                    if (
+                        order.status !== "New"
+                    ) {
 
-                    newOrderIds.delete(
-                        order.id
-                    );
+                        newOrderIds.delete(
+                            order.id
+                        );
+
+                    }
 
                 }
-
-            });
+            );
 
 
             updateNewOrderCounter();
@@ -2144,14 +1953,21 @@
            RENDER ORDERS
         ===================================================== */
 
-        function renderOrders(orders) {
+        function renderOrders(
+            orders
+        ) {
 
             const container =
                 document
-                    .getElementById("ordersContainer");
+                    .getElementById(
+                        "ordersContainer"
+                    );
 
 
-            if (!orders || orders.length === 0) {
+            if (
+                !orders ||
+                orders.length === 0
+            ) {
 
                 container.innerHTML = `
 
@@ -2170,358 +1986,388 @@
             container.innerHTML = "";
 
 
-            orders.forEach(function(order) {
+            orders.forEach(
+                function(order) {
 
-                const card =
-                    document.createElement("div");
-
-
-                const isNew =
-                    order.status === "New" &&
-                    newOrderIds.has(order.id);
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
 
 
-                card.className =
-                    isNew
-                        ? "order-card new-order"
-                        : "order-card";
+                    const isNew =
+                        order.status ===
+                            "New"
+                        &&
+                        newOrderIds.has(
+                            order.id
+                        );
 
 
-                let itemsText =
-                    order.ordered_items || "";
+                    card.className =
+                        isNew
+                            ? "order-card new-order"
+                            : "order-card";
 
 
-                if (typeof itemsText !== "string") {
+                    let itemsText =
+                        order.ordered_items
+                        || "";
 
-                    try {
 
-                        itemsText =
-                            JSON.stringify(
-                                itemsText,
-                                null,
-                                2
-                            );
+                    if (
+                        typeof itemsText !==
+                        "string"
+                    ) {
 
-                    } catch {
+                        try {
 
-                        itemsText =
-                            String(
-                                itemsText
-                            );
+                            itemsText =
+                                JSON.stringify(
+                                    itemsText,
+                                    null,
+                                    2
+                                );
+
+                        }
+                        catch {
+
+                            itemsText =
+                                String(
+                                    itemsText
+                                );
+
+                        }
 
                     }
 
-                }
 
+                    const createdDate =
+                        order.created_at
+                            ? new Date(
+                                order.created_at
+                            ).toLocaleString()
+                            : "";
 
-                const createdDate =
-                    order.created_at
-                        ? new Date(
-                            order.created_at
-                        ).toLocaleString()
-                        : "";
 
-
-                const badge =
-                    isNew
-                        ? `
-
-                            <div class="new-order-badge">
-
-                                🔔 NEW ORDER
-
-                            </div>
-
-                        `
-                        : "";
-
-
-                card.innerHTML = `
-
-                    ${badge}
-
-
-                    <div class="order-top">
-
-                        <div>
-
-                            <div class="order-number">
-
-                                Order #
-                                ${escapeHTML(
-                                    String(
-                                        order.order_number ||
-                                        order.id
-                                    )
-                                )}
-
-                            </div>
-
-
-                            <div class="order-date">
-
-                                ${escapeHTML(
-                                    createdDate
-                                )}
-
-                            </div>
-
-                        </div>
-
-
-                        <strong>
-
-                            ${escapeHTML(
-                                order.status || "New"
-                            )}
-
-                        </strong>
-
-                    </div>
-
-
-                    <div class="order-info">
-
-                        <strong>
-                            Customer:
-                        </strong>
-
-                        ${escapeHTML(
-                            order.customer_name || ""
-                        )}
-
-                        <br>
-
-
-                        <strong>
-                            Phone:
-                        </strong>
-
-                        ${escapeHTML(
-                            order.phone || ""
-                        )}
-
-                        <br>
-
-
-                        <strong>
-                            Order Type:
-                        </strong>
-
-                        ${escapeHTML(
-                            order.order_type || ""
-                        )}
-
-                        <br>
-
-
-                        ${
-                            order.delivery_address
-                                ? `
-
-                                    <strong>
-                                        Delivery Address:
-                                    </strong>
-
-                                    ${escapeHTML(
-                                        order.delivery_address
-                                    )}
-
-                                    <br>
-
-                                `
-                                : ""
-                        }
-
-
-                        ${
-                            order.pickup_time
-                                ? `
-
-                                    <strong>
-                                        Pickup Time:
-                                    </strong>
-
-                                    ${escapeHTML(
-                                        order.pickup_time
-                                    )}
-
-                                    <br>
-
-                                `
-                                : ""
-                        }
-
-
-                        <strong>
-                            Payment:
-                        </strong>
-
-                        ${escapeHTML(
-                            order.payment_method || ""
-                        )}
-
-                        <br>
-
-
-                        ${
-                            order.gcash_reference
-                                ? `
-
-                                    <strong>
-                                        GCash Reference:
-                                    </strong>
-
-                                    ${escapeHTML(
-                                        order.gcash_reference
-                                    )}
-
-                                    <br>
-
-                                `
-                                : ""
-                        }
-
-                    </div>
-
-
-                    <div class="order-items">
-
-                        <strong>
-                            Ordered Items:
-                        </strong>
-
-                        <br><br>
-
-                        ${escapeHTML(
-                            itemsText
-                        )}
-
-                    </div>
-
-
-                    ${
-                        order.order_notes
+                    const badge =
+                        isNew
                             ? `
 
-                                <div class="order-info">
+                                <div class="new-order-badge">
 
-                                    <strong>
-                                        Notes:
-                                    </strong>
-
-                                    ${escapeHTML(
-                                        order.order_notes
-                                    )}
+                                    🔔 NEW ORDER
 
                                 </div>
 
                             `
-                            : ""
-                    }
+                            : "";
 
 
-                    <div class="order-total">
+                    card.innerHTML = `
 
-                        Total:
-                        ₱${Number(
-                            order.grand_total || 0
-                        ).toFixed(2)}
-
-                    </div>
+                        ${badge}
 
 
-                    <div class="order-status-row">
+                        <div class="order-top">
 
-                        <select
-                            class="status-select"
-                            id="status-${order.id}">
+                            <div>
 
-                            <option
-                                value="New"
-                                ${
-                                    order.status === "New"
-                                        ? "selected"
-                                        : ""
-                                }>
+                                <div class="order-number">
 
-                                New
+                                    Order #
 
-                            </option>
+                                    ${escapeHTML(
+                                        String(
+                                            order.order_number
+                                            ||
+                                            order.id
+                                        )
+                                    )}
 
-
-                            <option
-                                value="Preparing"
-                                ${
-                                    order.status === "Preparing"
-                                        ? "selected"
-                                        : ""
-                                }>
-
-                                Preparing
-
-                            </option>
+                                </div>
 
 
-                            <option
-                                value="Ready"
-                                ${
-                                    order.status === "Ready"
-                                        ? "selected"
-                                        : ""
-                                }>
+                                <div class="order-date">
 
-                                Ready
+                                    ${escapeHTML(
+                                        createdDate
+                                    )}
 
-                            </option>
+                                </div>
+
+                            </div>
 
 
-                            <option
-                                value="Completed"
-                                ${
-                                    order.status === "Completed"
-                                        ? "selected"
-                                        : ""
-                                }>
+                            <strong>
 
-                                Completed
+                                ${escapeHTML(
+                                    order.status
+                                    ||
+                                    "New"
+                                )}
 
-                            </option>
+                            </strong>
 
-
-                            <option
-                                value="Cancelled"
-                                ${
-                                    order.status === "Cancelled"
-                                        ? "selected"
-                                        : ""
-                                }>
-
-                                Cancelled
-
-                            </option>
-
-                        </select>
+                        </div>
 
 
-                        <button
-                            class="update-status-button"
-                            onclick="updateOrderStatus(
-                                '${order.id}'
-                            )">
+                        <div class="order-info">
 
-                            Update Status
+                            <strong>
+                                Customer:
+                            </strong>
 
-                        </button>
+                            ${escapeHTML(
+                                order.customer_name
+                                || ""
+                            )}
 
-                    </div>
-
-                `;
+                            <br>
 
 
-                container.appendChild(card);
+                            <strong>
+                                Phone:
+                            </strong>
 
-            });
+                            ${escapeHTML(
+                                order.phone
+                                || ""
+                            )}
+
+                            <br>
+
+
+                            <strong>
+                                Order Type:
+                            </strong>
+
+                            ${escapeHTML(
+                                order.order_type
+                                || ""
+                            )}
+
+                            <br>
+
+
+                            ${
+                                order.delivery_address
+                                    ? `
+
+                                        <strong>
+                                            Delivery Address:
+                                        </strong>
+
+                                        ${escapeHTML(
+                                            order.delivery_address
+                                        )}
+
+                                        <br>
+
+                                    `
+                                    : ""
+                            }
+
+
+                            ${
+                                order.pickup_time
+                                    ? `
+
+                                        <strong>
+                                            Pickup Time:
+                                        </strong>
+
+                                        ${escapeHTML(
+                                            order.pickup_time
+                                        )}
+
+                                        <br>
+
+                                    `
+                                    : ""
+                            }
+
+
+                            <strong>
+                                Payment:
+                            </strong>
+
+                            ${escapeHTML(
+                                order.payment_method
+                                || ""
+                            )}
+
+                            <br>
+
+
+                            ${
+                                order.gcash_reference
+                                    ? `
+
+                                        <strong>
+                                            GCash Reference:
+                                        </strong>
+
+                                        ${escapeHTML(
+                                            order.gcash_reference
+                                        )}
+
+                                        <br>
+
+                                    `
+                                    : ""
+                            }
+
+                        </div>
+
+
+                        <div class="order-items">
+
+                            <strong>
+                                Ordered Items:
+                            </strong>
+
+                            <br><br>
+
+                            ${escapeHTML(
+                                itemsText
+                            )}
+
+                        </div>
+
+
+                        ${
+                            order.order_notes
+                                ? `
+
+                                    <div class="order-info">
+
+                                        <strong>
+                                            Notes:
+                                        </strong>
+
+                                        ${escapeHTML(
+                                            order.order_notes
+                                        )}
+
+                                    </div>
+
+                                `
+                                : ""
+                        }
+
+
+                        <div class="order-total">
+
+                            Total:
+
+                            ₱${Number(
+                                order.grand_total
+                                || 0
+                            ).toFixed(2)}
+
+                        </div>
+
+
+                        <div class="order-status-row">
+
+                            <select
+                                class="status-select"
+                                id="status-${order.id}">
+
+                                <option
+                                    value="New"
+                                    ${
+                                        order.status ===
+                                        "New"
+                                            ? "selected"
+                                            : ""
+                                    }>
+
+                                    New
+
+                                </option>
+
+
+                                <option
+                                    value="Preparing"
+                                    ${
+                                        order.status ===
+                                        "Preparing"
+                                            ? "selected"
+                                            : ""
+                                    }>
+
+                                    Preparing
+
+                                </option>
+
+
+                                <option
+                                    value="Ready"
+                                    ${
+                                        order.status ===
+                                        "Ready"
+                                            ? "selected"
+                                            : ""
+                                    }>
+
+                                    Ready
+
+                                </option>
+
+
+                                <option
+                                    value="Completed"
+                                    ${
+                                        order.status ===
+                                        "Completed"
+                                            ? "selected"
+                                            : ""
+                                    }>
+
+                                    Completed
+
+                                </option>
+
+
+                                <option
+                                    value="Cancelled"
+                                    ${
+                                        order.status ===
+                                        "Cancelled"
+                                            ? "selected"
+                                            : ""
+                                    }>
+
+                                    Cancelled
+
+                                </option>
+
+                            </select>
+
+
+                            <button
+                                class="update-status-button"
+                                onclick="updateOrderStatus(
+                                    '${order.id}'
+                                )">
+
+                                Update Status
+
+                            </button>
+
+                        </div>
+
+                    `;
+
+
+                    container.appendChild(
+                        card
+                    );
+
+                }
+            );
 
         }
 
@@ -2530,7 +2376,9 @@
            UPDATE ORDER STATUS
         ===================================================== */
 
-        async function updateOrderStatus(id) {
+        async function updateOrderStatus(
+            id
+        ) {
 
             const select =
                 document
@@ -2549,15 +2397,13 @@
                 select.value;
 
 
-            /*
-             * COMPLETED
-             *
-             * Preserve the old behavior:
-             * ask before deleting the order.
-             */
+            /* =================================================
+               COMPLETED
+            ================================================= */
 
             if (
-                newStatus === "Completed"
+                newStatus ===
+                "Completed"
             ) {
 
                 const confirmed =
@@ -2574,10 +2420,14 @@
 
                 const {
                     error
-                } = await supabaseClient
-                    .from("orders")
-                    .delete()
-                    .eq("id", id);
+                } =
+                    await supabaseClient
+                        .from("orders")
+                        .delete()
+                        .eq(
+                            "id",
+                            id
+                        );
 
 
                 if (error) {
@@ -2586,17 +2436,19 @@
                         "Could not delete completed order."
                     );
 
-                    console.log(
-                        error
-                    );
+                    console.log(error);
 
                     return;
                 }
 
 
-                newOrderIds.delete(id);
+                newOrderIds.delete(
+                    id
+                );
+
 
                 updateNewOrderCounter();
+
 
                 loadOrders();
 
@@ -2605,20 +2457,25 @@
             }
 
 
-            /*
-             * UPDATE NORMAL STATUS
-             */
+            /* =================================================
+               UPDATE STATUS
+            ================================================= */
 
             const {
                 error
-            } = await supabaseClient
-                .from("orders")
-                .update({
+            } =
+                await supabaseClient
+                    .from("orders")
+                    .update({
 
-                    status: newStatus
+                        status:
+                            newStatus
 
-                })
-                .eq("id", id);
+                    })
+                    .eq(
+                        "id",
+                        id
+                    );
 
 
             if (error) {
@@ -2627,9 +2484,7 @@
                     "Could not update order status."
                 );
 
-                console.log(
-                    error
-                );
+                console.log(error);
 
                 return;
             }
@@ -2637,19 +2492,22 @@
 
             /*
              * If order is no longer New,
-             * remove its NEW notification.
+             * stop its alert.
              */
 
             if (
-                newStatus !== "New"
+                newStatus !==
+                "New"
             ) {
 
-                newOrderIds.delete(id);
-
-                updateNewOrderCounter();
+                newOrderIds.delete(
+                    id
+                );
 
             }
 
+
+            updateNewOrderCounter();
 
             loadOrders();
 
@@ -2657,7 +2515,201 @@
 
 
         /* =====================================================
-           START AUTOMATIC ORDER CHECKING
+           SHOW NEW ORDER ALERT
+        ===================================================== */
+
+        function showNewOrderAlert() {
+
+            const count =
+                newOrderIds.size;
+
+
+            if (count <= 0) {
+
+                return;
+            }
+
+
+            document
+                .getElementById(
+                    "newOrderCount"
+                )
+                .textContent =
+                count === 1
+                    ? "1 new order received"
+                    : count +
+                      " new orders received";
+
+
+            document
+                .getElementById(
+                    "topNewOrderCount"
+                )
+                .textContent =
+                count;
+
+
+            document
+                .getElementById(
+                    "newOrderOverlay"
+                )
+                .style.display =
+                "flex";
+
+
+            document
+                .getElementById(
+                    "newOrderAlert"
+                )
+                .style.display =
+                "block";
+
+
+            /*
+             * START REPEATING RING
+             */
+
+            startRingAlert();
+
+        }
+
+
+        /* =====================================================
+           ACKNOWLEDGE NEW ORDERS
+        ===================================================== */
+
+        function acknowledgeNewOrders() {
+
+            /*
+             * Remove all current new-order
+             * notifications.
+             */
+
+            newOrderIds.clear();
+
+
+            /*
+             * Stop the ringing immediately.
+             */
+
+            stopRingAlert();
+
+
+            /*
+             * Hide popup.
+             */
+
+            document
+                .getElementById(
+                    "newOrderOverlay"
+                )
+                .style.display =
+                "none";
+
+
+            document
+                .getElementById(
+                    "newOrderAlert"
+                )
+                .style.display =
+                "none";
+
+
+            updateNewOrderCounter();
+
+
+            /*
+             * Refresh orders.
+             */
+
+            loadOrders();
+
+        }
+
+
+        /* =====================================================
+           VIEW NEW ORDERS
+        ===================================================== */
+
+        function viewNewOrders() {
+
+            /*
+             * Hide center popup,
+             * but KEEP RINGING.
+             */
+
+            document
+                .getElementById(
+                    "newOrderOverlay"
+                )
+                .style.display =
+                "none";
+
+
+            document
+                .getElementById(
+                    "ordersCard"
+                )
+                .scrollIntoView({
+
+                    behavior:
+                        "smooth",
+
+                    block:
+                        "start"
+
+                });
+
+        }
+
+
+        /* =====================================================
+           UPDATE COUNTER
+        ===================================================== */
+
+        function updateNewOrderCounter() {
+
+            const count =
+                newOrderIds.size;
+
+
+            document
+                .getElementById(
+                    "topNewOrderCount"
+                )
+                .textContent =
+                count;
+
+
+            if (count > 0) {
+
+                document
+                    .getElementById(
+                        "newOrderAlert"
+                    )
+                    .style.display =
+                    "block";
+
+            }
+            else {
+
+                document
+                    .getElementById(
+                        "newOrderAlert"
+                    )
+                    .style.display =
+                    "none";
+
+
+                stopRingAlert();
+
+            }
+
+        }
+
+
+        /* =====================================================
+           AUTOMATIC ORDER CHECKING
         ===================================================== */
 
         function startOrderChecking() {
@@ -2666,52 +2718,42 @@
 
 
             /*
-             * Check every 10 seconds.
+             * Check Supabase every 10 seconds.
              */
 
             orderCheckInterval =
-                setInterval(function() {
+                setInterval(
+                    function() {
 
-                    loadOrders({
-                        automatic: true
-                    });
+                        loadOrders({
+                            automatic: true
+                        });
 
-                }, 10000);
+                    },
+                    10000
+                );
 
         }
 
 
         /* =====================================================
-           STOP AUTOMATIC ORDER CHECKING
+           STOP ORDER CHECKING
         ===================================================== */
 
         function stopOrderChecking() {
 
-            if (orderCheckInterval) {
+            if (
+                orderCheckInterval
+            ) {
 
                 clearInterval(
                     orderCheckInterval
                 );
 
-                orderCheckInterval = null;
+                orderCheckInterval =
+                    null;
 
             }
-
-        }
-
-
-        /* =====================================================
-           RENDER NEW ORDER BADGES AGAIN
-        ===================================================== */
-
-        function renderCurrentNewOrderBadges() {
-
-            /*
-             * Reloading the orders makes sure
-             * all badges are updated correctly.
-             */
-
-            loadOrders();
 
         }
 
@@ -2720,9 +2762,13 @@
            ESCAPE HTML
         ===================================================== */
 
-        function escapeHTML(value) {
+        function escapeHTML(
+            value
+        ) {
 
-            return String(value ?? "")
+            return String(
+                value ?? ""
+            )
                 .replace(
                     /&/g,
                     "&amp;"
@@ -2748,13 +2794,12 @@
 
 
         /* =====================================================
-           START
+           START ADMIN
         ===================================================== */
 
         checkAdminSession();
 
     </script>
-
 
 </body>
 
