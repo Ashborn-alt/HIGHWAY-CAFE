@@ -5,7 +5,10 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>HIGHWAY CAFE ADMIN</title>
 
@@ -18,29 +21,48 @@
         }
 
         body {
+
             margin: 0;
+
             padding: 20px;
+
             font-family: Arial, sans-serif;
+
             background: #f5eee6;
+
             color: #3e2723;
+
         }
+
 
         h1,
         h2,
         h3 {
+
             color: #4b2e1f;
+
         }
+
 
         button {
+
             border: none;
+
             border-radius: 8px;
+
             padding: 10px 15px;
+
             cursor: pointer;
+
             font-weight: bold;
+
         }
 
+
         button:hover {
+
             opacity: 0.9;
+
         }
 
 
@@ -60,19 +82,29 @@
 
             border-radius: 15px;
 
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, 0.15);
 
             text-align: center;
+
         }
+
 
         #loginScreen h1 {
+
             margin-bottom: 5px;
+
         }
 
+
         #loginScreen p {
+
             color: #777;
+
             margin-bottom: 25px;
+
         }
+
 
         .login-input {
 
@@ -87,7 +119,9 @@
             border-radius: 8px;
 
             font-size: 16px;
+
         }
+
 
         #loginButton {
 
@@ -98,12 +132,18 @@
             color: white;
 
             font-size: 16px;
+
         }
 
+
         #loginButton:disabled {
+
             opacity: 0.6;
+
             cursor: not-allowed;
+
         }
+
 
         #loginError {
 
@@ -112,6 +152,7 @@
             margin-top: 15px;
 
             display: none;
+
         }
 
 
@@ -120,10 +161,15 @@
         ===================================================== */
 
         #adminDashboard {
+
             display: none;
+
             max-width: 1200px;
+
             margin: auto;
+
         }
+
 
         .admin-header {
 
@@ -133,7 +179,8 @@
 
             border-radius: 15px;
 
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.1);
 
             display: flex;
 
@@ -146,23 +193,106 @@
             margin-bottom: 20px;
 
             flex-wrap: wrap;
+
         }
+
 
         .admin-header h1 {
+
             margin: 0;
+
         }
 
+
         #loggedInEmail {
+
             font-size: 14px;
+
             color: #777;
+
             margin-top: 5px;
+
         }
+
 
         #logoutButton {
 
             background: #8b4513;
 
             color: white;
+
+        }
+
+
+        /* =====================================================
+           NEW ORDER ALERT
+        ===================================================== */
+
+        #newOrderAlert {
+
+            display: none;
+
+            background: #fff3cd;
+
+            border: 2px solid #ff9800;
+
+            color: #663c00;
+
+            padding: 15px 18px;
+
+            border-radius: 12px;
+
+            margin-bottom: 20px;
+
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.1);
+
+            animation: alertPulse 1.5s infinite;
+
+        }
+
+
+        #newOrderAlert strong {
+
+            font-size: 18px;
+
+        }
+
+
+        #newOrderCount {
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+        }
+
+
+        #newOrderAlert button {
+
+            margin-top: 10px;
+
+            background: #4b2e1f;
+
+            color: white;
+
+        }
+
+
+        @keyframes alertPulse {
+
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.01);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+
         }
 
 
@@ -178,10 +308,13 @@
 
             border-radius: 15px;
 
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.1);
 
             margin-bottom: 20px;
+
         }
+
 
         #shopStatus {
 
@@ -190,13 +323,16 @@
             font-weight: bold;
 
             margin: 10px 0 15px;
+
         }
+
 
         #shopToggleButton {
 
             color: white;
 
             font-size: 15px;
+
         }
 
 
@@ -207,14 +343,18 @@
         .menu-category {
 
             margin-bottom: 25px;
+
         }
+
 
         .menu-category h3 {
 
             border-bottom: 2px solid #ddd;
 
             padding-bottom: 8px;
+
         }
+
 
         .menu-item {
 
@@ -231,17 +371,23 @@
             border-bottom: 1px solid #eee;
 
             flex-wrap: wrap;
+
         }
 
+
         .menu-item-name {
+
             font-weight: bold;
+
         }
+
 
         .availability-button {
 
             color: white;
 
             min-width: 120px;
+
         }
 
 
@@ -250,10 +396,15 @@
         ===================================================== */
 
         #ordersContainer {
+
             display: flex;
+
             flex-direction: column;
+
             gap: 15px;
+
         }
+
 
         .order-card {
 
@@ -264,7 +415,70 @@
             padding: 18px;
 
             background: #fff;
+
+            transition:
+                transform 0.2s,
+                box-shadow 0.2s,
+                border 0.2s;
+
         }
+
+
+        /* =====================================================
+           NEW ORDER HIGHLIGHT
+        ===================================================== */
+
+        .order-card.new-order {
+
+            border: 3px solid #ff9800;
+
+            background: #fffaf0;
+
+            box-shadow:
+                0 5px 20px rgba(255, 152, 0, 0.25);
+
+        }
+
+
+        .new-order-badge {
+
+            display: inline-block;
+
+            background: #c62828;
+
+            color: white;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            margin-left: 8px;
+
+            animation: badgePulse 1s infinite;
+
+        }
+
+
+        @keyframes badgePulse {
+
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.55;
+            }
+
+            100% {
+                opacity: 1;
+            }
+
+        }
+
 
         .order-top {
 
@@ -279,7 +493,9 @@
             flex-wrap: wrap;
 
             margin-bottom: 10px;
+
         }
+
 
         .order-number {
 
@@ -288,7 +504,9 @@
             font-weight: bold;
 
             color: #4b2e1f;
+
         }
+
 
         .order-status {
 
@@ -301,14 +519,18 @@
             font-weight: bold;
 
             background: #eee;
+
         }
+
 
         .order-info {
 
             line-height: 1.6;
 
             margin-bottom: 12px;
+
         }
+
 
         .order-items {
 
@@ -321,7 +543,9 @@
             white-space: pre-line;
 
             margin-bottom: 12px;
+
         }
+
 
         .order-total {
 
@@ -330,7 +554,9 @@
             font-weight: bold;
 
             margin-bottom: 15px;
+
         }
+
 
         .status-buttons {
 
@@ -339,31 +565,51 @@
             gap: 8px;
 
             flex-wrap: wrap;
+
         }
+
 
         .status-buttons button {
+
             color: white;
+
         }
+
 
         .status-new {
+
             background: #2196f3;
+
         }
+
 
         .status-preparing {
+
             background: #ff9800;
+
         }
+
 
         .status-ready {
+
             background: #4caf50;
+
         }
+
 
         .status-completed {
+
             background: #2e7d32;
+
         }
 
+
         .status-cancelled {
+
             background: #c62828;
+
         }
+
 
         .refresh-button {
 
@@ -372,7 +618,9 @@
             color: white;
 
             margin-bottom: 15px;
+
         }
+
 
         .empty-orders {
 
@@ -381,7 +629,9 @@
             padding: 30px;
 
             color: #777;
+
         }
+
 
         .loading {
 
@@ -390,7 +640,9 @@
             padding: 20px;
 
             color: #777;
+
         }
+
 
         .error-message {
 
@@ -403,6 +655,7 @@
             border-radius: 8px;
 
             margin-top: 10px;
+
         }
 
 
@@ -413,30 +666,64 @@
         @media (max-width: 600px) {
 
             body {
+
                 padding: 10px;
+
             }
+
 
             #loginScreen {
+
                 margin: 40px auto;
+
                 padding: 20px;
+
             }
+
 
             .admin-header {
+
                 align-items: flex-start;
+
             }
+
 
             .menu-item {
+
                 align-items: flex-start;
+
             }
+
 
             .availability-button {
+
                 width: 100%;
+
             }
 
+
             .status-buttons button {
+
                 flex: 1;
+
                 min-width: 100px;
+
             }
+
+
+            .order-number {
+
+                font-size: 18px;
+
+            }
+
+
+            #newOrderAlert {
+
+                padding: 12px;
+
+            }
+
         }
 
     </style>
@@ -457,7 +744,9 @@
 
         <h2>Admin Login</h2>
 
-        <p>Sign in to access the admin dashboard.</p>
+        <p>
+            Sign in to access the admin dashboard.
+        </p>
 
 
         <form id="loginForm">
@@ -471,6 +760,7 @@
                 required
             >
 
+
             <input
                 type="password"
                 id="loginPassword"
@@ -479,6 +769,7 @@
                 autocomplete="current-password"
                 required
             >
+
 
             <button
                 type="submit"
@@ -503,17 +794,22 @@
     <div id="adminDashboard">
 
 
-        <!-- HEADER -->
+        <!-- =================================================
+             HEADER
+        ================================================= -->
 
         <div class="admin-header">
 
             <div>
 
-                <h1>☕ HIGHWAY CAFE ADMIN</h1>
+                <h1>
+                    ☕ HIGHWAY CAFE ADMIN
+                </h1>
 
                 <div id="loggedInEmail"></div>
 
             </div>
+
 
             <button
                 id="logoutButton"
@@ -527,16 +823,56 @@
 
 
         <!-- =================================================
+             NEW ORDER ALERT
+        ================================================= -->
+
+        <div id="newOrderAlert">
+
+            <div>
+
+                🔔
+                <strong>
+                    NEW ORDER RECEIVED!
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                You have
+                <span id="newOrderCount">0</span>
+                new order(s).
+
+            </div>
+
+
+            <button
+                type="button"
+                onclick="scrollToOrders()"
+            >
+                VIEW NEW ORDERS
+            </button>
+
+        </div>
+
+
+
+        <!-- =================================================
              SHOP STATUS
         ================================================= -->
 
         <div class="admin-card">
 
-            <h2>🏪 Shop Status</h2>
+            <h2>
+                🏪 Shop Status
+            </h2>
+
 
             <div id="shopStatus">
                 Loading...
             </div>
+
 
             <button
                 id="shopToggleButton"
@@ -555,12 +891,16 @@
 
         <div class="admin-card">
 
-            <h2>🍔 Menu Availability</h2>
+            <h2>
+                🍔 Menu Availability
+            </h2>
+
 
             <p>
                 Turn individual products on or off when they are
                 unavailable.
             </p>
+
 
             <div id="menuContainer">
 
@@ -578,9 +918,15 @@
              ORDERS
         ================================================= -->
 
-        <div class="admin-card">
+        <div
+            class="admin-card"
+            id="ordersCard"
+        >
 
-            <h2>📋 Customer Orders</h2>
+            <h2>
+                📋 Customer Orders
+            </h2>
+
 
             <button
                 class="refresh-button"
@@ -588,6 +934,7 @@
             >
                 🔄 Refresh Orders
             </button>
+
 
             <div id="ordersContainer">
 
@@ -614,6 +961,7 @@
 const SUPABASE_URL =
     "https://qfnjegsbyxxqsdaelqqa.supabase.co";
 
+
 const SUPABASE_KEY =
     "sb_publishable_ttu1AyOaylp3J4x7iTqaNg_1VLOdHoE";
 
@@ -627,69 +975,134 @@ const supabaseClient =
 
 
 // =====================================================
+// NEW ORDER SYSTEM
+// =====================================================
+
+let firstOrdersLoaded =
+    false;
+
+
+let knownOrderIds =
+    new Set();
+
+
+let newOrderIds =
+    new Set();
+
+
+let orderCheckInterval =
+    null;
+
+
+
+// =====================================================
 // LOGIN
 // =====================================================
 
 document
     .getElementById("loginForm")
-    .addEventListener("submit", async function(event) {
+    .addEventListener(
+        "submit",
+        async function(event) {
 
-        event.preventDefault();
-
-        const email =
-            document
-                .getElementById("loginEmail")
-                .value
-                .trim();
-
-        const password =
-            document
-                .getElementById("loginPassword")
-                .value;
-
-        const loginButton =
-            document.getElementById("loginButton");
-
-        const loginError =
-            document.getElementById("loginError");
+            event.preventDefault();
 
 
-        loginError.style.display = "none";
-
-        loginButton.disabled = true;
-
-        loginButton.textContent = "LOGGING IN...";
-
-
-        const { data, error } =
-            await supabaseClient.auth.signInWithPassword({
-                email: email,
-                password: password
-            });
+            const email =
+                document
+                    .getElementById("loginEmail")
+                    .value
+                    .trim();
 
 
-        if (error) {
+            const password =
+                document
+                    .getElementById("loginPassword")
+                    .value;
 
-            console.error("Login error:", error);
 
-            loginError.textContent =
-                "Login failed: " + error.message;
+            const loginButton =
+                document.getElementById(
+                    "loginButton"
+                );
 
-            loginError.style.display = "block";
 
-            loginButton.disabled = false;
+            const loginError =
+                document.getElementById(
+                    "loginError"
+                );
 
-            loginButton.textContent = "LOGIN";
 
-            return;
+            loginError.style.display =
+                "none";
+
+
+            loginButton.disabled =
+                true;
+
+
+            loginButton.textContent =
+                "LOGGING IN...";
+
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient.auth
+                    .signInWithPassword({
+
+                        email:
+                            email,
+
+                        password:
+                            password
+
+                    });
+
+
+            if (error) {
+
+                console.error(
+                    "Login error:",
+                    error
+                );
+
+
+                loginError.textContent =
+                    "Login failed: " +
+                    error.message;
+
+
+                loginError.style.display =
+                    "block";
+
+
+                loginButton.disabled =
+                    false;
+
+
+                loginButton.textContent =
+                    "LOGIN";
+
+
+                return;
+
+            }
+
+
+            console.log(
+                "Admin login successful:",
+                data.user.email
+            );
+
+
+            showAdminDashboard(
+                data.user
+            );
+
         }
-
-
-        console.log("Admin login successful:", data.user.email);
-
-        showAdminDashboard(data.user);
-
-    });
+    );
 
 
 
@@ -704,14 +1117,22 @@ async function checkAdminSession() {
             session
         }
     } =
-        await supabaseClient.auth.getSession();
+        await supabaseClient.auth
+            .getSession();
 
 
-    if (session && session.user) {
+    if (
+        session &&
+        session.user
+    ) {
 
-        showAdminDashboard(session.user);
+        showAdminDashboard(
+            session.user
+        );
 
-    } else {
+    }
+
+    else {
 
         showLoginScreen();
 
@@ -729,11 +1150,17 @@ function showLoginScreen() {
 
     document
         .getElementById("loginScreen")
-        .style.display = "block";
+        .style.display =
+            "block";
+
 
     document
         .getElementById("adminDashboard")
-        .style.display = "none";
+        .style.display =
+            "none";
+
+
+    stopOrderChecking();
 
 }
 
@@ -747,17 +1174,21 @@ function showAdminDashboard(user) {
 
     document
         .getElementById("loginScreen")
-        .style.display = "none";
+        .style.display =
+            "none";
+
 
     document
         .getElementById("adminDashboard")
-        .style.display = "block";
+        .style.display =
+            "block";
 
 
     document
         .getElementById("loggedInEmail")
         .textContent =
-            "Logged in as: " + user.email;
+            "Logged in as: " +
+            user.email;
 
 
     loadShopStatus();
@@ -765,6 +1196,9 @@ function showAdminDashboard(user) {
     loadMenu();
 
     loadOrders();
+
+
+    startOrderChecking();
 
 }
 
@@ -777,25 +1211,43 @@ function showAdminDashboard(user) {
 async function logoutAdmin() {
 
     const confirmed =
-        confirm("Are you sure you want to log out?");
+        confirm(
+            "Are you sure you want to log out?"
+        );
 
 
     if (!confirmed) {
+
         return;
+
     }
 
 
-    const { error } =
-        await supabaseClient.auth.signOut();
+    stopOrderChecking();
+
+
+    const {
+        error
+    } =
+        await supabaseClient.auth
+            .signOut();
 
 
     if (error) {
 
-        console.error("Logout error:", error);
+        console.error(
+            "Logout error:",
+            error
+        );
 
-        alert("Could not log out.");
+
+        alert(
+            "Could not log out."
+        );
+
 
         return;
+
     }
 
 
@@ -804,11 +1256,14 @@ async function logoutAdmin() {
 
     document
         .getElementById("loginEmail")
-        .value = "";
+        .value =
+            "";
+
 
     document
         .getElementById("loginPassword")
-        .value = "";
+        .value =
+            "";
 
 }
 
@@ -820,7 +1275,10 @@ async function logoutAdmin() {
 
 async function loadShopStatus() {
 
-    const { data, error } =
+    const {
+        data,
+        error
+    } =
         await supabaseClient
             .from("shop_settings")
             .select("shop_open")
@@ -834,27 +1292,37 @@ async function loadShopStatus() {
             error
         );
 
+
         document
             .getElementById("shopStatus")
             .textContent =
                 "Error loading shop status";
 
+
         return;
+
     }
 
 
-    if (!data || data.length === 0) {
+    if (
+        !data ||
+        data.length === 0
+    ) {
 
         document
             .getElementById("shopStatus")
             .textContent =
                 "No shop settings found";
 
+
         return;
+
     }
 
 
-    updateShopDisplay(data[0].shop_open);
+    updateShopDisplay(
+        data[0].shop_open
+    );
 
 }
 
@@ -867,10 +1335,15 @@ async function loadShopStatus() {
 function updateShopDisplay(isOpen) {
 
     const status =
-        document.getElementById("shopStatus");
+        document.getElementById(
+            "shopStatus"
+        );
+
 
     const button =
-        document.getElementById("shopToggleButton");
+        document.getElementById(
+            "shopToggleButton"
+        );
 
 
     if (isOpen) {
@@ -878,25 +1351,33 @@ function updateShopDisplay(isOpen) {
         status.textContent =
             "🟢 SHOP IS OPEN";
 
+
         status.style.color =
             "#2e7d32";
+
 
         button.textContent =
             "🔴 CLOSE SHOP";
 
+
         button.style.background =
             "#c62828";
 
-    } else {
+    }
+
+    else {
 
         status.textContent =
             "🔴 SHOP IS CLOSED";
 
+
         status.style.color =
             "#c62828";
 
+
         button.textContent =
             "🟢 OPEN SHOP";
+
 
         button.style.background =
             "#2e7d32";
@@ -930,22 +1411,35 @@ async function toggleShop() {
             error
         );
 
-        alert("Could not read shop status.");
+
+        alert(
+            "Could not read shop status."
+        );
+
 
         return;
+
     }
 
 
-    if (!data || data.length === 0) {
+    if (
+        !data ||
+        data.length === 0
+    ) {
 
-        alert("No shop settings were found.");
+        alert(
+            "No shop settings were found."
+        );
+
 
         return;
+
     }
 
 
     const currentStatus =
         data[0].shop_open;
+
 
     const newStatus =
         !currentStatus;
@@ -957,9 +1451,14 @@ async function toggleShop() {
         await supabaseClient
             .from("shop_settings")
             .update({
-                shop_open: newStatus,
+
+                shop_open:
+                    newStatus,
+
                 updated_at:
-                    new Date().toISOString()
+                    new Date()
+                        .toISOString()
+
             })
             .eq(
                 "shop_open",
@@ -974,15 +1473,20 @@ async function toggleShop() {
             updateError
         );
 
+
         alert(
             "Could not update shop status."
         );
 
+
         return;
+
     }
 
 
-    updateShopDisplay(newStatus);
+    updateShopDisplay(
+        newStatus
+    );
 
 }
 
@@ -1022,128 +1526,185 @@ async function loadMenu() {
             error
         );
 
+
         container.innerHTML =
             '<div class="error-message">Could not load menu.</div>';
 
+
         return;
+
     }
 
 
-    if (!data || data.length === 0) {
+    if (
+        !data ||
+        data.length === 0
+    ) {
 
         container.innerHTML =
             '<div class="empty-orders">No menu items found.</div>';
 
+
         return;
+
     }
 
 
     const categories = {};
 
 
-    data.forEach(function(item) {
+    data.forEach(
+        function(item) {
 
-        if (!categories[item.category]) {
+            if (
+                !categories[item.category]
+            ) {
 
-            categories[item.category] = [];
-
-        }
-
-        categories[item.category].push(item);
-
-    });
-
-
-    container.innerHTML = "";
-
-
-    Object.keys(categories).forEach(function(category) {
-
-        const categoryDiv =
-            document.createElement("div");
-
-        categoryDiv.className =
-            "menu-category";
-
-
-        const title =
-            document.createElement("h3");
-
-        title.textContent =
-            category;
-
-
-        categoryDiv.appendChild(title);
-
-
-        categories[category].forEach(function(item) {
-
-            const row =
-                document.createElement("div");
-
-            row.className =
-                "menu-item";
-
-
-            const name =
-                document.createElement("div");
-
-            name.className =
-                "menu-item-name";
-
-            name.textContent =
-                item.product_name;
-
-
-            const button =
-                document.createElement("button");
-
-            button.className =
-                "availability-button";
-
-
-            if (item.available) {
-
-                button.textContent =
-                    "🟢 AVAILABLE";
-
-                button.style.background =
-                    "#2e7d32";
-
-            } else {
-
-                button.textContent =
-                    "🔴 SOLD OUT";
-
-                button.style.background =
-                    "#c62828";
+                categories[item.category] =
+                    [];
 
             }
 
 
-            button.onclick =
-                function() {
+            categories[
+                item.category
+            ].push(item);
 
-                    toggleMenuItem(
-                        item.id,
-                        item.available
+        }
+    );
+
+
+    container.innerHTML =
+        "";
+
+
+    Object.keys(categories)
+        .forEach(
+            function(category) {
+
+                const categoryDiv =
+                    document.createElement(
+                        "div"
                     );
 
-                };
+
+                categoryDiv.className =
+                    "menu-category";
 
 
-            row.appendChild(name);
-
-            row.appendChild(button);
-
-            categoryDiv.appendChild(row);
-
-        });
+                const title =
+                    document.createElement(
+                        "h3"
+                    );
 
 
-        container.appendChild(categoryDiv);
+                title.textContent =
+                    category;
 
-    });
+
+                categoryDiv.appendChild(
+                    title
+                );
+
+
+                categories[category]
+                    .forEach(
+                        function(item) {
+
+                            const row =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            row.className =
+                                "menu-item";
+
+
+                            const name =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            name.className =
+                                "menu-item-name";
+
+
+                            name.textContent =
+                                item.product_name;
+
+
+                            const button =
+                                document.createElement(
+                                    "button"
+                                );
+
+
+                            button.className =
+                                "availability-button";
+
+
+                            if (
+                                item.available
+                            ) {
+
+                                button.textContent =
+                                    "🟢 AVAILABLE";
+
+
+                                button.style.background =
+                                    "#2e7d32";
+
+                            }
+
+                            else {
+
+                                button.textContent =
+                                    "🔴 SOLD OUT";
+
+
+                                button.style.background =
+                                    "#c62828";
+
+                            }
+
+
+                            button.onclick =
+                                function() {
+
+                                    toggleMenuItem(
+                                        item.id,
+                                        item.available
+                                    );
+
+                                };
+
+
+                            row.appendChild(
+                                name
+                            );
+
+
+                            row.appendChild(
+                                button
+                            );
+
+
+                            categoryDiv.appendChild(
+                                row
+                            );
+
+                        }
+                    );
+
+
+                container.appendChild(
+                    categoryDiv
+                );
+
+            }
+        );
 
 }
 
@@ -1168,13 +1729,19 @@ async function toggleMenuItem(
         await supabaseClient
             .from("menu_items")
             .update({
+
                 available:
                     newAvailability,
 
                 updated_at:
-                    new Date().toISOString()
+                    new Date()
+                        .toISOString()
+
             })
-            .eq("id", id);
+            .eq(
+                "id",
+                id
+            );
 
 
     if (error) {
@@ -1184,11 +1751,14 @@ async function toggleMenuItem(
             error
         );
 
+
         alert(
             "Could not update menu availability."
         );
 
+
         return;
+
     }
 
 
@@ -1202,7 +1772,13 @@ async function toggleMenuItem(
 // LOAD ORDERS
 // =====================================================
 
-async function loadOrders() {
+async function loadOrders(
+    options = {}
+) {
+
+    const isAutomaticCheck =
+        options.automatic === true;
+
 
     const container =
         document.getElementById(
@@ -1210,8 +1786,12 @@ async function loadOrders() {
         );
 
 
-    container.innerHTML =
-        '<div class="loading">Loading orders...</div>';
+    if (!isAutomaticCheck) {
+
+        container.innerHTML =
+            '<div class="loading">Loading orders...</div>';
+
+    }
 
 
     const {
@@ -1236,278 +1816,814 @@ async function loadOrders() {
             error
         );
 
-        container.innerHTML =
-            '<div class="error-message">Could not load orders.</div>';
+
+        if (!isAutomaticCheck) {
+
+            container.innerHTML =
+                '<div class="error-message">Could not load orders.</div>';
+
+        }
+
 
         return;
+
     }
 
 
-    if (!data || data.length === 0) {
+    const orders =
+        data || [];
+
+
+    // =================================================
+    // DETECT NEW ORDERS
+    // =================================================
+
+    if (
+        firstOrdersLoaded
+    ) {
+
+        let newlyDetected =
+            [];
+
+
+        orders.forEach(
+            function(order) {
+
+                if (
+                    !knownOrderIds.has(
+                        order.id
+                    )
+                ) {
+
+                    newlyDetected.push(
+                        order
+                    );
+
+                }
+
+            }
+        );
+
+
+        newlyDetected.forEach(
+            function(order) {
+
+                if (
+                    order.status === "New"
+                ) {
+
+                    newOrderIds.add(
+                        order.id
+                    );
+
+                }
+
+            }
+        );
+
+
+        if (
+            newlyDetected.length > 0
+        ) {
+
+            playNewOrderSound();
+
+            showNewOrderAlert();
+
+        }
+
+    }
+
+
+    // =================================================
+    // UPDATE KNOWN ORDERS
+    // =================================================
+
+    knownOrderIds =
+        new Set(
+            orders.map(
+                function(order) {
+
+                    return order.id;
+
+                }
+            )
+        );
+
+
+    // =================================================
+    // REMOVE ORDERS THAT ARE NO LONGER NEW
+    // =================================================
+
+    orders.forEach(
+        function(order) {
+
+            if (
+                order.status !== "New"
+            ) {
+
+                newOrderIds.delete(
+                    order.id
+                );
+
+            }
+
+        }
+    );
+
+
+    updateNewOrderCounter();
+
+
+    firstOrdersLoaded =
+        true;
+
+
+    // =================================================
+    // EMPTY
+    // =================================================
+
+    if (
+        orders.length === 0
+    ) {
 
         container.innerHTML =
             '<div class="empty-orders">No active orders.</div>';
 
         return;
+
     }
 
 
-    container.innerHTML = "";
+    // =================================================
+    // RENDER ORDERS
+    // =================================================
 
+    container.innerHTML =
+        "";
 
-    data.forEach(function(order) {
 
-        const card =
-            document.createElement("div");
+    orders.forEach(
+        function(order) {
 
-        card.className =
-            "order-card";
+            const card =
+                document.createElement(
+                    "div"
+                );
 
 
-        // ---------------------------------------------
-        // TOP
-        // ---------------------------------------------
+            card.className =
+                "order-card";
 
-        const top =
-            document.createElement("div");
 
-        top.className =
-            "order-top";
+            const isNew =
+                order.status === "New" &&
+                newOrderIds.has(
+                    order.id
+                );
 
 
-        const orderNumber =
-            document.createElement("div");
+            if (isNew) {
 
-        orderNumber.className =
-            "order-number";
+                card.classList.add(
+                    "new-order"
+                );
 
-        orderNumber.textContent =
-            order.order_number;
-
-
-        const status =
-            document.createElement("div");
-
-        status.className =
-            "order-status";
-
-        status.textContent =
-            order.status;
-
-
-        top.appendChild(orderNumber);
-
-        top.appendChild(status);
-
-
-        // ---------------------------------------------
-        // CUSTOMER INFORMATION
-        // ---------------------------------------------
-
-        const info =
-            document.createElement("div");
-
-        info.className =
-            "order-info";
-
-
-        let infoHTML = "";
-
-        infoHTML +=
-            "<strong>Customer:</strong> "
-            + escapeHTML(order.customer_name)
-            + "<br>";
-
-        infoHTML +=
-            "<strong>Phone:</strong> "
-            + escapeHTML(order.phone)
-            + "<br>";
-
-        infoHTML +=
-            "<strong>Order Type:</strong> "
-            + escapeHTML(order.order_type)
-            + "<br>";
-
-
-        if (order.delivery_address) {
-
-            infoHTML +=
-                "<strong>Delivery Address:</strong> "
-                + escapeHTML(
-                    order.delivery_address
-                )
-                + "<br>";
-
-        }
-
-
-        if (order.pickup_time) {
-
-            infoHTML +=
-                "<strong>Pickup Time:</strong> "
-                + escapeHTML(
-                    order.pickup_time
-                )
-                + "<br>";
-
-        }
-
-
-        infoHTML +=
-            "<strong>Payment:</strong> "
-            + escapeHTML(
-                order.payment_method
-            )
-            + "<br>";
-
-
-        if (order.gcash_reference) {
-
-            infoHTML +=
-                "<strong>GCash Reference:</strong> "
-                + escapeHTML(
-                    order.gcash_reference
-                )
-                + "<br>";
-
-        }
-
-
-        if (order.order_notes) {
-
-            infoHTML +=
-                "<strong>Notes:</strong> "
-                + escapeHTML(
-                    order.order_notes
-                )
-                + "<br>";
-
-        }
-
-
-        infoHTML +=
-            "<strong>Time:</strong> "
-            + new Date(
-                order.created_at
-            ).toLocaleString();
-
-
-        info.innerHTML =
-            infoHTML;
-
-
-        // ---------------------------------------------
-        // ITEMS
-        // ---------------------------------------------
-
-        const items =
-            document.createElement("div");
-
-        items.className =
-            "order-items";
-
-        items.textContent =
-            order.ordered_items || "";
-
-
-        // ---------------------------------------------
-        // TOTAL
-        // ---------------------------------------------
-
-        const total =
-            document.createElement("div");
-
-        total.className =
-            "order-total";
-
-        total.textContent =
-            "Total: ₱"
-            + Number(
-                order.grand_total || 0
-            ).toFixed(2);
-
-
-        // ---------------------------------------------
-        // STATUS BUTTONS
-        // ---------------------------------------------
-
-        const statusButtons =
-            document.createElement("div");
-
-        statusButtons.className =
-            "status-buttons";
-
-
-        const statuses = [
-            {
-                name: "New",
-                className: "status-new"
-            },
-            {
-                name: "Preparing",
-                className: "status-preparing"
-            },
-            {
-                name: "Ready",
-                className: "status-ready"
-            },
-            {
-                name: "Completed",
-                className: "status-completed"
-            },
-            {
-                name: "Cancelled",
-                className: "status-cancelled"
             }
-        ];
 
 
-        statuses.forEach(function(statusOption) {
+            // -----------------------------------------
+            // TOP
+            // -----------------------------------------
 
-            const button =
-                document.createElement("button");
-
-            button.textContent =
-                statusOption.name;
-
-            button.className =
-                statusOption.className;
+            const top =
+                document.createElement(
+                    "div"
+                );
 
 
-            button.onclick =
-                function() {
+            top.className =
+                "order-top";
 
-                    updateOrderStatus(
-                        order.id,
-                        statusOption.name
+
+            const orderNumber =
+                document.createElement(
+                    "div"
+                );
+
+
+            orderNumber.className =
+                "order-number";
+
+
+            orderNumber.textContent =
+                order.order_number;
+
+
+            if (isNew) {
+
+                const badge =
+                    document.createElement(
+                        "span"
                     );
 
-                };
+
+                badge.className =
+                    "new-order-badge";
 
 
-            statusButtons.appendChild(button);
-
-        });
-
-
-        // ---------------------------------------------
-        // BUILD CARD
-        // ---------------------------------------------
-
-        card.appendChild(top);
-
-        card.appendChild(info);
-
-        card.appendChild(items);
-
-        card.appendChild(total);
-
-        card.appendChild(statusButtons);
+                badge.textContent =
+                    "NEW ORDER";
 
 
-        container.appendChild(card);
+                orderNumber.appendChild(
+                    badge
+                );
+
+            }
+
+
+            const status =
+                document.createElement(
+                    "div"
+                );
+
+
+            status.className =
+                "order-status";
+
+
+            status.textContent =
+                order.status;
+
+
+            top.appendChild(
+                orderNumber
+            );
+
+
+            top.appendChild(
+                status
+            );
+
+
+            // -----------------------------------------
+            // CUSTOMER INFORMATION
+            // -----------------------------------------
+
+            const info =
+                document.createElement(
+                    "div"
+                );
+
+
+            info.className =
+                "order-info";
+
+
+            let infoHTML =
+                "";
+
+
+            infoHTML +=
+                "<strong>Customer:</strong> " +
+                escapeHTML(
+                    order.customer_name
+                ) +
+                "<br>";
+
+
+            infoHTML +=
+                "<strong>Phone:</strong> " +
+                escapeHTML(
+                    order.phone
+                ) +
+                "<br>";
+
+
+            infoHTML +=
+                "<strong>Order Type:</strong> " +
+                escapeHTML(
+                    order.order_type
+                ) +
+                "<br>";
+
+
+            if (
+                order.delivery_address
+            ) {
+
+                infoHTML +=
+                    "<strong>Delivery Address:</strong> " +
+                    escapeHTML(
+                        order.delivery_address
+                    ) +
+                    "<br>";
+
+            }
+
+
+            if (
+                order.pickup_time
+            ) {
+
+                infoHTML +=
+                    "<strong>Pickup Time:</strong> " +
+                    escapeHTML(
+                        order.pickup_time
+                    ) +
+                    "<br>";
+
+            }
+
+
+            infoHTML +=
+                "<strong>Payment:</strong> " +
+                escapeHTML(
+                    order.payment_method
+                ) +
+                "<br>";
+
+
+            if (
+                order.gcash_reference
+            ) {
+
+                infoHTML +=
+                    "<strong>GCash Reference:</strong> " +
+                    escapeHTML(
+                        order.gcash_reference
+                    ) +
+                    "<br>";
+
+            }
+
+
+            if (
+                order.order_notes
+            ) {
+
+                infoHTML +=
+                    "<strong>Notes:</strong> " +
+                    escapeHTML(
+                        order.order_notes
+                    ) +
+                    "<br>";
+
+            }
+
+
+            infoHTML +=
+                "<strong>Time:</strong> " +
+                new Date(
+                    order.created_at
+                ).toLocaleString();
+
+
+            info.innerHTML =
+                infoHTML;
+
+
+            // -----------------------------------------
+            // ITEMS
+            // -----------------------------------------
+
+            const items =
+                document.createElement(
+                    "div"
+                );
+
+
+            items.className =
+                "order-items";
+
+
+            items.textContent =
+                order.ordered_items ||
+                "";
+
+
+            // -----------------------------------------
+            // TOTAL
+            // -----------------------------------------
+
+            const total =
+                document.createElement(
+                    "div"
+                );
+
+
+            total.className =
+                "order-total";
+
+
+            total.textContent =
+                "Total: ₱" +
+                Number(
+                    order.grand_total || 0
+                ).toFixed(2);
+
+
+            // -----------------------------------------
+            // STATUS BUTTONS
+            // -----------------------------------------
+
+            const statusButtons =
+                document.createElement(
+                    "div"
+                );
+
+
+            statusButtons.className =
+                "status-buttons";
+
+
+            const statuses = [
+
+                {
+                    name:
+                        "New",
+
+                    className:
+                        "status-new"
+                },
+
+                {
+                    name:
+                        "Preparing",
+
+                    className:
+                        "status-preparing"
+                },
+
+                {
+                    name:
+                        "Ready",
+
+                    className:
+                        "status-ready"
+                },
+
+                {
+                    name:
+                        "Completed",
+
+                    className:
+                        "status-completed"
+                },
+
+                {
+                    name:
+                        "Cancelled",
+
+                    className:
+                        "status-cancelled"
+                }
+
+            ];
+
+
+            statuses.forEach(
+                function(statusOption) {
+
+                    const button =
+                        document.createElement(
+                            "button"
+                        );
+
+
+                    button.textContent =
+                        statusOption.name;
+
+
+                    button.className =
+                        statusOption.className;
+
+
+                    button.onclick =
+                        function() {
+
+                            updateOrderStatus(
+                                order.id,
+                                statusOption.name
+                            );
+
+                        };
+
+
+                    statusButtons.appendChild(
+                        button
+                    );
+
+                }
+            );
+
+
+            // -----------------------------------------
+            // BUILD CARD
+            // -----------------------------------------
+
+            card.appendChild(
+                top
+            );
+
+
+            card.appendChild(
+                info
+            );
+
+
+            card.appendChild(
+                items
+            );
+
+
+            card.appendChild(
+                total
+            );
+
+
+            card.appendChild(
+                statusButtons
+            );
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+
+// =====================================================
+// NEW ORDER COUNTER
+// =====================================================
+
+function updateNewOrderCounter() {
+
+    const count =
+        newOrderIds.size;
+
+
+    const countElement =
+        document.getElementById(
+            "newOrderCount"
+        );
+
+
+    const alertElement =
+        document.getElementById(
+            "newOrderAlert"
+        );
+
+
+    if (countElement) {
+
+        countElement.textContent =
+            count;
+
+    }
+
+
+    if (
+        alertElement
+    ) {
+
+        if (count > 0) {
+
+            alertElement.style.display =
+                "block";
+
+        }
+
+        else {
+
+            alertElement.style.display =
+                "none";
+
+        }
+
+    }
+
+}
+
+
+
+// =====================================================
+// SHOW NEW ORDER ALERT
+// =====================================================
+
+function showNewOrderAlert() {
+
+    const alertElement =
+        document.getElementById(
+            "newOrderAlert"
+        );
+
+
+    if (!alertElement) {
+
+        return;
+
+    }
+
+
+    alertElement.style.display =
+        "block";
+
+
+    updateNewOrderCounter();
+
+
+    // Scroll slightly toward alert
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
 
     });
+
+}
+
+
+
+// =====================================================
+// SCROLL TO ORDERS
+// =====================================================
+
+function scrollToOrders() {
+
+    const ordersCard =
+        document.getElementById(
+            "ordersCard"
+        );
+
+
+    if (!ordersCard) {
+
+        return;
+
+    }
+
+
+    ordersCard.scrollIntoView({
+
+        behavior:
+            "smooth",
+
+        block:
+            "start"
+
+    });
+
+}
+
+
+
+// =====================================================
+// NEW ORDER SOUND
+// =====================================================
+
+function playNewOrderSound() {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+
+        if (!AudioContext) {
+
+            return;
+
+        }
+
+
+        const audioContext =
+            new AudioContext();
+
+
+        const oscillator =
+            audioContext.createOscillator();
+
+
+        const gainNode =
+            audioContext.createGain();
+
+
+        oscillator.type =
+            "sine";
+
+
+        oscillator.frequency.setValueAtTime(
+            880,
+            audioContext.currentTime
+        );
+
+
+        gainNode.gain.setValueAtTime(
+            0.15,
+            audioContext.currentTime
+        );
+
+
+        oscillator.connect(
+            gainNode
+        );
+
+
+        gainNode.connect(
+            audioContext.destination
+        );
+
+
+        oscillator.start();
+
+
+        oscillator.stop(
+            audioContext.currentTime +
+            0.25
+        );
+
+
+        oscillator.onended =
+            function() {
+
+                audioContext.close();
+
+            };
+
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Notification sound unavailable."
+        );
+
+    }
+
+}
+
+
+
+// =====================================================
+// AUTOMATIC ORDER CHECKING
+// =====================================================
+
+function startOrderChecking() {
+
+    stopOrderChecking();
+
+
+    orderCheckInterval =
+        setInterval(
+            function() {
+
+                loadOrders({
+                    automatic:
+                        true
+                });
+
+            },
+            10000
+        );
+
+
+    console.log(
+        "Automatic order checking started."
+    );
+
+}
+
+
+
+// =====================================================
+// STOP ORDER CHECKING
+// =====================================================
+
+function stopOrderChecking() {
+
+    if (
+        orderCheckInterval
+    ) {
+
+        clearInterval(
+            orderCheckInterval
+        );
+
+
+        orderCheckInterval =
+            null;
+
+    }
 
 }
 
@@ -1522,12 +2638,13 @@ async function updateOrderStatus(
     newStatus
 ) {
 
-
     // ================================================
     // COMPLETED = DELETE
     // ================================================
 
-    if (newStatus === "Completed") {
+    if (
+        newStatus === "Completed"
+    ) {
 
         const confirmed =
             confirm(
@@ -1536,7 +2653,9 @@ async function updateOrderStatus(
 
 
         if (!confirmed) {
+
             return;
+
         }
 
 
@@ -1546,7 +2665,10 @@ async function updateOrderStatus(
             await supabaseClient
                 .from("orders")
                 .delete()
-                .eq("id", orderId);
+                .eq(
+                    "id",
+                    orderId
+                );
 
 
         if (error) {
@@ -1556,19 +2678,30 @@ async function updateOrderStatus(
                 error
             );
 
+
             alert(
                 "Could not remove the completed order."
             );
 
+
             return;
+
         }
+
+
+        newOrderIds.delete(
+            orderId
+        );
+
+
+        updateNewOrderCounter();
 
 
         loadOrders();
 
         return;
-    }
 
+    }
 
 
     // ================================================
@@ -1581,9 +2714,15 @@ async function updateOrderStatus(
         await supabaseClient
             .from("orders")
             .update({
-                status: newStatus
+
+                status:
+                    newStatus
+
             })
-            .eq("id", orderId);
+            .eq(
+                "id",
+                orderId
+            );
 
 
     if (error) {
@@ -1593,12 +2732,33 @@ async function updateOrderStatus(
             error
         );
 
+
         alert(
             "Could not update order status."
         );
 
+
         return;
+
     }
+
+
+    // ================================================
+    // NO LONGER NEW
+    // ================================================
+
+    if (
+        newStatus !== "New"
+    ) {
+
+        newOrderIds.delete(
+            orderId
+        );
+
+    }
+
+
+    updateNewOrderCounter();
 
 
     loadOrders();
@@ -1613,8 +2773,10 @@ async function updateOrderStatus(
 
 function escapeHTML(value) {
 
-    if (value === null ||
-        value === undefined) {
+    if (
+        value === null ||
+        value === undefined
+    ) {
 
         return "";
 
@@ -1622,11 +2784,31 @@ function escapeHTML(value) {
 
 
     return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -1636,23 +2818,29 @@ function escapeHTML(value) {
 // AUTH STATE
 // =====================================================
 
-supabaseClient.auth.onAuthStateChange(
-    function(event, session) {
+supabaseClient.auth
+    .onAuthStateChange(
+        function(event, session) {
 
-        if (session && session.user) {
-
-            showAdminDashboard(
+            if (
+                session &&
                 session.user
-            );
+            ) {
 
-        } else {
+                showAdminDashboard(
+                    session.user
+                );
 
-            showLoginScreen();
+            }
+
+            else {
+
+                showLoginScreen();
+
+            }
 
         }
-
-    }
-);
+    );
 
 
 
