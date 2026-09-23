@@ -360,25 +360,35 @@ button:disabled {
 
     font-weight: bold;
 }
-    /* MAKE AVAILABLE BUTTON */
-
+    
 .menu-toggle.make-available {
 
     background: #16833a;
 
     color: white;
+
+    opacity: 1;
 }
 
-
-/* MARK SOLD OUT BUTTON */
 
 .menu-toggle.mark-sold-out {
 
     background: #b00020;
 
     color: white;
+
+    opacity: 1;
 }
 
+
+/* Keep menu buttons bright even when temporarily disabled */
+
+.menu-toggle:disabled {
+
+    opacity: 1;
+
+    cursor: not-allowed;
+}
 
 /* =====================================================
    ORDERS
