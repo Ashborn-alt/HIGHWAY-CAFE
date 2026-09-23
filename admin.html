@@ -2237,18 +2237,22 @@ async function loadMenu() {
 
 
                 <button
-                    class="menu-toggle"
-                    data-menu-id="${escapeHTML(
+            class="menu-toggle ${
+                    isAvailable
+                                    ? "mark-sold-out"
+                                    : "make-available"
+                }"
+             data-menu-id="${escapeHTML(
                         safeId
-                    )}">
+                        )}">
 
-                    ${
-                        isAvailable
-                            ? "Mark Sold Out"
-                            : "Make Available"
-                    }
+                ${
+                    isAvailable
+                                ? "Mark Sold Out"
+                                : "Make Available"
+                            }
 
-                </button>
+</button>
 
             `;
 
