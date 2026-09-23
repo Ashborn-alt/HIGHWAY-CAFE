@@ -1,7 +1,735 @@
 /* =====================================================
    HIGHWAY CAFE
    COMPLETE ORDERING SYSTEM
+   + SUPABASE SHOP STATUS
+   + MENU AVAILABILITY
+   + ONLINE ORDERS
 ===================================================== */
+
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+    "https://qfnjegsbyxxqsdaelqqa.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_ttu1AyOaylp3J4x7iTqaNg_1VLOdHoE";
+
+let supabaseClient = null;
+
+let shopIsOpen = true;
+
+let menuAvailability = {};
+
+let supabaseReady = false;
+
+
+/* =====================================================
+   LOAD SUPABASE LIBRARY
+===================================================== */
+
+function loadSupabaseLibrary() {
+
+    return new Promise(function(resolve, reject) {
+
+        if (
+            window.supabase &&
+            typeof window.supabase.createClient === "function"
+        ) {
+
+            resolve();
+
+            return;
+        }
+
+
+        const script =
+            document.createElement("script");
+
+        script.src =
+            "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+
+        script.onload = function() {
+
+            resolve();
+        };
+
+
+        script.onerror = function() {
+
+            reject(
+                new Error(
+                    "Could not load Supabase."
+                )
+            );
+        };
+
+
+        document.head.appendChild(script);
+    });
+}
+
+
+/* =====================================================
+   INITIALIZE SUPABASE
+===================================================== */
+
+async function initializeSupabase() {
+
+    try {
+
+        await loadSupabaseLibrary();
+
+
+        supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        supabaseReady = true;
+
+
+        console.log(
+            "HIGHWAY CAFE Supabase connected."
+        );
+
+
+        await loadShopStatusForCustomer();
+
+        await loadMenuAvailabilityForCustomer();
+
+        applyCustomerAvailability();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Supabase initialization error:",
+            error
+        );
+
+        supabaseReady = false;
+
+        showShopConnectionWarning();
+    }
+}
+
+
+/* =====================================================
+   SHOP STATUS
+===================================================== */
+
+async function loadShopStatusForCustomer() {
+
+    if (!supabaseClient) {
+        return;
+    }
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("shop_settings")
+            .select("shop_open")
+            .limit(1);
+
+
+    if (error) {
+
+        console.error(
+            "Could not load shop status:",
+            error
+        );
+
+        return;
+    }
+
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        console.error(
+            "No shop settings found."
+        );
+
+        return;
+    }
+
+
+    shopIsOpen =
+        data[0].shop_open === true;
+
+
+    console.log(
+        "Shop open:",
+        shopIsOpen
+    );
+
+
+    updateCustomerShopDisplay();
+}
+
+
+/* =====================================================
+   CUSTOMER SHOP DISPLAY
+===================================================== */
+
+function updateCustomerShopDisplay() {
+
+    let notice =
+        document.getElementById(
+            "customerShopStatus"
+        );
+
+
+    if (!notice) {
+
+        notice =
+            document.createElement(
+                "div"
+            );
+
+        notice.id =
+            "customerShopStatus";
+
+
+        notice.style.width =
+            "calc(100% - 40px)";
+
+        notice.style.maxWidth =
+            "900px";
+
+        notice.style.margin =
+            "15px auto";
+
+        notice.style.padding =
+            "12px 18px";
+
+        notice.style.borderRadius =
+            "10px";
+
+        notice.style.fontWeight =
+            "bold";
+
+        notice.style.textAlign =
+            "center";
+
+        notice.style.boxSizing =
+            "border-box";
+
+
+        const header =
+            document.querySelector(
+                "header"
+            );
+
+
+        const menu =
+            document.getElementById(
+                "menu"
+            );
+
+
+        if (header && header.parentNode) {
+
+            header.parentNode.insertBefore(
+                notice,
+                menu || header.nextSibling
+            );
+
+        }
+
+        else if (document.body) {
+
+            document.body.insertBefore(
+                notice,
+                document.body.firstChild
+            );
+        }
+    }
+
+
+    if (shopIsOpen) {
+
+        notice.textContent =
+            "🟢 HIGHWAY CAFE IS OPEN";
+
+        notice.style.background =
+            "#dff6df";
+
+        notice.style.color =
+            "#176b17";
+
+        notice.style.border =
+            "2px solid #4caf50";
+
+    }
+
+    else {
+
+        notice.textContent =
+            "🔴 HIGHWAY CAFE IS CURRENTLY CLOSED";
+
+        notice.style.background =
+            "#ffe1e1";
+
+        notice.style.color =
+            "#a00000";
+
+        notice.style.border =
+            "2px solid #d33";
+    }
+
+
+    const orderNowButtons =
+        document.querySelectorAll(
+            'button[onclick*="startOrder"]'
+        );
+
+
+    orderNowButtons.forEach(
+        function(button) {
+
+            if (shopIsOpen) {
+
+                button.disabled =
+                    false;
+
+                button.style.opacity =
+                    "1";
+
+                button.style.cursor =
+                    "pointer";
+
+            }
+
+            else {
+
+                button.disabled =
+                    true;
+
+                button.style.opacity =
+                    "0.5";
+
+                button.style.cursor =
+                    "not-allowed";
+            }
+        }
+    );
+
+
+    const checkoutButton =
+        document.querySelector(
+            'button[onclick*="openCheckout"]'
+        );
+
+
+    if (checkoutButton) {
+
+        if (shopIsOpen) {
+
+            checkoutButton.disabled =
+                false;
+
+            checkoutButton.style.opacity =
+                "1";
+
+        }
+
+        else {
+
+            checkoutButton.disabled =
+                true;
+
+            checkoutButton.style.opacity =
+                "0.5";
+        }
+    }
+
+
+    const placeOrderButton =
+        document.getElementById(
+            "placeOrderButton"
+        );
+
+
+    if (placeOrderButton) {
+
+        if (!shopIsOpen) {
+
+            placeOrderButton.disabled =
+                true;
+
+            placeOrderButton.style.opacity =
+                "0.5";
+
+        }
+    }
+}
+
+
+/* =====================================================
+   CONNECTION WARNING
+===================================================== */
+
+function showShopConnectionWarning() {
+
+    let warning =
+        document.getElementById(
+            "customerShopConnectionWarning"
+        );
+
+
+    if (warning) {
+        return;
+    }
+
+
+    warning =
+        document.createElement(
+            "div"
+        );
+
+
+    warning.id =
+        "customerShopConnectionWarning";
+
+
+    warning.textContent =
+        "⚠ Shop status could not be checked. Please refresh the page.";
+
+
+    warning.style.background =
+        "#fff3cd";
+
+    warning.style.color =
+        "#856404";
+
+    warning.style.padding =
+        "10px";
+
+    warning.style.textAlign =
+        "center";
+
+    warning.style.fontWeight =
+        "bold";
+
+
+    document.body.insertBefore(
+        warning,
+        document.body.firstChild
+    );
+}
+
+
+/* =====================================================
+   MENU AVAILABILITY
+===================================================== */
+
+async function loadMenuAvailabilityForCustomer() {
+
+    if (!supabaseClient) {
+        return;
+    }
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("menu_items")
+            .select(
+                "product_name, category, available"
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Could not load menu availability:",
+            error
+        );
+
+        return;
+    }
+
+
+    menuAvailability = {};
+
+
+    if (!data) {
+        return;
+    }
+
+
+    data.forEach(
+        function(item) {
+
+            const key =
+                makeMenuKey(
+                    item.product_name,
+                    item.category
+                );
+
+
+            menuAvailability[key] =
+                item.available === true;
+        }
+    );
+
+
+    console.log(
+        "Menu availability loaded:",
+        menuAvailability
+    );
+}
+
+
+/* =====================================================
+   MENU KEY
+===================================================== */
+
+function makeMenuKey(
+    productName,
+    category
+) {
+
+    return (
+        String(category)
+            .trim()
+            .toLowerCase()
+        +
+        "|"
+        +
+        String(productName)
+            .trim()
+            .toLowerCase()
+    );
+}
+
+
+/* =====================================================
+   CHECK PRODUCT AVAILABILITY
+===================================================== */
+
+function isMenuItemAvailable(
+    productName,
+    category
+) {
+
+    const key =
+        makeMenuKey(
+            productName,
+            category
+        );
+
+
+    if (
+        Object.prototype.hasOwnProperty.call(
+            menuAvailability,
+            key
+        )
+    ) {
+
+        return menuAvailability[key];
+    }
+
+
+    /*
+       If an item is not found in the database,
+       allow it so existing menu items don't
+       suddenly disappear.
+    */
+
+    return true;
+}
+
+
+/* =====================================================
+   APPLY MENU AVAILABILITY
+===================================================== */
+
+function applyCustomerAvailability() {
+
+    updateCustomerShopDisplay();
+
+
+    const buttons =
+        document.querySelectorAll(
+            "button[onclick]"
+        );
+
+
+    buttons.forEach(
+        function(button) {
+
+            const onclick =
+                button.getAttribute(
+                    "onclick"
+                );
+
+
+            if (!onclick) {
+                return;
+            }
+
+
+            let productName = null;
+
+            let category = null;
+
+
+            /* -----------------------------------------
+               PRODUCT
+            ----------------------------------------- */
+
+            let match =
+                onclick.match(
+                    /openProduct\s*\(\s*['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/
+                );
+
+
+            if (match) {
+
+                productName =
+                    match[1];
+
+                category =
+                    match[2];
+            }
+
+
+            /* -----------------------------------------
+               SNACK
+            ----------------------------------------- */
+
+            if (!match) {
+
+                match =
+                    onclick.match(
+                        /openSnack\s*\(\s*['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/
+                    );
+
+
+                if (match) {
+
+                    productName =
+                        match[1];
+
+                    category =
+                        match[2];
+                }
+            }
+
+
+            /* -----------------------------------------
+               MEAL
+            ----------------------------------------- */
+
+            if (!match) {
+
+                match =
+                    onclick.match(
+                        /openMeal\s*\(\s*['"]([^'"]+)['"]/
+                    );
+
+
+                if (match) {
+
+                    productName =
+                        match[1];
+
+                    category =
+                        "Pit Stop Plates";
+                }
+            }
+
+
+            if (
+                !productName ||
+                !category
+            ) {
+
+                return;
+            }
+
+
+            const available =
+                isMenuItemAvailable(
+                    productName,
+                    category
+                );
+
+
+            if (!button.dataset.originalText) {
+
+                button.dataset.originalText =
+                    button.textContent;
+            }
+
+
+            if (shopIsOpen && available) {
+
+                button.disabled =
+                    false;
+
+                button.style.opacity =
+                    "1";
+
+                button.style.cursor =
+                    "pointer";
+
+                button.style.backgroundColor =
+                    "";
+
+                button.textContent =
+                    button.dataset.originalText;
+            }
+
+            else {
+
+                button.disabled =
+                    true;
+
+                button.style.opacity =
+                    "0.55";
+
+                button.style.cursor =
+                    "not-allowed";
+
+                button.style.backgroundColor =
+                    "#999";
+
+                button.textContent =
+                    button.dataset.originalText +
+                    " - SOLD OUT";
+            }
+        }
+    );
+}
+
+
+/* =====================================================
+   REFRESH CUSTOMER STATUS
+===================================================== */
+
+async function refreshCustomerAvailability() {
+
+    if (!supabaseClient) {
+        return;
+    }
+
+
+    await loadShopStatusForCustomer();
+
+    await loadMenuAvailabilityForCustomer();
+
+    applyCustomerAvailability();
+}
 
 
 /* =====================================================
@@ -101,8 +829,19 @@ let paymentMethod = "cash";
 
 function startOrder() {
 
+    if (!shopIsOpen) {
+
+        alert(
+            "HIGHWAY CAFE is currently closed."
+        );
+
+        return;
+    }
+
+
     const menu =
         document.getElementById("menu");
+
 
     if (!menu) {
 
@@ -113,7 +852,10 @@ function startOrder() {
         return;
     }
 
-    menu.style.display = "block";
+
+    menu.style.display =
+        "block";
+
 
     menu.scrollIntoView({
         behavior: "smooth"
@@ -135,102 +877,148 @@ function openProduct(
     p8 = 0
 ) {
 
-    selectedProduct = productName;
-    selectedCategory = category;
+    if (!shopIsOpen) {
 
-    price8 = Number(p8) || 0;
-    price12 = Number(p12) || 0;
-    price16 = Number(p16) || 0;
-    price22 = Number(p22) || 0;
+        alert(
+            "HIGHWAY CAFE is currently closed."
+        );
+
+        return;
+    }
 
 
-    /* ---------------------------------------------
-       DETERMINE SIZE TYPE
-    --------------------------------------------- */
+    if (
+        !isMenuItemAvailable(
+            productName,
+            category
+        )
+    ) {
+
+        alert(
+            productName +
+            " is currently sold out."
+        );
+
+        return;
+    }
+
+
+    selectedProduct =
+        productName;
+
+    selectedCategory =
+        category;
+
+    price8 =
+        Number(p8) || 0;
+
+    price12 =
+        Number(p12) || 0;
+
+    price16 =
+        Number(p16) || 0;
+
+    price22 =
+        Number(p22) || 0;
+
 
     if (category === "Hot Coffee") {
 
-        sizeType = "size8";
+        sizeType =
+            "size8";
 
-        selectedSize = 8;
-
+        selectedSize =
+            8;
     }
 
     else if (category === "Soda Series") {
 
-        sizeType = "size12-16-22";
+        sizeType =
+            "size12-16-22";
 
-        price12 = 29;
+        price12 =
+            29;
 
-        selectedSize = 12;
-
+        selectedSize =
+            12;
     }
 
     else {
 
-        sizeType = "size16-22";
+        sizeType =
+            "size16-22";
 
-        selectedSize = 16;
-
+        selectedSize =
+            16;
     }
 
 
-    /* ---------------------------------------------
-       RESET QUANTITY
-    --------------------------------------------- */
+    quantity =
+        1;
 
-    quantity = 1;
 
     const quantityInput =
-        document.getElementById("quantity");
+        document.getElementById(
+            "quantity"
+        );
+
 
     if (quantityInput) {
-        quantityInput.value = 1;
+
+        quantityInput.value =
+            1;
     }
 
 
-    /* ---------------------------------------------
-       RESET ADD-ONS
-    --------------------------------------------- */
+    extraEspresso =
+        false;
 
-    extraEspresso = false;
-    extraMatcha = false;
-    extraChocolate = false;
+    extraMatcha =
+        false;
 
+    extraChocolate =
+        false;
 
-    /* ---------------------------------------------
-       DETERMINE AVAILABLE ADD-ONS
-    --------------------------------------------- */
 
     let addonList = [];
 
+
     if (Array.isArray(addons)) {
-        addonList = addons;
+
+        addonList =
+            addons;
     }
 
-    else if (typeof addons === "string") {
-        addonList = [addons];
+    else if (
+        typeof addons === "string"
+    ) {
+
+        addonList =
+            [addons];
     }
 
 
     espressoAvailable =
-        addonList.includes("espresso");
+        addonList.includes(
+            "espresso"
+        );
 
     matchaAvailable =
-        addonList.includes("matcha");
+        addonList.includes(
+            "matcha"
+        );
 
     chocolateAvailable =
-        addonList.includes("chocolate");
+        addonList.includes(
+            "chocolate"
+        );
 
-
-    /* ---------------------------------------------
-       DISPLAY PRODUCT
-    --------------------------------------------- */
 
     const productDisplay =
         document.getElementById(
             "selectedProduct"
         );
+
 
     if (productDisplay) {
 
@@ -244,16 +1032,13 @@ function openProduct(
             "selectedCategory"
         );
 
+
     if (categoryDisplay) {
 
         categoryDisplay.textContent =
             selectedCategory;
     }
 
-
-    /* ---------------------------------------------
-       SIZE BUTTONS
-    --------------------------------------------- */
 
     const size12Button =
         document.getElementById(
@@ -271,17 +1056,19 @@ function openProduct(
         );
 
 
-    /* 12oz */
-
     if (size12Button) {
 
-        if (sizeType === "size12-16-22") {
+        if (
+            sizeType ===
+            "size12-16-22"
+        ) {
 
             size12Button.style.display =
                 "inline-block";
 
             size12Button.textContent =
-                "12oz - ₱" + price12;
+                "12oz - ₱" +
+                price12;
 
         }
 
@@ -293,29 +1080,29 @@ function openProduct(
     }
 
 
-    /* 16oz / 8oz */
-
     if (size16Button) {
 
         size16Button.style.display =
             "inline-block";
 
-        if (sizeType === "size8") {
+
+        if (
+            sizeType === "size8"
+        ) {
 
             size16Button.textContent =
-                "8oz - ₱" + price8;
-
+                "8oz - ₱" +
+                price8;
         }
 
         else {
 
             size16Button.textContent =
-                "16oz - ₱" + price16;
+                "16oz - ₱" +
+                price16;
         }
     }
 
-
-    /* 22oz */
 
     if (size22Button) {
 
@@ -328,7 +1115,8 @@ function openProduct(
                 "inline-block";
 
             size22Button.textContent =
-                "22oz - ₱" + price22;
+                "22oz - ₱" +
+                price22;
 
         }
 
@@ -340,14 +1128,11 @@ function openProduct(
     }
 
 
-    /* ---------------------------------------------
-       SIZE TITLE
-    --------------------------------------------- */
-
     const sizeTitle =
         document.getElementById(
             "sizeTitle"
         );
+
 
     if (sizeTitle) {
 
@@ -357,10 +1142,6 @@ function openProduct(
                 : "Choose Size";
     }
 
-
-    /* ---------------------------------------------
-       ADD-ON VISIBILITY
-    --------------------------------------------- */
 
     const espressoOption =
         document.getElementById(
@@ -409,6 +1190,7 @@ function openProduct(
 
     updateSelectedProductPrice();
 
+
     showPopup(
         "productOverlay",
         "productPopup"
@@ -422,54 +1204,76 @@ function openProduct(
 
 function getBasePriceForSize(size) {
 
-    if (sizeType === "size8") {
+    if (
+        sizeType === "size8"
+    ) {
+
         return price8;
     }
 
+
     if (size === 12) {
+
         return price12;
     }
 
+
     if (size === 16) {
+
         return price16;
     }
 
+
     if (size === 22) {
+
         return price22;
     }
+
 
     return 0;
 }
 
 
+/* =====================================================
+   SELECT SIZE
+===================================================== */
+
 function selectSize(size) {
 
     if (
         size === 12 &&
-        sizeType !== "size12-16-22"
+        sizeType !==
+            "size12-16-22"
     ) {
+
         return;
     }
 
 
     if (
         size === 22 &&
-        sizeType !== "size16-22" &&
-        sizeType !== "size12-16-22"
+        sizeType !==
+            "size16-22" &&
+        sizeType !==
+            "size12-16-22"
     ) {
+
         return;
     }
 
 
     if (
         size === 8 &&
-        sizeType !== "size8"
+        sizeType !==
+            "size8"
     ) {
+
         return;
     }
 
 
-    selectedSize = size;
+    selectedSize =
+        size;
 
 
     const buttons = [
@@ -488,18 +1292,21 @@ function selectSize(size) {
     ];
 
 
-    buttons.forEach(function(button) {
+    buttons.forEach(
+        function(button) {
 
-        if (button) {
+            if (button) {
 
-            button.classList.remove(
-                "selected-option"
-            );
+                button.classList.remove(
+                    "selected-option"
+                );
+            }
         }
-    });
+    );
 
 
-    let selectedButton = null;
+    let selectedButton =
+        null;
 
 
     if (size === 12) {
@@ -553,6 +1360,7 @@ function updateSelectedProductPrice() {
             "selectedProductPrice"
         );
 
+
     if (!priceDisplay) {
         return;
     }
@@ -565,15 +1373,23 @@ function updateSelectedProductPrice() {
 
 
     if (extraEspresso) {
-        finalPrice += ESPRESSO_PRICE;
+
+        finalPrice +=
+            ESPRESSO_PRICE;
     }
+
 
     if (extraMatcha) {
-        finalPrice += MATCHA_PRICE;
+
+        finalPrice +=
+            MATCHA_PRICE;
     }
 
+
     if (extraChocolate) {
-        finalPrice += CHOCOLATE_PRICE;
+
+        finalPrice +=
+            CHOCOLATE_PRICE;
     }
 
 
@@ -591,19 +1407,16 @@ function toggleAddon(type) {
     if (type === "espresso") {
 
         toggleEspresso();
-
     }
 
     else if (type === "matcha") {
 
         toggleMatcha();
-
     }
 
     else if (type === "chocolate") {
 
         toggleChocolate();
-
     }
 }
 
@@ -614,13 +1427,16 @@ function toggleEspresso() {
         return;
     }
 
+
     extraEspresso =
         !extraEspresso;
+
 
     updateAddonButton(
         "espressoButton",
         extraEspresso
     );
+
 
     updateSelectedProductPrice();
 }
@@ -632,13 +1448,16 @@ function toggleMatcha() {
         return;
     }
 
+
     extraMatcha =
         !extraMatcha;
+
 
     updateAddonButton(
         "matchaButton",
         extraMatcha
     );
+
 
     updateSelectedProductPrice();
 }
@@ -650,13 +1469,16 @@ function toggleChocolate() {
         return;
     }
 
+
     extraChocolate =
         !extraChocolate;
+
 
     updateAddonButton(
         "chocolateButton",
         extraChocolate
     );
+
 
     updateSelectedProductPrice();
 }
@@ -670,9 +1492,11 @@ function updateAddonButton(
     const button =
         document.getElementById(id);
 
+
     if (!button) {
         return;
     }
+
 
     button.classList.toggle(
         "selected-option",
@@ -711,6 +1535,7 @@ function getProductQuantity() {
             "quantity"
         );
 
+
     if (!input) {
         return 1;
     }
@@ -727,13 +1552,18 @@ function getProductQuantity() {
         isNaN(value) ||
         value < 1
     ) {
+
         value = 1;
     }
 
 
-    quantity = value;
+    quantity =
+        value;
 
-    input.value = value;
+
+    input.value =
+        value;
+
 
     return value;
 }
@@ -744,6 +1574,34 @@ function getProductQuantity() {
 ===================================================== */
 
 function addSelectedProduct() {
+
+    if (!shopIsOpen) {
+
+        alert(
+            "HIGHWAY CAFE is currently closed."
+        );
+
+        return;
+    }
+
+
+    if (
+        !isMenuItemAvailable(
+            selectedProduct,
+            selectedCategory
+        )
+    ) {
+
+        alert(
+            selectedProduct +
+            " is currently sold out."
+        );
+
+        closeProduct();
+
+        return;
+    }
+
 
     const selectedQuantity =
         getProductQuantity();
@@ -756,15 +1614,23 @@ function addSelectedProduct() {
 
 
     if (extraEspresso) {
-        finalPrice += ESPRESSO_PRICE;
+
+        finalPrice +=
+            ESPRESSO_PRICE;
     }
+
 
     if (extraMatcha) {
-        finalPrice += MATCHA_PRICE;
+
+        finalPrice +=
+            MATCHA_PRICE;
     }
 
+
     if (extraChocolate) {
-        finalPrice += CHOCOLATE_PRICE;
+
+        finalPrice +=
+            CHOCOLATE_PRICE;
     }
 
 
@@ -776,15 +1642,20 @@ function addSelectedProduct() {
 
     const item = {
 
-        name: selectedProduct,
+        name:
+            selectedProduct,
 
-        category: selectedCategory,
+        category:
+            selectedCategory,
 
-        size: sizeText,
+        size:
+            sizeText,
 
-        price: finalPrice,
+        price:
+            finalPrice,
 
-        quantity: selectedQuantity,
+        quantity:
+            selectedQuantity,
 
         extraEspresso:
             extraEspresso,
@@ -812,47 +1683,49 @@ function addSelectedProduct() {
 function addItemToCart(newItem) {
 
     const existing =
-        cart.find(function(item) {
+        cart.find(
+            function(item) {
 
-            return (
+                return (
 
-                item.name ===
-                    newItem.name &&
+                    item.name ===
+                        newItem.name &&
 
-                item.category ===
-                    newItem.category &&
+                    item.category ===
+                        newItem.category &&
 
-                item.size ===
-                    newItem.size &&
+                    item.size ===
+                        newItem.size &&
 
-                item.price ===
-                    newItem.price &&
+                    item.price ===
+                        newItem.price &&
 
-                item.option ===
-                    newItem.option &&
+                    item.option ===
+                        newItem.option &&
 
-                item.flavor ===
-                    newItem.flavor &&
+                    item.flavor ===
+                        newItem.flavor &&
 
-                item.cooler ===
-                    newItem.cooler &&
+                    item.cooler ===
+                        newItem.cooler &&
 
-                item.extraEspresso ===
-                    newItem.extraEspresso &&
+                    item.extraEspresso ===
+                        newItem.extraEspresso &&
 
-                item.extraMatcha ===
-                    newItem.extraMatcha &&
+                    item.extraMatcha ===
+                        newItem.extraMatcha &&
 
-                item.extraChocolate ===
-                    newItem.extraChocolate &&
+                    item.extraChocolate ===
+                        newItem.extraChocolate &&
 
-                item.extraEgg ===
-                    newItem.extraEgg &&
+                    item.extraEgg ===
+                        newItem.extraEgg &&
 
-                item.extraRice ===
-                    newItem.extraRice
-            );
-        });
+                    item.extraRice ===
+                        newItem.extraRice
+                );
+            }
+        );
 
 
     if (existing) {
@@ -866,7 +1739,9 @@ function addItemToCart(newItem) {
 
     else {
 
-        cart.push(newItem);
+        cart.push(
+            newItem
+        );
     }
 
 
@@ -897,23 +1772,29 @@ function showPopup(
     ];
 
 
-    allOverlays.forEach(function(id) {
+    allOverlays.forEach(
+        function(id) {
 
-        const overlay =
-            document.getElementById(id);
+            const overlay =
+                document.getElementById(
+                    id
+                );
 
-        if (overlay) {
 
-            overlay.style.display =
-                "none";
+            if (overlay) {
+
+                overlay.style.display =
+                    "none";
+            }
         }
-    });
+    );
 
 
     const overlay =
         document.getElementById(
             overlayId
         );
+
 
     const popup =
         document.getElementById(
@@ -947,6 +1828,7 @@ function closeProduct() {
             "productOverlay"
         );
 
+
     if (overlay) {
 
         overlay.style.display =
@@ -965,6 +1847,7 @@ function showOrderNotice() {
         document.getElementById(
             "orderNotice"
         );
+
 
     if (!notice) {
         return;
@@ -985,12 +1868,15 @@ function showOrderNotice() {
 
 
     window.highwayCafeNoticeTimer =
-        setTimeout(function() {
+        setTimeout(
+            function() {
 
-            notice.style.display =
-                "none";
+                notice.style.display =
+                    "none";
 
-        }, 1800);
+            },
+            1800
+        );
 }
 
 
@@ -1005,6 +1891,32 @@ function openSnack(
     flavors = []
 ) {
 
+    if (!shopIsOpen) {
+
+        alert(
+            "HIGHWAY CAFE is currently closed."
+        );
+
+        return;
+    }
+
+
+    if (
+        !isMenuItemAvailable(
+            snackName,
+            category
+        )
+    ) {
+
+        alert(
+            snackName +
+            " is currently sold out."
+        );
+
+        return;
+    }
+
+
     selectedSnack =
         snackName;
 
@@ -1017,49 +1929,54 @@ function openSnack(
     selectedSnackFlavor =
         "";
 
-    snackQuantity = 1;
+    snackQuantity =
+        1;
 
-    snackChoices = [];
+    snackChoices =
+        [];
 
-
-    /* ---------------------------------------------
-       CONVERT CHOICES
-    --------------------------------------------- */
 
     if (Array.isArray(choices)) {
 
-        choices.forEach(function(choice) {
+        choices.forEach(
+            function(choice) {
 
-            if (Array.isArray(choice)) {
+                if (
+                    Array.isArray(choice)
+                ) {
 
-                snackChoices.push({
+                    snackChoices.push({
 
-                    name: choice[0],
+                        name:
+                            choice[0],
 
-                    price:
-                        Number(
-                            choice[1]
-                        ) || 0
-                });
+                        price:
+                            Number(
+                                choice[1]
+                            ) || 0
+                    });
 
+                }
+
+                else if (
+                    choice &&
+                    typeof choice ===
+                        "object"
+                ) {
+
+                    snackChoices.push({
+
+                        name:
+                            choice.name,
+
+                        price:
+                            Number(
+                                choice.price
+                            ) || 0
+                    });
+                }
             }
-
-            else if (
-                choice &&
-                typeof choice === "object"
-            ) {
-
-                snackChoices.push({
-
-                    name: choice.name,
-
-                    price:
-                        Number(
-                            choice.price
-                        ) || 0
-                });
-            }
-        });
+        );
     }
 
 
@@ -1069,14 +1986,11 @@ function openSnack(
             : [];
 
 
-    /* ---------------------------------------------
-       DISPLAY
-    --------------------------------------------- */
-
     const snackDisplay =
         document.getElementById(
             "selectedSnack"
         );
+
 
     if (snackDisplay) {
 
@@ -1090,6 +2004,7 @@ function openSnack(
             "selectedSnackCategory"
         );
 
+
     if (categoryDisplay) {
 
         categoryDisplay.textContent =
@@ -1102,15 +2017,13 @@ function openSnack(
             "snackQuantity"
         );
 
+
     if (quantityInput) {
 
-        quantityInput.value = 1;
+        quantityInput.value =
+            1;
     }
 
-
-    /* ---------------------------------------------
-       CHOICE BUTTONS
-    --------------------------------------------- */
 
     const choiceContainer =
         document.getElementById(
@@ -1120,7 +2033,8 @@ function openSnack(
 
     if (choiceContainer) {
 
-        choiceContainer.innerHTML = "";
+        choiceContainer.innerHTML =
+            "";
 
 
         snackChoices.forEach(
@@ -1131,7 +2045,10 @@ function openSnack(
                         "button"
                     );
 
-                button.type = "button";
+
+                button.type =
+                    "button";
+
 
                 button.textContent =
                     choice.name +
@@ -1158,14 +2075,11 @@ function openSnack(
     }
 
 
-    /* ---------------------------------------------
-       FLAVORS
-    --------------------------------------------- */
-
     const flavorSection =
         document.getElementById(
             "snackFlavors"
         );
+
 
     const flavorContainer =
         document.getElementById(
@@ -1173,7 +2087,9 @@ function openSnack(
         );
 
 
-    if (snackFlavors.length > 0) {
+    if (
+        snackFlavors.length > 0
+    ) {
 
         if (flavorSection) {
 
@@ -1196,7 +2112,10 @@ function openSnack(
                             "button"
                         );
 
-                    button.type = "button";
+
+                    button.type =
+                        "button";
+
 
                     button.textContent =
                         flavor;
@@ -1232,11 +2151,9 @@ function openSnack(
     }
 
 
-    /* ---------------------------------------------
-       AUTO SELECT ONE CHOICE
-    --------------------------------------------- */
-
-    if (snackChoices.length === 1) {
+    if (
+        snackChoices.length === 1
+    ) {
 
         selectSnackChoice(0);
     }
@@ -1347,6 +2264,7 @@ function getSnackQuantity() {
     snackQuantity =
         value;
 
+
     input.value =
         value;
 
@@ -1360,6 +2278,34 @@ function getSnackQuantity() {
 ===================================================== */
 
 function addSnackToCart() {
+
+    if (!shopIsOpen) {
+
+        alert(
+            "HIGHWAY CAFE is currently closed."
+        );
+
+        return;
+    }
+
+
+    if (
+        !isMenuItemAvailable(
+            selectedSnack,
+            selectedSnackCategory
+        )
+    ) {
+
+        alert(
+            selectedSnack +
+            " is currently sold out."
+        );
+
+        closeSnack();
+
+        return;
+    }
+
 
     if (!selectedSnackChoice) {
 
@@ -1390,7 +2336,8 @@ function addSnackToCart() {
 
     const item = {
 
-        name: selectedSnack,
+        name:
+            selectedSnack,
 
         category:
             selectedSnackCategory,
@@ -1428,6 +2375,7 @@ function closeSnack() {
             "snackOverlay"
         );
 
+
     if (overlay) {
 
         overlay.style.display =
@@ -1445,47 +2393,81 @@ function openMeal(
     choices
 ) {
 
+    if (!shopIsOpen) {
+
+        alert(
+            "HIGHWAY CAFE is currently closed."
+        );
+
+        return;
+    }
+
+
+    if (
+        !isMenuItemAvailable(
+            mealName,
+            "Pit Stop Plates"
+        )
+    ) {
+
+        alert(
+            mealName +
+            " is currently sold out."
+        );
+
+        return;
+    }
+
+
     selectedMeal =
         mealName;
 
 
-    mealChoices = [];
+    mealChoices =
+        [];
 
 
     if (Array.isArray(choices)) {
 
-        choices.forEach(function(choice) {
+        choices.forEach(
+            function(choice) {
 
-            if (Array.isArray(choice)) {
+                if (
+                    Array.isArray(choice)
+                ) {
 
-                mealChoices.push({
+                    mealChoices.push({
 
-                    name: choice[0],
+                        name:
+                            choice[0],
 
-                    price:
-                        Number(
-                            choice[1]
-                        ) || 0
-                });
+                        price:
+                            Number(
+                                choice[1]
+                            ) || 0
+                    });
 
+                }
+
+                else if (
+                    choice &&
+                    typeof choice ===
+                        "object"
+                ) {
+
+                    mealChoices.push({
+
+                        name:
+                            choice.name,
+
+                        price:
+                            Number(
+                                choice.price
+                            ) || 0
+                    });
+                }
             }
-
-            else if (
-                choice &&
-                typeof choice === "object"
-            ) {
-
-                mealChoices.push({
-
-                    name: choice.name,
-
-                    price:
-                        Number(
-                            choice.price
-                        ) || 0
-                });
-            }
-        });
+        );
     }
 
 
@@ -1521,10 +2503,6 @@ function openMeal(
     }
 
 
-    /* ---------------------------------------------
-       MEAL CHOICES
-    --------------------------------------------- */
-
     const choiceContainer =
         document.getElementById(
             "mealChoiceButtons"
@@ -1545,8 +2523,10 @@ function openMeal(
                         "button"
                     );
 
+
                 button.type =
                     "button";
+
 
                 button.textContent =
                     choice.name +
@@ -1573,7 +2553,9 @@ function openMeal(
     }
 
 
-    if (mealChoices.length === 1) {
+    if (
+        mealChoices.length === 1
+    ) {
 
         selectMealChoice(0);
     }
@@ -1590,7 +2572,8 @@ function openMeal(
 
     if (quantityInput) {
 
-        quantityInput.value = 1;
+        quantityInput.value =
+            1;
     }
 
 
@@ -1656,7 +2639,6 @@ function selectMealCooler(name) {
             35;
     }
 
-
     else if (name === "22oz") {
 
         coolerName =
@@ -1694,7 +2676,9 @@ function selectMealCooler(name) {
         null;
 
 
-    if (coolerName === "None") {
+    if (
+        coolerName === "None"
+    ) {
 
         selectedButton =
             document.getElementById(
@@ -1760,7 +2744,6 @@ function toggleMealExtra(type) {
             );
         }
     }
-
 
     else if (type === "rice") {
 
@@ -1879,6 +2862,7 @@ function getMealQuantity() {
     mealQuantity =
         value;
 
+
     input.value =
         value;
 
@@ -1892,6 +2876,34 @@ function getMealQuantity() {
 ===================================================== */
 
 function addMealToCart() {
+
+    if (!shopIsOpen) {
+
+        alert(
+            "HIGHWAY CAFE is currently closed."
+        );
+
+        return;
+    }
+
+
+    if (
+        !isMenuItemAvailable(
+            selectedMeal,
+            "Pit Stop Plates"
+        )
+    ) {
+
+        alert(
+            selectedMeal +
+            " is currently sold out."
+        );
+
+        closeMeal();
+
+        return;
+    }
+
 
     if (!selectedMealChoice) {
 
@@ -1917,13 +2929,15 @@ function addMealToCart() {
 
     if (extraEgg) {
 
-        finalPrice += 10;
+        finalPrice +=
+            10;
     }
 
 
     if (extraRice) {
 
-        finalPrice += 15;
+        finalPrice +=
+            15;
     }
 
 
@@ -2232,7 +3246,10 @@ function decreaseCartItem(index) {
         cart[index].quantity <= 0
     ) {
 
-        cart.splice(index, 1);
+        cart.splice(
+            index,
+            1
+        );
     }
 
 
@@ -2247,7 +3264,11 @@ function removeCartItem(index) {
     }
 
 
-    cart.splice(index, 1);
+    cart.splice(
+        index,
+        1
+    );
+
 
     updateCart();
 }
@@ -2283,7 +3304,8 @@ function getCartTotal() {
 function getDeliveryFee() {
 
     if (
-        orderType === "delivery"
+        orderType ===
+        "delivery"
     ) {
 
         return DELIVERY_FEE;
@@ -2308,6 +3330,16 @@ function getGrandTotal() {
 ===================================================== */
 
 function openCheckout() {
+
+    if (!shopIsOpen) {
+
+        alert(
+            "HIGHWAY CAFE is currently closed."
+        );
+
+        return;
+    }
+
 
     if (cart.length === 0) {
 
@@ -2370,12 +3402,15 @@ function clearCheckoutInputs() {
         function(id) {
 
             const element =
-                document.getElementById(id);
+                document.getElementById(
+                    id
+                );
 
 
             if (element) {
 
-                element.value = "";
+                element.value =
+                    "";
             }
         }
     );
@@ -2393,7 +3428,8 @@ function selectOrderType(type) {
         type !== "pickup"
     ) {
 
-        type = "pickup";
+        type =
+            "pickup";
     }
 
 
@@ -2438,7 +3474,10 @@ function selectOrderType(type) {
     }
 
 
-    if (type === "delivery") {
+    if (
+        type ===
+        "delivery"
+    ) {
 
         if (deliveryButton) {
 
@@ -2460,8 +3499,8 @@ function selectOrderType(type) {
             pickupDetails.style.display =
                 "none";
         }
-    }
 
+    }
 
     else {
 
@@ -2505,7 +3544,8 @@ function selectPaymentMethod(
         method !== "gcash"
     ) {
 
-        method = "cash";
+        method =
+            "cash";
     }
 
 
@@ -2545,7 +3585,9 @@ function selectPaymentMethod(
     }
 
 
-    if (method === "gcash") {
+    if (
+        method === "gcash"
+    ) {
 
         if (gcashButton) {
 
@@ -2560,8 +3602,8 @@ function selectPaymentMethod(
             gcashDetails.style.display =
                 "block";
         }
-    }
 
+    }
 
     else {
 
@@ -2608,7 +3650,8 @@ function updateCheckoutSummary() {
     }
 
 
-    let html = "";
+    let html =
+        "";
 
 
     cart.forEach(
@@ -2708,6 +3751,7 @@ function updateCheckoutSummary() {
     const subtotal =
         getCartTotal();
 
+
     const deliveryFee =
         getDeliveryFee();
 
@@ -2789,10 +3833,134 @@ function closeCheckout() {
 
 
 /* =====================================================
+   CREATE ORDER ITEMS TEXT
+===================================================== */
+
+function createOrderedItemsText() {
+
+    let text =
+        "";
+
+
+    cart.forEach(
+        function(item) {
+
+            const quantity =
+                Number(
+                    item.quantity || 1
+                );
+
+
+            const itemTotal =
+                Number(
+                    item.price || 0
+                ) *
+                quantity;
+
+
+            text +=
+                quantity +
+                " x " +
+                item.name;
+
+
+            if (item.size) {
+
+                text +=
+                    " | " +
+                    item.size;
+            }
+
+
+            if (item.option) {
+
+                text +=
+                    " | " +
+                    item.option;
+            }
+
+
+            if (item.flavor) {
+
+                text +=
+                    " | Flavor: " +
+                    item.flavor;
+            }
+
+
+            if (
+                item.cooler &&
+                item.cooler !== "None"
+            ) {
+
+                text +=
+                    " | " +
+                    item.cooler;
+            }
+
+
+            if (item.extraEspresso) {
+
+                text +=
+                    " | Extra Espresso";
+            }
+
+
+            if (item.extraMatcha) {
+
+                text +=
+                    " | Extra Matcha";
+            }
+
+
+            if (item.extraChocolate) {
+
+                text +=
+                    " | Extra Chocolate";
+            }
+
+
+            if (item.extraEgg) {
+
+                text +=
+                    " | Extra Egg";
+            }
+
+
+            if (item.extraRice) {
+
+                text +=
+                    " | Extra Rice";
+            }
+
+
+            text +=
+                " | Item Total: ₱" +
+                itemTotal +
+                "\n";
+        }
+    );
+
+
+    return text.trim();
+}
+
+
+/* =====================================================
    PLACE ORDER
 ===================================================== */
 
 async function placeOrder() {
+
+    if (!shopIsOpen) {
+
+        alert(
+            "HIGHWAY CAFE is currently closed. Your order cannot be placed."
+        );
+
+        return;
+    }
+
 
     if (cart.length === 0) {
 
@@ -2801,6 +3969,57 @@ async function placeOrder() {
         );
 
         return;
+    }
+
+
+    /*
+       Refresh shop/menu status immediately before
+       submitting the order.
+
+       This protects against the admin closing the
+       shop while a customer is checking out.
+    */
+
+    if (supabaseClient) {
+
+        await refreshCustomerAvailability();
+
+
+        if (!shopIsOpen) {
+
+            alert(
+                "HIGHWAY CAFE has just been closed. Your order was not submitted."
+            );
+
+            return;
+        }
+
+
+        for (
+            let i = 0;
+            i < cart.length;
+            i++
+        ) {
+
+            const item =
+                cart[i];
+
+
+            if (
+                !isMenuItemAvailable(
+                    item.name,
+                    item.category
+                )
+            ) {
+
+                alert(
+                    item.name +
+                    " is now sold out. Please remove it from your cart."
+                );
+
+                return;
+            }
+        }
     }
 
 
@@ -2871,19 +4090,18 @@ async function placeOrder() {
             : "";
 
 
-    /* ---------------------------------------------
-       VALIDATION
-    --------------------------------------------- */
-
     if (!name) {
 
         alert(
             "Please enter your name."
         );
 
+
         if (nameInput) {
+
             nameInput.focus();
         }
+
 
         return;
     }
@@ -2895,9 +4113,12 @@ async function placeOrder() {
             "Please enter your phone number."
         );
 
+
         if (phoneInput) {
+
             phoneInput.focus();
         }
+
 
         return;
     }
@@ -2912,9 +4133,12 @@ async function placeOrder() {
             "Please enter your delivery address."
         );
 
+
         if (addressInput) {
+
             addressInput.focus();
         }
+
 
         return;
     }
@@ -2929,17 +4153,16 @@ async function placeOrder() {
             "Please enter your GCash reference number."
         );
 
+
         if (paymentReferenceInput) {
+
             paymentReferenceInput.focus();
         }
+
 
         return;
     }
 
-
-    /* ---------------------------------------------
-       ORDER NUMBER
-    --------------------------------------------- */
 
     const orderNumber =
         "HC-" +
@@ -2951,16 +4174,22 @@ async function placeOrder() {
     const subtotal =
         getCartTotal();
 
+
     const deliveryFee =
         getDeliveryFee();
+
 
     const total =
         getGrandTotal();
 
 
-    /* ---------------------------------------------
-       ORDER SUMMARY FOR CONFIRMATION
-    --------------------------------------------- */
+    const orderedItems =
+        createOrderedItemsText();
+
+
+    /* =================================================
+       ORDER SUMMARY
+    ================================================= */
 
     let orderSummary =
         "HIGHWAY CAFE\n\n";
@@ -3205,10 +4434,6 @@ async function placeOrder() {
     }
 
 
-    /* ---------------------------------------------
-       DISABLE BUTTON
-    --------------------------------------------- */
-
     const placeButton =
         document.getElementById(
             "placeOrderButton"
@@ -3226,14 +4451,119 @@ async function placeOrder() {
 
 
     /* =================================================
+       SUPABASE ORDER
+    ================================================= */
+
+    let supabaseOrderSaved =
+        false;
+
+
+    if (supabaseClient) {
+
+        const orderData = {
+
+            order_number:
+                orderNumber,
+
+            customer_name:
+                name,
+
+            phone:
+                phone,
+
+            order_type:
+                orderType === "delivery"
+                    ? "Delivery"
+                    : "Pickup",
+
+            delivery_address:
+                orderType === "delivery"
+                    ? address
+                    : null,
+
+            pickup_time:
+                orderType === "pickup"
+                    ? (
+                        pickupTime ||
+                        null
+                    )
+                    : null,
+
+            payment_method:
+                paymentMethod === "gcash"
+                    ? "GCash / Online Payment"
+                    : "Cash",
+
+            gcash_reference:
+                paymentMethod === "gcash"
+                    ? paymentReference
+                    : null,
+
+            ordered_items:
+                orderedItems,
+
+            order_notes:
+                notes || null,
+
+            subtotal:
+                subtotal,
+
+            delivery_fee:
+                deliveryFee,
+
+            grand_total:
+                total,
+
+            status:
+                "New"
+        };
+
+
+        try {
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("orders")
+                    .insert(
+                        [orderData]
+                    );
+
+
+            if (error) {
+
+                console.error(
+                    "Supabase order error:",
+                    error
+                );
+
+            }
+
+            else {
+
+                supabaseOrderSaved =
+                    true;
+
+                console.log(
+                    "Order saved to Supabase."
+                );
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Supabase order exception:",
+                error
+            );
+        }
+    }
+
+
+    /* =================================================
        FORMSUBMIT
-
-       IMPORTANT:
-       We use "box" instead of "table".
-
-       This makes the email much cleaner and prevents
-       the long order summary from becoming a cramped
-       table-style email.
     ================================================= */
 
     const formData =
@@ -3247,8 +4577,6 @@ async function placeOrder() {
     );
 
 
-    /* CLEANER EMAIL TEMPLATE */
-
     formData.append(
         "_template",
         "box"
@@ -3260,10 +4588,6 @@ async function placeOrder() {
         "false"
     );
 
-
-    /* ---------------------------------------------
-       ORDER INFORMATION
-    --------------------------------------------- */
 
     formData.append(
         "ORDER NUMBER",
@@ -3327,22 +4651,11 @@ async function placeOrder() {
     );
 
 
-    /* ---------------------------------------------
-       ORDER ITEMS
-
-       Keep this as a separate field so the customer
-       can easily read the complete order.
-    --------------------------------------------- */
-
     formData.append(
         "ORDER ITEMS",
         orderSummary
     );
 
-
-    /* ---------------------------------------------
-       NOTES
-    --------------------------------------------- */
 
     formData.append(
         "ORDER NOTES",
@@ -3351,10 +4664,6 @@ async function placeOrder() {
             : "No notes"
     );
 
-
-    /* ---------------------------------------------
-       TOTALS
-    --------------------------------------------- */
 
     formData.append(
         "SUBTOTAL",
@@ -3374,10 +4683,6 @@ async function placeOrder() {
     );
 
 
-    /* ---------------------------------------------
-       PAYMENT STATUS
-    --------------------------------------------- */
-
     formData.append(
         "PAYMENT STATUS",
         paymentMethod === "gcash"
@@ -3393,9 +4698,9 @@ async function placeOrder() {
     );
 
 
-    /* ---------------------------------------------
-       SEND EMAIL
-    --------------------------------------------- */
+    /* =================================================
+       SEND FORM SUBMIT
+    ================================================= */
 
     try {
 
@@ -3403,9 +4708,11 @@ async function placeOrder() {
             await fetch(
                 "https://formsubmit.co/ajax/highwaycafe14@gmail.com",
                 {
-                    method: "POST",
+                    method:
+                        "POST",
 
-                    body: formData,
+                    body:
+                        formData,
 
                     headers: {
                         "Accept":
@@ -3425,10 +4732,6 @@ async function placeOrder() {
         );
 
 
-        /* -----------------------------------------
-           SUCCESS
-        ----------------------------------------- */
-
         if (
             response.ok &&
             result.success !== false
@@ -3441,6 +4744,22 @@ async function placeOrder() {
 
                 placeButton.textContent =
                     "Place Order";
+            }
+
+
+            /*
+               The FormSubmit email succeeded.
+
+               Supabase is also attempted above.
+               If Supabase failed, the email still
+               protects the order from being lost.
+            */
+
+            if (!supabaseOrderSaved) {
+
+                console.warn(
+                    "Email succeeded, but Supabase order was not saved."
+                );
             }
 
 
@@ -3459,13 +4778,8 @@ async function placeOrder() {
             result.message ||
             "FormSubmit rejected the order."
         );
-
     }
 
-
-    /* ---------------------------------------------
-       ERROR
-    --------------------------------------------- */
 
     catch (error) {
 
@@ -3589,7 +4903,8 @@ function finishOrder() {
     }
 
 
-    cart = [];
+    cart =
+        [];
 
 
     updateCart();
@@ -3619,11 +4934,6 @@ function finishOrder() {
 document.addEventListener(
     "DOMContentLoaded",
     function() {
-
-
-        /* ---------------------------------------------
-           HIDE MENU AT START
-        --------------------------------------------- */
 
         const menu =
             document.getElementById(
@@ -3774,6 +5084,27 @@ document.addEventListener(
         --------------------------------------------- */
 
         updateCart();
+
+
+        /* ---------------------------------------------
+           SUPABASE
+        --------------------------------------------- */
+
+        initializeSupabase();
+
+
+        /* ---------------------------------------------
+           REFRESH EVERY 15 SECONDS
+        --------------------------------------------- */
+
+        setInterval(
+            function() {
+
+                refreshCustomerAvailability();
+
+            },
+            15000
+        );
 
 
         console.log(
