@@ -614,9 +614,8 @@ async function toggleShop() {
     const { data, error } =
         await supabaseClient
             .from("shop_settings")
-            .select("shop_open")
-            .limit(1)
-            .single();
+            .select("id, shop_open")
+            .limit(1);
 
 
     if (error) {
@@ -631,19 +630,40 @@ async function toggleShop() {
     }
 
 
+    if (!data || data.length === 0) {
+
+        alert(
+            "No shop settings were found."
+        );
+
+        return;
+    }
+
+
+    const shopSettings =
+        data[0];
+
+
     const newStatus =
-        !data.shop_open;
+        !shopSettings.shop_open;
 
 
     const { error: updateError } =
         await supabaseClient
             .from("shop_settings")
             .update({
-                shop_open: newStatus,
+
+                shop_open:
+                    newStatus,
+
                 updated_at:
                     new Date().toISOString()
+
             })
-            .eq("id", data.id);
+            .eq(
+                "id",
+                shopSettings.id
+            );
 
 
     if (updateError) {
@@ -652,7 +672,10 @@ async function toggleShop() {
             "Could not update shop status."
         );
 
-        console.error(updateError);
+        console.error(
+            "Shop update error:",
+            updateError
+        );
 
         return;
     }
