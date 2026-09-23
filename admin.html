@@ -1508,53 +1508,60 @@ ${escapeHTML(created)}
 ===================================================== */
 
 
-async function updateOrderStatus(
-    id,
-    status
-) {
+async function updateOrderStatus(orderId, newStatus) {
 
+    // ==========================================
+    // DELETE ORDER WHEN COMPLETED
+    // ==========================================
 
-    const { error } =
+    if (newStatus === "Completed") {
 
-        await supabaseClient
+        const confirmDelete = confirm(
+            "Mark this order as COMPLETED and remove it from the dashboard?"
+        );
 
+        if (!confirmDelete) {
+            return;
+        }
+
+        const { error } = await supabaseClient
             .from("orders")
+            .delete()
+            .eq("id", orderId);
 
-            .update({
+        if (error) {
+            console.error("Delete completed order error:", error);
+            alert("Could not remove the completed order.");
+            return;
+        }
 
-                status:
-                    status
-
-            })
-
-            .eq(
-                "id",
-                id
-            );
-
-
-    if (error) {
-
-
-        console.error(
-            "Order update error:",
-            error
-        );
-
-
-        alert(
-            "Could not update order."
-        );
-
+        // Refresh the dashboard
+        loadOrders();
 
         return;
     }
 
 
+    // ==========================================
+    // NORMAL STATUS UPDATE
+    // ==========================================
+
+    const { error } = await supabaseClient
+        .from("orders")
+        .update({
+            status: newStatus
+        })
+        .eq("id", orderId);
+
+    if (error) {
+        console.error("Order status update error:", error);
+        alert("Could not update order status.");
+        return;
+    }
+
+    // Refresh the dashboard
     loadOrders();
-
 }
-
 
 /* =====================================================
    HTML ESCAPE
