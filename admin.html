@@ -11,7 +11,9 @@
     <title>HIGHWAY CAFE - Admin</title>
 
 
-    <!-- SUPABASE -->
+    <!-- =================================================
+         SUPABASE
+    ================================================== -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -76,7 +78,7 @@
             margin-bottom: 20px;
 
             box-shadow:
-                0 3px 10px rgba(0,0,0,0.08);
+                0 3px 10px rgba(0, 0, 0, 0.08);
         }
 
 
@@ -90,9 +92,9 @@
         }
 
 
-        /* ==============================
+        /* =================================================
            SHOP STATUS
-        ============================== */
+        ================================================== */
 
         .shop-status {
 
@@ -127,6 +129,10 @@
             color: red;
         }
 
+
+        /* =================================================
+           BUTTONS
+        ================================================== */
 
         button {
 
@@ -164,13 +170,19 @@
         }
 
 
-        /* ==============================
+        /* =================================================
            MENU
-        ============================== */
+        ================================================== */
 
         .category {
 
             margin-top: 25px;
+        }
+
+
+        .category:first-child {
+
+            margin-top: 0;
         }
 
 
@@ -179,6 +191,8 @@
             margin-bottom: 10px;
 
             color: #6b5143;
+
+            font-size: 20px;
         }
 
 
@@ -207,6 +221,8 @@
         .item-name {
 
             font-weight: bold;
+
+            font-size: 16px;
         }
 
 
@@ -215,28 +231,14 @@
             font-size: 13px;
 
             color: #888;
+
+            margin-top: 4px;
         }
 
 
-        .available {
-
-            color: green;
-
-            font-weight: bold;
-        }
-
-
-        .sold-out {
-
-            color: red;
-
-            font-weight: bold;
-        }
-
-
-        /* ==============================
+        /* =================================================
            ORDERS
-        ============================== */
+        ================================================== */
 
         .order {
 
@@ -249,6 +251,12 @@
             margin-bottom: 15px;
 
             background: #fafafa;
+        }
+
+
+        .new-order {
+
+            border-left: 6px solid #228b22;
         }
 
 
@@ -274,9 +282,9 @@
         }
 
 
-        .new-order {
+        .order-status {
 
-            border-left: 6px solid #228b22;
+            font-weight: bold;
         }
 
 
@@ -297,6 +305,10 @@
             font-weight: bold;
 
             margin-top: 10px;
+
+            padding-top: 10px;
+
+            border-top: 1px solid #ddd;
         }
 
 
@@ -340,9 +352,31 @@
         }
 
 
-        /* ==============================
+        .loading {
+
+            text-align: center;
+
+            padding: 20px;
+
+            color: #777;
+        }
+
+
+        .error-message {
+
+            text-align: center;
+
+            padding: 20px;
+
+            color: #b22222;
+
+            font-weight: bold;
+        }
+
+
+        /* =================================================
            MOBILE
-        ============================== */
+        ================================================== */
 
         @media (max-width: 600px) {
 
@@ -375,6 +409,22 @@
             .menu-item {
 
                 align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+
+            .menu-item button {
+
+                width: 100%;
+            }
+
+
+            .status-buttons button {
+
+                flex: 1;
+
+                min-width: 120px;
             }
 
         }
@@ -389,6 +439,10 @@
 
 <div class="container">
 
+
+    <!-- =================================================
+         HEADER
+    ================================================== -->
 
     <h1>
         HIGHWAY CAFE
@@ -413,6 +467,7 @@
 
         <div class="shop-status">
 
+
             <div id="shopStatus"
                  class="status">
 
@@ -428,6 +483,7 @@
                 Loading...
 
             </button>
+
 
         </div>
 
@@ -447,7 +503,9 @@
 
         <div id="menuContainer">
 
-            Loading menu...
+            <div class="loading">
+                Loading menu...
+            </div>
 
         </div>
 
@@ -476,7 +534,9 @@
 
         <div id="ordersContainer">
 
-            Loading orders...
+            <div class="loading">
+                Loading orders...
+            </div>
 
         </div>
 
@@ -488,17 +548,22 @@
 
 <script>
 
+
 /* =====================================================
    SUPABASE CONNECTION
 ===================================================== */
 
 
 /*
-    IMPORTANT:
+    KEEP THESE VALUES.
 
-    Replace these two values with the
-    Project URL and Publishable Key
-    from your Supabase project.
+    SUPABASE_URL:
+    Your Supabase project URL.
+
+    SUPABASE_KEY:
+    Your Supabase PUBLISHABLE KEY.
+
+    DO NOT use a secret/service-role key here.
 */
 
 
@@ -518,35 +583,106 @@ const supabaseClient =
 
 
 /* =====================================================
+   CHECK SUPABASE CONNECTION
+===================================================== */
+
+console.log(
+    "HIGHWAY CAFE ADMIN CONNECTED"
+);
+
+
+/* =====================================================
    SHOP STATUS
 ===================================================== */
 
+
+/*
+    Load the current shop status.
+
+    IMPORTANT:
+    We only request shop_open.
+
+    We do NOT request the id.
+
+    This prevents the old
+    id=eq.undefined problem.
+*/
+
+
 async function loadShopStatus() {
 
+
     const { data, error } =
+
         await supabaseClient
+
             .from("shop_settings")
-            .select("*")
-            .limit(1)
-            .single();
+
+            .select("shop_open")
+
+            .limit(1);
 
 
     if (error) {
 
-        console.error(error);
+
+        console.error(
+            "Shop status loading error:",
+            error
+        );
+
 
         document.getElementById(
             "shopStatus"
         ).textContent =
-            "Error loading shop status.";
+            "Error loading shop status";
+
+
+        document.getElementById(
+            "shopToggleButton"
+        ).textContent =
+            "Try Again";
+
 
         return;
     }
 
 
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+
+        console.error(
+            "No shop_settings row found."
+        );
+
+
+        document.getElementById(
+            "shopStatus"
+        ).textContent =
+            "No shop settings found";
+
+
+        document.getElementById(
+            "shopToggleButton"
+        ).textContent =
+            "Create Shop Status";
+
+
+        return;
+    }
+
+
+    const currentStatus =
+        data[0].shop_open;
+
+
     updateShopDisplay(
-        data.shop_open
+        currentStatus
     );
+
 }
 
 
@@ -554,9 +690,11 @@ async function loadShopStatus() {
    DISPLAY SHOP STATUS
 ===================================================== */
 
+
 function updateShopDisplay(
     isOpen
 ) {
+
 
     const status =
         document.getElementById(
@@ -572,8 +710,10 @@ function updateShopDisplay(
 
     if (isOpen) {
 
+
         status.textContent =
             "🟢 SHOP IS OPEN";
+
 
         status.className =
             "status open";
@@ -582,15 +722,19 @@ function updateShopDisplay(
         button.textContent =
             "🔴 Close Shop";
 
+
         button.className =
             "danger";
-    }
 
+
+    }
 
     else {
 
+
         status.textContent =
             "🔴 SHOP IS CLOSED";
+
 
         status.className =
             "status closed";
@@ -599,9 +743,12 @@ function updateShopDisplay(
         button.textContent =
             "🟢 Open Shop";
 
+
         button.className =
             "success";
+
     }
+
 }
 
 
@@ -609,51 +756,68 @@ function updateShopDisplay(
    TOGGLE SHOP
 ===================================================== */
 
+
 async function toggleShop() {
 
+
+    console.log(
+        "Toggle shop clicked."
+    );
+
+
     /* ---------------------------------------------
-       GET CURRENT SHOP STATUS
+       GET CURRENT STATUS
     --------------------------------------------- */
 
+
     const { data, error } =
+
         await supabaseClient
+
             .from("shop_settings")
+
             .select("shop_open")
+
             .limit(1);
 
 
     if (error) {
+
 
         console.error(
             "Could not read shop status:",
             error
         );
 
+
         alert(
             "Could not read shop status."
         );
+
 
         return;
     }
 
 
-    if (!data || data.length === 0) {
+    if (
+        !data ||
+        data.length === 0
+    ) {
 
-        console.error(
-            "No shop settings row found."
-        );
 
         alert(
             "No shop settings were found."
         );
+
 
         return;
     }
 
 
     /* ---------------------------------------------
-       GET CURRENT VALUE
+       CURRENT STATUS
     --------------------------------------------- */
+
 
     const currentStatus =
         data[0].shop_open;
@@ -663,19 +827,39 @@ async function toggleShop() {
         !currentStatus;
 
 
+    console.log(
+        "Current shop status:",
+        currentStatus
+    );
+
+
+    console.log(
+        "New shop status:",
+        newStatus
+    );
+
+
     /* ---------------------------------------------
-       UPDATE SHOP STATUS
+       UPDATE WITHOUT USING ID
     --------------------------------------------- */
 
+
     const { error: updateError } =
+
         await supabaseClient
+
             .from("shop_settings")
+
             .update({
-                shop_open: newStatus,
+
+                shop_open:
+                    newStatus,
 
                 updated_at:
                     new Date().toISOString()
+
             })
+
             .eq(
                 "shop_open",
                 currentStatus
@@ -684,26 +868,36 @@ async function toggleShop() {
 
     if (updateError) {
 
+
         console.error(
             "Shop update error:",
             updateError
         );
 
+
         alert(
             "Could not update shop status."
         );
+
 
         return;
     }
 
 
+    console.log(
+        "Shop status successfully updated."
+    );
+
+
     /* ---------------------------------------------
-       UPDATE DISPLAY
+       UPDATE SCREEN
     --------------------------------------------- */
+
 
     updateShopDisplay(
         newStatus
     );
+
 }
 
 
@@ -711,7 +905,9 @@ async function toggleShop() {
    LOAD MENU
 ===================================================== */
 
+
 async function loadMenu() {
+
 
     const container =
         document.getElementById(
@@ -719,129 +915,193 @@ async function loadMenu() {
         );
 
 
+    container.innerHTML =
+        `<div class="loading">
+            Loading menu...
+        </div>`;
+
+
     const { data, error } =
+
         await supabaseClient
+
             .from("menu_items")
+
             .select("*")
+
             .order("category")
+
             .order("product_name");
 
 
     if (error) {
 
-        console.error(error);
+
+        console.error(
+            "Menu loading error:",
+            error
+        );
+
 
         container.innerHTML =
-            "<p>Could not load menu.</p>";
+            `<div class="error-message">
+                Could not load menu.
+            </div>`;
+
 
         return;
     }
 
 
-    if (!data || data.length === 0) {
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
 
         container.innerHTML =
-            "<p>No menu items found.</p>";
+            `<div class="empty">
+                No menu items found.
+            </div>`;
+
 
         return;
     }
+
+
+    /* ---------------------------------------------
+       GROUP MENU BY CATEGORY
+    --------------------------------------------- */
 
 
     const categories = {};
 
 
-    data.forEach(function(item) {
+    data.forEach(
+        function(item) {
 
-        if (!categories[item.category]) {
 
-            categories[item.category] = [];
+            if (
+                !categories[item.category]
+            ) {
+
+
+                categories[item.category] =
+                    [];
+
+            }
+
+
+            categories[item.category]
+                .push(item);
+
+
         }
+    );
 
 
-        categories[item.category].push(
-            item
-        );
-    });
+    /* ---------------------------------------------
+       CREATE HTML
+    --------------------------------------------- */
 
 
     let html = "";
 
 
     Object.keys(categories)
-        .forEach(function(category) {
-
-            html += `
-
-                <div class="category">
-
-                    <h3>
-                        ${category}
-                    </h3>
-
-            `;
+        .forEach(
+            function(category) {
 
 
-            categories[category]
-                .forEach(function(item) {
+                html += `
 
-                    html += `
+                    <div class="category">
 
-                        <div class="menu-item">
+                        <h3>
+                            ${escapeHTML(category)}
+                        </h3>
 
-                            <div>
+                `;
 
-                                <div class="item-name">
-                                    ${item.product_name}
+
+                categories[category]
+                    .forEach(
+                        function(item) {
+
+
+                            html += `
+
+                                <div class="menu-item">
+
+                                    <div>
+
+                                        <div class="item-name">
+                                            ${escapeHTML(item.product_name)}
+                                        </div>
+
+                                        <div class="item-category">
+
+                                            ${
+                                                item.available
+                                                    ? "Available"
+                                                    : "Sold Out"
+                                            }
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <button
+
+                                            onclick="toggleMenuItem(
+                                                ${item.id},
+                                                ${item.available}
+                                            )"
+
+                                            class="${
+                                                item.available
+                                                    ? "success"
+                                                    : "danger"
+                                            }"
+
+                                        >
+
+                                            ${
+                                                item.available
+                                                    ? "🟢 Available"
+                                                    : "🔴 Sold Out"
+                                            }
+
+                                        </button>
+
+                                    </div>
+
                                 </div>
 
-                                <div class="item-category">
-                                    ${item.available
-                                        ? "Available"
-                                        : "Sold Out"}
-                                </div>
-
-                            </div>
+                            `;
 
 
-                            <div>
-
-                                <button
-                                    onclick="toggleMenuItem(
-                                        ${item.id},
-                                        ${item.available}
-                                    )"
-                                    class="${
-                                        item.available
-                                            ? "success"
-                                            : "danger"
-                                    }">
-
-                                    ${
-                                        item.available
-                                            ? "🟢 Available"
-                                            : "🔴 Sold Out"
-                                    }
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    `;
-
-                });
+                        }
+                    );
 
 
-            html += `
-                </div>
-            `;
+                html += `
 
-        });
+                    </div>
+
+                `;
+
+
+            }
+        );
 
 
     container.innerHTML =
         html;
+
 }
 
 
@@ -849,37 +1109,61 @@ async function loadMenu() {
    TOGGLE MENU ITEM
 ===================================================== */
 
+
 async function toggleMenuItem(
     id,
     currentStatus
 ) {
 
+
+    console.log(
+        "Changing menu item:",
+        id
+    );
+
+
     const { error } =
+
         await supabaseClient
+
             .from("menu_items")
+
             .update({
+
                 available:
                     !currentStatus,
 
                 updated_at:
                     new Date().toISOString()
+
             })
-            .eq("id", id);
+
+            .eq(
+                "id",
+                id
+            );
 
 
     if (error) {
+
+
+        console.error(
+            "Menu update error:",
+            error
+        );
+
 
         alert(
             "Could not update menu item."
         );
 
-        console.error(error);
 
         return;
     }
 
 
     loadMenu();
+
 }
 
 
@@ -887,7 +1171,9 @@ async function toggleMenuItem(
    LOAD ORDERS
 ===================================================== */
 
+
 async function loadOrders() {
+
 
     const container =
         document.getElementById(
@@ -896,13 +1182,19 @@ async function loadOrders() {
 
 
     container.innerHTML =
-        "Loading orders...";
+        `<div class="loading">
+            Loading orders...
+        </div>`;
 
 
     const { data, error } =
+
         await supabaseClient
+
             .from("orders")
+
             .select("*")
+
             .order(
                 "created_at",
                 {
@@ -913,23 +1205,37 @@ async function loadOrders() {
 
     if (error) {
 
-        console.error(error);
+
+        console.error(
+            "Orders loading error:",
+            error
+        );
+
 
         container.innerHTML =
-            "<p>Could not load orders.</p>";
+            `<div class="error-message">
+                Could not load orders.
+            </div>`;
+
 
         return;
     }
 
 
-    if (!data || data.length === 0) {
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
 
         container.innerHTML =
-            `
-                <div class="empty">
-                    No orders yet.
-                </div>
-            `;
+
+            `<div class="empty">
+
+                No orders yet.
+
+            </div>`;
+
 
         return;
     }
@@ -938,193 +1244,262 @@ async function loadOrders() {
     let html = "";
 
 
-    data.forEach(function(order) {
-
-        const created =
-            new Date(
-                order.created_at
-            ).toLocaleString();
+    data.forEach(
+        function(order) {
 
 
-        html += `
-
-            <div class="order ${
-                order.status === "New"
-                    ? "new-order"
-                    : ""
-            }">
+            const created =
+                new Date(
+                    order.created_at
+                ).toLocaleString();
 
 
-                <div class="order-header">
+            html += `
 
-                    <div class="order-number">
+                <div class="order ${
+                    order.status === "New"
+                        ? "new-order"
+                        : ""
+                }">
 
-                        #${order.order_number}
+
+                    <!-- ORDER HEADER -->
+
+                    <div class="order-header">
+
+
+                        <div class="order-number">
+
+                            #${escapeHTML(
+                                order.order_number
+                            )}
+
+                        </div>
+
+
+                        <div class="order-status">
+
+                            ${escapeHTML(
+                                order.status
+                            )}
+
+                        </div>
+
 
                     </div>
 
 
-                    <strong>
+                    <!-- ORDER DETAILS -->
 
-                        ${order.status}
+                    <div class="order-details">
 
-                    </strong>
-
-                </div>
-
-
-                <div class="order-details">
 
 <strong>Customer:</strong>
-${order.customer_name}
+${escapeHTML(order.customer_name)}
+
 
 <strong>Phone:</strong>
-${order.phone}
+${escapeHTML(order.phone)}
+
 
 <strong>Order Type:</strong>
-${order.order_type}
+${escapeHTML(order.order_type)}
+
 
 ${
     order.order_type === "Delivery"
+
         ? `<strong>Address:</strong>
-${order.delivery_address || "N/A"}`
+${escapeHTML(
+    order.delivery_address ||
+    "N/A"
+)}`
+
         : `<strong>Pickup Time:</strong>
-${order.pickup_time || "Not specified"}`
+${escapeHTML(
+    order.pickup_time ||
+    "Not specified"
+)}`
 }
 
+
 <strong>Payment:</strong>
-${order.payment_method}
+${escapeHTML(order.payment_method)}
+
 
 ${
     order.gcash_reference
+
         ? `<strong>GCash Reference:</strong>
-${order.gcash_reference}`
+${escapeHTML(
+    order.gcash_reference
+)}`
+
         : ""
 }
 
+
 <strong>Items:</strong>
-${order.ordered_items}
+${escapeHTML(
+    order.ordered_items
+)}
+
 
 ${
     order.order_notes
+
         ? `<strong>Notes:</strong>
-${order.order_notes}`
+${escapeHTML(
+    order.order_notes
+)}`
+
         : ""
 }
 
+
 <strong>Ordered:</strong>
-${created}
+${escapeHTML(created)}
+
+
+                    </div>
+
+
+                    <!-- TOTAL -->
+
+                    <div class="order-total">
+
+                        Total:
+                        ₱${Number(
+                            order.grand_total
+                        ).toLocaleString(
+                            "en-PH",
+                            {
+                                minimumFractionDigits: 2
+                            }
+                        )}
+
+                    </div>
+
+
+                    <!-- STATUS BUTTONS -->
+
+                    <div class="status-buttons">
+
+
+                        <button
+
+                            class="status-button ${
+                                order.status === "New"
+                                    ? "selected"
+                                    : ""
+                            }"
+
+                            onclick="updateOrderStatus(
+                                ${order.id},
+                                'New'
+                            )"
+
+                        >
+
+                            🆕 New
+
+                        </button>
+
+
+                        <button
+
+                            class="status-button ${
+                                order.status === "Preparing"
+                                    ? "selected"
+                                    : ""
+                            }"
+
+                            onclick="updateOrderStatus(
+                                ${order.id},
+                                'Preparing'
+                            )"
+
+                        >
+
+                            👨‍🍳 Preparing
+
+                        </button>
+
+
+                        <button
+
+                            class="status-button ${
+                                order.status === "Ready"
+                                    ? "selected"
+                                    : ""
+                            }"
+
+                            onclick="updateOrderStatus(
+                                ${order.id},
+                                'Ready'
+                            )"
+
+                        >
+
+                            ✅ Ready
+
+                        </button>
+
+
+                        <button
+
+                            class="status-button ${
+                                order.status === "Completed"
+                                    ? "selected"
+                                    : ""
+                            }"
+
+                            onclick="updateOrderStatus(
+                                ${order.id},
+                                'Completed'
+                            )"
+
+                        >
+
+                            ✔ Completed
+
+                        </button>
+
+
+                        <button
+
+                            class="status-button ${
+                                order.status === "Cancelled"
+                                    ? "selected"
+                                    : ""
+                            }"
+
+                            onclick="updateOrderStatus(
+                                ${order.id},
+                                'Cancelled'
+                            )"
+
+                        >
+
+                            ❌ Cancelled
+
+                        </button>
+
+
+                    </div>
+
 
                 </div>
 
+            `;
 
-                <div class="order-total">
-
-                    Total:
-                    ₱${Number(
-                        order.grand_total
-                    ).toLocaleString(
-                        "en-PH",
-                        {
-                            minimumFractionDigits: 2
-                        }
-                    )}
-
-                </div>
-
-
-                <div class="status-buttons">
-
-                    <button
-                        class="status-button ${
-                            order.status === "New"
-                                ? "selected"
-                                : ""
-                        }"
-                        onclick="updateOrderStatus(
-                            ${order.id},
-                            'New'
-                        )">
-
-                        🆕 New
-
-                    </button>
-
-
-                    <button
-                        class="status-button ${
-                            order.status === "Preparing"
-                                ? "selected"
-                                : ""
-                        }"
-                        onclick="updateOrderStatus(
-                            ${order.id},
-                            'Preparing'
-                        )">
-
-                        👨‍🍳 Preparing
-
-                    </button>
-
-
-                    <button
-                        class="status-button ${
-                            order.status === "Ready"
-                                ? "selected"
-                                : ""
-                        }"
-                        onclick="updateOrderStatus(
-                            ${order.id},
-                            'Ready'
-                        )">
-
-                        ✅ Ready
-
-                    </button>
-
-
-                    <button
-                        class="status-button ${
-                            order.status === "Completed"
-                                ? "selected"
-                                : ""
-                        }"
-                        onclick="updateOrderStatus(
-                            ${order.id},
-                            'Completed'
-                        )">
-
-                        ✔ Completed
-
-                    </button>
-
-
-                    <button
-                        class="status-button ${
-                            order.status === "Cancelled"
-                                ? "selected"
-                                : ""
-                        }"
-                        onclick="updateOrderStatus(
-                            ${order.id},
-                            'Cancelled'
-                        )">
-
-                        ❌ Cancelled
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        `;
-
-    });
+        }
+    );
 
 
     container.innerHTML =
         html;
+
 }
 
 
@@ -1132,33 +1507,108 @@ ${created}
    UPDATE ORDER STATUS
 ===================================================== */
 
+
 async function updateOrderStatus(
     id,
     status
 ) {
 
+
     const { error } =
+
         await supabaseClient
+
             .from("orders")
+
             .update({
-                status: status
+
+                status:
+                    status
+
             })
-            .eq("id", id);
+
+            .eq(
+                "id",
+                id
+            );
 
 
     if (error) {
+
+
+        console.error(
+            "Order update error:",
+            error
+        );
+
 
         alert(
             "Could not update order."
         );
 
-        console.error(error);
 
         return;
     }
 
 
     loadOrders();
+
+}
+
+
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+
+/*
+    This prevents customer-entered information
+    from being interpreted as HTML.
+*/
+
+
+function escapeHTML(
+    value
+) {
+
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
 }
 
 
@@ -1166,9 +1616,16 @@ async function updateOrderStatus(
    INITIAL LOAD
 ===================================================== */
 
+
 document.addEventListener(
     "DOMContentLoaded",
     function() {
+
+
+        console.log(
+            "Loading HIGHWAY CAFE admin dashboard..."
+        );
+
 
         loadShopStatus();
 
@@ -1176,8 +1633,10 @@ document.addEventListener(
 
         loadOrders();
 
+
     }
 );
+
 
 </script>
 
