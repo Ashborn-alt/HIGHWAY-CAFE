@@ -5,23 +5,15 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>HIGHWAY CAFE - Admin</title>
 
-    <!-- =====================================================
-         SUPABASE
-    ====================================================== -->
-
+    <!-- SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- =====================================================
-         EXCEL EXPORT
-    ====================================================== -->
-
+    <!-- EXCEL EXPORT -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 
@@ -32,973 +24,633 @@
         }
 
         body {
-
             margin: 0;
             padding: 20px;
-
             font-family: Arial, sans-serif;
-
             background: #f5eee6;
-
-            color: #333;
+            color: #3e2a20;
         }
 
-
-        /* =====================================================
-           GENERAL
-        ====================================================== */
 
         h1,
         h2,
         h3 {
-
             margin-top: 0;
         }
 
+
         button {
-
-            border: none;
-
-            border-radius: 8px;
-
-            padding: 11px 16px;
-
-            font-size: 14px;
-
-            font-weight: bold;
-
             cursor: pointer;
-        }
-
-        button:hover {
-
-            opacity: 0.9;
-        }
-
-        button:disabled {
-
-            cursor: not-allowed;
-
-            opacity: 0.55;
-        }
-
-
-        /* =====================================================
-           LOGIN
-        ====================================================== */
-
-        #loginSection {
-
-            max-width: 420px;
-
-            margin: 80px auto;
-
-            background: white;
-
-            padding: 30px;
-
-            border-radius: 15px;
-
-            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
-
-            text-align: center;
-        }
-
-        #loginSection h1 {
-
-            color: #4b2e1f;
-
-            margin-bottom: 5px;
-        }
-
-        #loginSection p {
-
-            color: #777;
-
-            margin-bottom: 25px;
-        }
-
-        #loginSection input {
-
-            width: 100%;
-
-            padding: 13px;
-
-            margin-bottom: 12px;
-
-            border: 1px solid #ccc;
-
+            border: none;
             border-radius: 8px;
-
-            font-size: 15px;
+            padding: 10px 15px;
+            font-weight: bold;
         }
+
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbb9aa;
+            border-radius: 7px;
+            font-size: 15px;
+            background: white;
+        }
+
+
+        .hidden {
+            display: none !important;
+        }
+
+
+        /* =========================
+           LOGIN
+        ========================= */
+
+        #loginScreen {
+            max-width: 420px;
+            margin: 70px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+        }
+
+
+        #loginScreen h1 {
+            text-align: center;
+            color: #4b2e1f;
+        }
+
+
+        .login-field {
+            margin-bottom: 15px;
+        }
+
+
+        .login-field label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
 
         #loginButton {
-
             width: 100%;
-
             background: #4b2e1f;
-
             color: white;
         }
 
 
-        /* =====================================================
-           ADMIN
-        ====================================================== */
+        #loginMessage {
+            margin-top: 15px;
+            text-align: center;
+            color: #b00020;
+        }
 
-        #adminSection {
 
-            display: none;
+        /* =========================
+           DASHBOARD
+        ========================= */
 
+        #dashboard {
             max-width: 1250px;
-
             margin: auto;
         }
 
-        .admin-header {
 
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            gap: 15px;
-
-            margin-bottom: 20px;
-
-            flex-wrap: wrap;
+        .top-header {
+            background: #4b2e1f;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
         }
 
-        .admin-header h1 {
 
-            color: #4b2e1f;
+        .top-header h1 {
+            margin-bottom: 5px;
+        }
 
+
+        .top-header p {
             margin: 0;
         }
 
-        .logout-button {
 
-            background: #b3261e;
-
-            color: white;
-        }
-
-
-        /* =====================================================
-           CARDS
-        ====================================================== */
-
-        .admin-card {
-
-            background: white;
-
-            border-radius: 15px;
-
-            padding: 22px;
-
-            margin-bottom: 20px;
-
-            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-        }
-
-        .admin-card h2 {
-
-            color: #4b2e1f;
-
-            margin-bottom: 8px;
-        }
-
-        .admin-card > p {
-
-            color: #777;
-        }
-
-
-        /* =====================================================
-           MESSAGES
-        ====================================================== */
-
-        .admin-message {
-
-            display: none;
-
-            padding: 12px;
-
-            border-radius: 8px;
-
-            margin-top: 12px;
-
-            font-size: 14px;
-
-            line-height: 1.5;
-        }
-
-        .admin-message.error {
-
-            display: block;
-
-            background: #ffe5e5;
-
-            color: #a00000;
-
-            border: 1px solid #ffb5b5;
-        }
-
-        .admin-message.success {
-
-            display: block;
-
-            background: #e6f7e9;
-
-            color: #146c2e;
-
-            border: 1px solid #9ed6aa;
-        }
-
-
-        /* =====================================================
-           SHOP STATUS
-        ====================================================== */
-
-        .shop-status-box {
-
+        .top-buttons {
             display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            gap: 15px;
-
+            gap: 10px;
             flex-wrap: wrap;
+            margin-bottom: 20px;
         }
+
+
+        .top-buttons button {
+            background: #ffffff;
+            color: #4b2e1f;
+            border: 1px solid #bca99a;
+        }
+
+
+        .logout-button {
+            margin-left: auto;
+        }
+
+
+        /* =========================
+           SHOP STATUS
+        ========================= */
+
+        .shop-status-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
 
         #shopStatus {
-
-            font-size: 25px;
-
+            font-size: 22px;
             font-weight: bold;
+            margin-bottom: 12px;
         }
 
-        .shop-open {
 
-            color: #16833a;
+        .open-status {
+            color: green;
         }
 
-        .shop-closed {
 
-            color: #b3261e;
+        .closed-status {
+            color: #b00020;
         }
 
-        #shopToggleButton {
 
+        #toggleShopButton {
             background: #4b2e1f;
-
             color: white;
         }
 
 
-        /* =====================================================
+        /* =========================
+           SECTIONS
+        ========================= */
+
+        .admin-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+
+        /* =========================
            MENU
-        ====================================================== */
+        ========================= */
 
-        .menu-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(auto-fit, minmax(250px, 1fr));
-
-            gap: 12px;
-        }
-
-        .menu-item {
-
-            border: 1px solid #ddd;
-
-            border-radius: 10px;
-
-            padding: 15px;
-
-            background: #fafafa;
-
+        .menu-item-row {
             display: flex;
-
             justify-content: space-between;
-
             align-items: center;
-
-            gap: 10px;
+            gap: 15px;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
         }
+
+
+        .menu-item-row:last-child {
+            border-bottom: none;
+        }
+
 
         .menu-item-name {
-
             font-weight: bold;
-
-            color: #4b2e1f;
         }
+
 
         .menu-item-category {
-
-            font-size: 12px;
-
+            font-size: 13px;
             color: #777;
-
-            margin-top: 4px;
         }
 
-        .menu-toggle {
-
-            color: white;
-
-            min-width: 120px;
-        }
 
         .available-button {
-
-            background: #16833a;
-        }
-
-        .soldout-button {
-
-            background: #b3261e;
-        }
-
-        .menu-toggle:disabled {
-
-            opacity: 1;
-        }
-
-
-        /* =====================================================
-           NAVIGATION
-        ====================================================== */
-
-        .admin-navigation {
-
-            display: flex;
-
-            gap: 10px;
-
-            flex-wrap: wrap;
-
-            margin-bottom: 20px;
-        }
-
-        .nav-button {
-
-            background: #4b2e1f;
-
+            background: #2e7d32;
             color: white;
         }
 
-        .nav-button.report {
 
-            background: #16833a;
+        .sold-button {
+            background: #b00020;
+            color: white;
         }
 
 
-        /* =====================================================
-           MANUAL ORDER
-        ====================================================== */
+        /* =========================
+           ORDERS
+        ========================= */
 
-        .manual-order-form {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(auto-fit, minmax(180px, 1fr));
-
+        .orders-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             gap: 10px;
-
-            margin-top: 15px;
+            flex-wrap: wrap;
         }
 
-        .manual-order-form input,
-        .manual-order-form select {
 
-            width: 100%;
-
-            padding: 12px;
-
-            border: 1px solid #ccc;
-
-            border-radius: 8px;
-
+        #orderCount {
+            background: #4b2e1f;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
             font-size: 14px;
         }
 
-        #addManualOrderButton {
 
-            background: #16833a;
+        .order-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 12px;
+            background: #fffdfb;
+        }
 
+
+        .order-card.new-order {
+            border: 3px solid #d97706;
+            background: #fff8eb;
+        }
+
+
+        .order-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+
+        .order-number {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+
+        .order-source {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+
+        .source-online {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+
+        .source-manual {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+
+        .order-info {
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+
+        .order-items {
+            background: #f7f2ed;
+            padding: 10px;
+            border-radius: 7px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+
+
+        .order-total {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+
+        .order-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+
+        .status-button {
+            background: #4b2e1f;
             color: white;
+        }
 
+
+        .cancel-button {
+            background: #b00020;
+            color: white;
+        }
+
+
+        /* =========================
+           NEW ORDER ALERT
+        ========================= */
+
+        #newOrderBanner {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            background: #b45309;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+            max-width: 320px;
+        }
+
+
+        #newOrderBanner button {
+            margin-top: 10px;
+            background: white;
+            color: #4b2e1f;
+        }
+
+
+        /* =========================
+           MANUAL ORDER
+        ========================= */
+
+        .manual-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+
+        .manual-field {
+            margin-bottom: 5px;
+        }
+
+
+        .manual-field.full {
             grid-column: 1 / -1;
         }
 
 
-        /* =====================================================
-           ACTIVE ORDERS
-        ====================================================== */
-
-        .orders-header {
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            gap: 10px;
-
-            flex-wrap: wrap;
+        .manual-field label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
         }
 
-        #refreshOrdersButton {
 
-            background: #4b2e1f;
-
-            color: white;
-        }
-
-        #ordersContainer {
-
+        .manual-addons {
             margin-top: 15px;
-        }
-
-        .order-card {
-
-            border: 1px solid #ddd;
-
-            border-radius: 12px;
-
-            padding: 18px;
-
-            margin-bottom: 15px;
-
-            background: #fff;
-        }
-
-        .order-card.new-order {
-
-            border: 3px solid #d40000;
-
-            background: #fff4f4;
-        }
-
-        .new-order-badge {
-
-            display: inline-block;
-
-            background: #d40000;
-
-            color: white;
-
-            padding: 5px 9px;
-
-            border-radius: 5px;
-
-            font-size: 11px;
-
-            font-weight: bold;
-
-            margin-left: 6px;
-        }
-
-        .source-badge {
-
-            display: inline-block;
-
-            padding: 5px 9px;
-
-            border-radius: 5px;
-
-            font-size: 11px;
-
-            font-weight: bold;
-
-            margin-left: 5px;
-        }
-
-        .online-source {
-
-            background: #e5efff;
-
-            color: #174ea6;
-        }
-
-        .manual-source {
-
-            background: #fff1cc;
-
-            color: #8a5a00;
-        }
-
-        .order-title {
-
-            display: flex;
-
-            align-items: center;
-
-            flex-wrap: wrap;
-
-            gap: 5px;
-
-            margin-bottom: 12px;
-        }
-
-        .order-title strong {
-
-            color: #4b2e1f;
-
-            font-size: 18px;
-        }
-
-        .order-info {
-
-            line-height: 1.6;
-
-            font-size: 14px;
-        }
-
-        .order-items {
-
-            white-space: pre-wrap;
-
-            background: #f7f7f7;
-
-            padding: 12px;
-
-            border-radius: 8px;
-
-            margin: 10px 0;
-        }
-
-        .order-total {
-
-            font-size: 18px;
-
-            font-weight: bold;
-
-            color: #16833a;
-
-            margin-top: 10px;
-        }
-
-        .status-row {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-            margin-top: 15px;
-
-            flex-wrap: wrap;
-        }
-
-        .status-select {
-
-            padding: 10px;
-
-            border-radius: 8px;
-
-            border: 1px solid #ccc;
-
-            min-width: 170px;
-        }
-
-        .empty-orders {
-
-            text-align: center;
-
-            padding: 35px;
-
-            color: #777;
-
-            background: #fafafa;
-
+            padding: 15px;
+            background: #f8f3ee;
             border-radius: 10px;
         }
 
 
-        /* =====================================================
-           NEW ORDER ALERT
-        ====================================================== */
-
-        #newOrderBanner {
-
-            display: none;
-
-            position: fixed;
-
-            top: 0;
-
-            left: 0;
-
-            width: 100%;
-
-            z-index: 9998;
-
-            background: #d40000;
-
-            color: white;
-
-            padding: 14px;
-
-            text-align: center;
-
-            font-weight: bold;
+        .manual-addons h3 {
+            margin-bottom: 10px;
         }
 
-        #newOrderPopup {
 
-            display: none;
-
-            position: fixed;
-
-            z-index: 9999;
-
-            top: 50%;
-
-            left: 50%;
-
-            transform: translate(-50%, -50%);
-
-            width: min(450px, calc(100% - 30px));
-
-            background: white;
-
-            border-radius: 15px;
-
-            padding: 30px;
-
-            text-align: center;
-
-            box-shadow: 0 10px 40px rgba(0,0,0,0.35);
-        }
-
-        #newOrderPopup h2 {
-
-            color: #d40000;
-        }
-
-        .alert-button-row {
-
+        .addon-option {
             display: flex;
-
-            gap: 10px;
-
-            margin-top: 20px;
-        }
-
-        .alert-button-row button {
-
-            flex: 1;
-        }
-
-        #viewOrderButton {
-
-            background: #4b2e1f;
-
-            color: white;
-        }
-
-        #acknowledgeButton {
-
-            background: #16833a;
-
-            color: white;
-        }
-
-
-        /* =====================================================
-           DAILY REPORTS
-        ====================================================== */
-
-        #reportsSection {
-
-            display: none;
-
-            max-width: 1250px;
-
-            margin: 0 auto;
-        }
-
-        .reports-header {
-
-            display: flex;
-
-            justify-content: space-between;
-
             align-items: center;
-
             gap: 10px;
-
-            flex-wrap: wrap;
+            padding: 8px 0;
         }
+
+
+        .addon-option input {
+            width: auto;
+        }
+
+
+        .manual-total-box {
+            margin-top: 15px;
+            padding: 15px;
+            background: #4b2e1f;
+            color: white;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+
+        #addManualOrderButton {
+            margin-top: 15px;
+            width: 100%;
+            background: #4b2e1f;
+            color: white;
+            font-size: 16px;
+        }
+
+
+        /* =========================
+           REPORTS
+        ========================= */
 
         .report-controls {
-
-            display: flex;
-
+            display: grid;
+            grid-template-columns: 1fr auto auto;
             gap: 10px;
-
-            flex-wrap: wrap;
-
-            align-items: center;
-
-            margin-top: 15px;
+            align-items: end;
+            margin-bottom: 20px;
         }
 
-        .report-controls input {
 
-            padding: 11px;
-
-            border: 1px solid #ccc;
-
-            border-radius: 8px;
-
-            font-size: 14px;
+        .report-control label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
         }
 
-        #loadReportButton {
 
+        .report-control button {
+            height: 43px;
             background: #4b2e1f;
-
             color: white;
         }
 
-        #exportExcelButton {
-
-            background: #16833a;
-
-            color: white;
-        }
-
-        #printReportButton {
-
-            background: #555;
-
-            color: white;
-        }
-
-        #backToDashboardButton {
-
-            background: #4b2e1f;
-
-            color: white;
-        }
-
-
-        /* =====================================================
-           REPORT STATISTICS
-        ====================================================== */
 
         .report-stats {
-
             display: grid;
-
-            grid-template-columns:
-                repeat(auto-fit, minmax(190px, 1fr));
-
+            grid-template-columns: repeat(4, 1fr);
             gap: 12px;
-
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
-        .report-stat {
 
-            background: #fafafa;
-
-            border: 1px solid #ddd;
-
-            border-radius: 12px;
-
-            padding: 18px;
+        .stat-card {
+            background: #f8f3ee;
+            padding: 15px;
+            border-radius: 10px;
         }
 
-        .report-stat span {
 
-            display: block;
-
-            color: #777;
-
+        .stat-title {
             font-size: 13px;
-
-            margin-bottom: 8px;
-        }
-
-        .report-stat strong {
-
-            font-size: 24px;
-
-            color: #4b2e1f;
+            color: #777;
         }
 
 
-        /* =====================================================
-           REPORT TABLE
-        ====================================================== */
+        .stat-value {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
 
         .report-table-wrapper {
-
-            width: 100%;
-
             overflow-x: auto;
-
-            margin-top: 20px;
         }
 
+
         .report-table {
-
             width: 100%;
-
             border-collapse: collapse;
-
             min-width: 900px;
         }
 
-        .report-table th {
 
-            background: #4b2e1f;
-
-            color: white;
-
-            padding: 11px;
-
-            text-align: left;
-
-            font-size: 13px;
-        }
-
+        .report-table th,
         .report-table td {
-
-            padding: 10px;
-
+            padding: 9px;
             border-bottom: 1px solid #ddd;
-
-            font-size: 13px;
-
+            text-align: left;
             vertical-align: top;
         }
 
-        .report-table tr:nth-child(even) {
 
-            background: #fafafa;
+        .report-table th {
+            background: #4b2e1f;
+            color: white;
         }
 
-        .report-total-row td {
 
-            font-weight: bold;
-
-            background: #f0f0f0;
+        .report-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
         }
 
-        .report-empty {
 
+        .report-buttons button {
+            background: #4b2e1f;
+            color: white;
+        }
+
+
+        /* =========================
+           EMPTY
+        ========================= */
+
+        .empty-message {
+            padding: 20px;
             text-align: center;
-
-            padding: 30px;
-
             color: #777;
         }
 
 
-        /* =====================================================
-           MOBILE
-        ====================================================== */
-
-        @media (max-width: 600px) {
-
-            body {
-
-                padding: 10px;
-            }
-
-            .admin-card {
-
-                padding: 16px;
-            }
-
-            .menu-item {
-
-                flex-direction: column;
-
-                align-items: stretch;
-            }
-
-            .menu-toggle {
-
-                width: 100%;
-            }
-
-            .status-row {
-
-                flex-direction: column;
-
-                align-items: stretch;
-            }
-
-            .status-select {
-
-                width: 100%;
-            }
-
-            .alert-button-row {
-
-                flex-direction: column;
-            }
-
-        }
-
-
-        /* =====================================================
+        /* =========================
            PRINT
-        ====================================================== */
+        ========================= */
 
         @media print {
 
             body {
-
                 background: white;
-
                 padding: 0;
             }
 
-            #loginSection,
-            #adminSection,
-            #newOrderBanner,
-            #newOrderPopup,
-            .report-controls,
-            #backToDashboardButton,
-            #exportExcelButton,
-            #printReportButton {
-
+            #dashboard > *:not(#reportsSection) {
                 display: none !important;
             }
 
             #reportsSection {
-
                 display: block !important;
-
-                max-width: none;
+                box-shadow: none;
             }
 
-            .admin-card {
-
-                box-shadow: none;
-
-                border: none;
+            .report-controls,
+            .report-buttons {
+                display: none !important;
             }
 
             .report-table {
-
                 min-width: 0;
+            }
+
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 10px;
+            }
+
+
+            .manual-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .manual-field.full {
+                grid-column: auto;
+            }
+
+
+            .report-controls {
+                grid-template-columns: 1fr;
+            }
+
+
+            .report-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+
+            .top-buttons {
+                flex-direction: column;
+            }
+
+
+            .logout-button {
+                margin-left: 0;
+            }
+
+
+            #newOrderBanner {
+                left: 10px;
+                right: 10px;
+                top: 10px;
+                max-width: none;
             }
 
         }
@@ -1011,222 +663,232 @@
 <body>
 
 
-    <!-- =====================================================
-         NEW ORDER ALERT BANNER
-    ====================================================== -->
+<!-- =====================================================
+     LOGIN
+===================================================== -->
 
-    <div id="newOrderBanner">
+<div id="loginScreen">
 
-        🔔 NEW HIGHWAY CAFE ORDER RECEIVED!
+    <h1>HIGHWAY CAFE</h1>
 
-    </div>
+    <p style="text-align:center;">
+        Admin Dashboard
+    </p>
 
 
-    <!-- =====================================================
-         NEW ORDER POPUP
-    ====================================================== -->
+    <div class="login-field">
 
-    <div id="newOrderPopup">
+        <label>Email</label>
 
-        <h2>🔔 NEW ORDER!</h2>
-
-        <p>
-            A new customer order has been received.
-        </p>
-
-        <p>
-            The alert will continue ringing until you acknowledge it.
-        </p>
-
-        <div class="alert-button-row">
-
-            <button
-                id="viewOrderButton"
-                onclick="viewNewOrders()"
-            >
-                VIEW ORDER
-            </button>
-
-            <button
-                id="acknowledgeButton"
-                onclick="acknowledgeNewOrders()"
-            >
-                ACKNOWLEDGE
-            </button>
-
-        </div>
+        <input
+            type="email"
+            id="loginEmail"
+            placeholder="Admin email">
 
     </div>
 
 
-    <!-- =====================================================
-         LOGIN
-    ====================================================== -->
+    <div class="login-field">
 
-    <section id="loginSection">
+        <label>Password</label>
+
+        <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password">
+
+    </div>
+
+
+    <button
+        id="loginButton"
+        onclick="loginAdmin()">
+
+        LOGIN
+
+    </button>
+
+
+    <div id="loginMessage"></div>
+
+</div>
+
+
+<!-- =====================================================
+     NEW ORDER BANNER
+===================================================== -->
+
+<div
+    id="newOrderBanner"
+    class="hidden">
+
+    <strong>🔔 NEW ORDER!</strong>
+
+    <div id="newOrderBannerText">
+        A new order has arrived.
+    </div>
+
+    <button onclick="viewNewOrders()">
+        VIEW ORDERS
+    </button>
+
+    <button onclick="acknowledgeNewOrders()">
+        ACKNOWLEDGE
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
+<div
+    id="dashboard"
+    class="hidden">
+
+
+    <div class="top-header">
 
         <h1>HIGHWAY CAFE</h1>
 
         <p>Admin Dashboard</p>
 
-        <input
-            type="email"
-            id="loginEmail"
-            placeholder="Admin email"
-            autocomplete="email"
-        >
+    </div>
 
-        <input
-            type="password"
-            id="loginPassword"
-            placeholder="Password"
-            autocomplete="current-password"
-        >
 
-        <button
-            id="loginButton"
-            onclick="loginAdmin()"
-        >
-            🔐 LOGIN
+    <!-- NAVIGATION -->
+
+    <div class="top-buttons">
+
+        <button onclick="showSection('ordersSection')">
+            📦 ACTIVE ORDERS
         </button>
 
-        <div
-            id="loginError"
-            class="admin-message"
-        ></div>
+        <button onclick="showSection('manualOrderSection')">
+            📝 MANUAL ORDER
+        </button>
 
-    </section>
+        <button onclick="showSection('menuSection')">
+            ☕ MENU
+        </button>
+
+        <button onclick="showSection('reportsSection')">
+            📊 DAILY REPORTS
+        </button>
+
+        <button
+            class="logout-button"
+            onclick="logoutAdmin()">
+
+            LOGOUT
+
+        </button>
+
+    </div>
 
 
-    <!-- =====================================================
-         MAIN ADMIN DASHBOARD
-    ====================================================== -->
+    <!-- =================================================
+         SHOP STATUS
+    ================================================= -->
 
-    <section id="adminSection">
+    <div class="shop-status-card">
 
-        <div class="admin-header">
+        <h2>SHOP STATUS</h2>
 
-            <div>
+        <div id="shopStatus">
+            Loading...
+        </div>
 
-                <h1>☕ HIGHWAY CAFE</h1>
+        <button
+            id="toggleShopButton"
+            onclick="toggleShop()">
 
-                <div>
-                    Admin Dashboard
-                </div>
+            Change Status
 
+        </button>
+
+    </div>
+
+
+    <!-- =================================================
+         ACTIVE ORDERS
+    ================================================= -->
+
+    <div
+        id="ordersSection"
+        class="admin-section">
+
+        <div class="orders-header">
+
+            <h2>📦 ACTIVE ORDERS</h2>
+
+            <span id="orderCount">
+                0 orders
+            </span>
+
+        </div>
+
+
+        <p style="color:#777;">
+            Completed and cancelled orders are removed from
+            this list but remain available in Daily Reports.
+        </p>
+
+
+        <div id="ordersList">
+
+            <div class="empty-message">
+                Loading orders...
             </div>
 
-            <button
-                class="logout-button"
-                onclick="logoutAdmin()"
-            >
-                LOGOUT
-            </button>
-
         </div>
 
-
-        <!-- =================================================
-             NAVIGATION
-        ================================================== -->
-
-        <div class="admin-navigation">
-
-            <button
-                class="nav-button"
-                onclick="showDashboard()"
-            >
-                🏠 DASHBOARD
-            </button>
-
-            <button
-                class="nav-button report"
-                onclick="showReports()"
-            >
-                📊 DAILY REPORTS
-            </button>
-
-        </div>
+    </div>
 
 
-        <!-- =================================================
-             SHOP STATUS
-        ================================================== -->
+    <!-- =================================================
+         MANUAL ORDER
+    ================================================= -->
 
-        <div class="admin-card">
+    <div
+        id="manualOrderSection"
+        class="admin-section hidden">
 
-            <h2>🏪 Shop Status</h2>
+        <h2>📝 MANUAL / WALK-IN ORDER</h2>
 
-            <div class="shop-status-box">
-
-                <div id="shopStatus">
-                    Loading...
-                </div>
-
-                <button
-                    id="shopToggleButton"
-                    onclick="toggleShopStatus()"
-                >
-                    CHANGE STATUS
-                </button>
-
-            </div>
-
-            <div
-                id="shopError"
-                class="admin-message"
-            ></div>
-
-        </div>
+        <p style="color:#777;">
+            Create an order directly from the Highway Cafe
+            menu. Prices and add-ons are calculated automatically.
+        </p>
 
 
-        <!-- =================================================
-             MENU AVAILABILITY
-        ================================================== -->
-
-        <div class="admin-card">
-
-            <h2>☕ Menu Availability</h2>
-
-            <p>
-                Turn menu items on or off when they are sold out.
-            </p>
-
-            <div
-                id="menuContainer"
-                class="menu-grid"
-            >
-                Loading menu...
-            </div>
-
-            <div
-                id="menuError"
-                class="admin-message"
-            ></div>
-
-        </div>
+        <div class="manual-grid">
 
 
-        <!-- =================================================
-             MANUAL ORDER
-        ================================================== -->
+            <!-- CUSTOMER -->
 
-        <div class="admin-card">
+            <div class="manual-field">
 
-            <h2>📝 Add Manual / Walk-in Order</h2>
-
-            <p>
-                Use this for customers who order directly at the café.
-                These orders will also appear in the Daily Reports.
-            </p>
-
-            <div class="manual-order-form">
+                <label>
+                    Customer Name
+                </label>
 
                 <input
                     type="text"
                     id="manualCustomerName"
-                    placeholder="Customer name (optional)"
-                >
+                    placeholder="Walk-in Customer">
+
+            </div>
+
+
+            <!-- ORDER TYPE -->
+
+            <div class="manual-field">
+
+                <label>
+                    Order Type
+                </label>
 
                 <select id="manualOrderType">
 
@@ -1244,3026 +906,4182 @@
 
                 </select>
 
-                <select id="manualPaymentMethod">
+            </div>
+
+
+            <!-- CATEGORY -->
+
+            <div class="manual-field">
+
+                <label>
+                    Category
+                </label>
+
+                <select
+                    id="manualCategory"
+                    onchange="manualCategoryChanged()">
+
+                    <option value="">
+                        Select Category
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ITEM -->
+
+            <div class="manual-field">
+
+                <label>
+                    Menu Item
+                </label>
+
+                <select
+                    id="manualItem"
+                    onchange="manualItemChanged()"
+                    disabled>
+
+                    <option value="">
+                        Select Menu Item
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- VARIANT -->
+
+            <div class="manual-field">
+
+                <label>
+                    Size / Variant
+                </label>
+
+                <select
+                    id="manualVariant"
+                    onchange="manualVariantChanged()"
+                    disabled>
+
+                    <option value="">
+                        Select Size / Variant
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- QUANTITY -->
+
+            <div class="manual-field">
+
+                <label>
+                    Quantity
+                </label>
+
+                <input
+                    type="number"
+                    id="manualQuantity"
+                    value="1"
+                    min="1"
+                    onchange="updateManualTotal()"
+                    oninput="updateManualTotal()">
+
+            </div>
+
+
+            <!-- PAYMENT -->
+
+            <div class="manual-field">
+
+                <label>
+                    Payment
+                </label>
+
+                <select id="manualPayment">
 
                     <option value="Cash">
                         Cash
                     </option>
 
-                    <option value="GCash">
+                    <option value="GCash / Online Payment">
                         GCash
                     </option>
 
                 </select>
 
-                <input
-                    type="text"
-                    id="manualItemName"
-                    placeholder="Item name"
-                >
-
-                <input
-                    type="number"
-                    id="manualItemPrice"
-                    placeholder="Price"
-                    min="0"
-                    step="0.01"
-                >
-
-                <input
-                    type="number"
-                    id="manualItemQuantity"
-                    placeholder="Quantity"
-                    min="1"
-                    value="1"
-                >
-
-                <button
-                    id="addManualOrderButton"
-                    onclick="addManualOrder()"
-                >
-                    ➕ ADD MANUAL ORDER
-                </button>
-
             </div>
+
+
+            <!-- FLAVOR -->
 
             <div
-                id="manualOrderMessage"
-                class="admin-message"
-            ></div>
-
-        </div>
-
-
-        <!-- =================================================
-             ACTIVE ORDERS
-        ================================================== -->
-
-        <div class="admin-card">
-
-            <div class="orders-header">
-
-                <div>
-
-                    <h2>🛒 Active Orders</h2>
-
-                    <p>
-                        Completed and cancelled orders are removed
-                        from this list but remain available in Daily Reports.
-                    </p>
-
-                </div>
-
-                <button
-                    id="refreshOrdersButton"
-                    onclick="loadOrders()"
-                >
-                    🔄 REFRESH
-                </button>
-
-            </div>
-
-            <div
-                id="ordersContainer"
-            >
-                Loading orders...
-            </div>
-
-            <div
-                id="ordersError"
-                class="admin-message"
-            ></div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         DAILY REPORTS
-    ====================================================== -->
-
-    <section id="reportsSection">
-
-        <div class="admin-header">
-
-            <div>
-
-                <h1>📊 HIGHWAY CAFE</h1>
-
-                <div>
-                    Daily Sales & Order Reports
-                </div>
-
-            </div>
-
-            <button
-                class="logout-button"
-                onclick="logoutAdmin()"
-            >
-                LOGOUT
-            </button>
-
-        </div>
-
-
-        <div class="admin-card">
-
-            <div class="reports-header">
-
-                <div>
-
-                    <h2>📊 Daily Report</h2>
-
-                    <p>
-                        Completed online and manual orders are included.
-                    </p>
-
-                </div>
-
-                <button
-                    id="backToDashboardButton"
-                    onclick="showDashboard()"
-                >
-                    ← BACK TO DASHBOARD
-                </button>
-
-            </div>
-
-
-            <!-- REPORT CONTROLS -->
-
-            <div class="report-controls">
+                class="manual-field hidden"
+                id="manualFlavorField">
 
                 <label>
-                    <strong>Select Date:</strong>
+                    Flavor
+                </label>
+
+                <select
+                    id="manualFlavor"
+                    onchange="updateManualTotal()">
+
+                    <option value="">
+                        Select Flavor
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ADDONS -->
+
+            <div
+                class="manual-field full hidden"
+                id="manualAddonsField">
+
+                <div class="manual-addons">
+
+                    <h3>
+                        ➕ Add-ons
+                    </h3>
+
+                    <div id="manualAddonsList"></div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- TOTAL -->
+
+        <div class="manual-total-box">
+
+            <span>
+                Manual Order Total
+            </span>
+
+            <span id="manualTotal">
+                ₱0.00
+            </span>
+
+        </div>
+
+
+        <button
+            id="addManualOrderButton"
+            onclick="addManualOrder()">
+
+            ➕ ADD MANUAL ORDER
+
+        </button>
+
+
+    </div>
+
+
+    <!-- =================================================
+         MENU MANAGEMENT
+    ================================================= -->
+
+    <div
+        id="menuSection"
+        class="admin-section hidden">
+
+        <h2>☕ MENU AVAILABILITY</h2>
+
+        <p style="color:#777;">
+            Turn individual menu items on or off.
+        </p>
+
+
+        <div id="menuList">
+
+            <div class="empty-message">
+                Loading menu...
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         DAILY REPORTS
+    ================================================= -->
+
+    <div
+        id="reportsSection"
+        class="admin-section hidden">
+
+        <h2>📊 DAILY REPORTS</h2>
+
+        <p style="color:#777;">
+            Completed online and manual orders for the selected day.
+        </p>
+
+
+        <div class="report-controls">
+
+
+            <div class="report-control">
+
+                <label>
+                    Select Date
                 </label>
 
                 <input
                     type="date"
-                    id="reportDate"
-                >
+                    id="reportDate">
 
-                <button
-                    id="loadReportButton"
-                    onclick="loadDailyReport()"
-                >
-                    🔄 LOAD REPORT
-                </button>
+            </div>
 
-                <button
-                    id="exportExcelButton"
-                    onclick="exportReportToExcel()"
-                >
-                    📥 EXPORT EXCEL
-                </button>
 
-                <button
-                    id="printReportButton"
-                    onclick="printDailyReport()"
-                >
-                    🖨️ PRINT
+            <div class="report-control">
+
+                <label>&nbsp;</label>
+
+                <button onclick="loadDailyReport()">
+                    LOAD REPORT
                 </button>
 
             </div>
 
 
-            <div
-                id="reportError"
-                class="admin-message"
-            ></div>
+            <div class="report-control">
 
+                <label>&nbsp;</label>
 
-            <!-- REPORT STATISTICS -->
-
-            <div class="report-stats">
-
-                <div class="report-stat">
-
-                    <span>
-                        Total Sales
-                    </span>
-
-                    <strong id="reportTotalSales">
-                        ₱0.00
-                    </strong>
-
-                </div>
-
-
-                <div class="report-stat">
-
-                    <span>
-                        Completed Orders
-                    </span>
-
-                    <strong id="reportTotalOrders">
-                        0
-                    </strong>
-
-                </div>
-
-
-                <div class="report-stat">
-
-                    <span>
-                        Online Orders
-                    </span>
-
-                    <strong id="reportOnlineOrders">
-                        0
-                    </strong>
-
-                </div>
-
-
-                <div class="report-stat">
-
-                    <span>
-                        Manual Orders
-                    </span>
-
-                    <strong id="reportManualOrders">
-                        0
-                    </strong>
-
-                </div>
-
-
-                <div class="report-stat">
-
-                    <span>
-                        Cash Sales
-                    </span>
-
-                    <strong id="reportCashSales">
-                        ₱0.00
-                    </strong>
-
-                </div>
-
-
-                <div class="report-stat">
-
-                    <span>
-                        GCash Sales
-                    </span>
-
-                    <strong id="reportGcashSales">
-                        ₱0.00
-                    </strong>
-
-                </div>
+                <button onclick="printReport()">
+                    🖨 PRINT
+                </button>
 
             </div>
 
-
-            <!-- REPORT TABLE -->
-
-            <div class="report-table-wrapper">
-
-                <table
-                    class="report-table"
-                    id="dailyReportTable"
-                >
-
-                    <thead>
-
-                        <tr>
-
-                            <th>
-                                Date
-                            </th>
-
-                            <th>
-                                Time
-                            </th>
-
-                            <th>
-                                Order #
-                            </th>
-
-                            <th>
-                                Source
-                            </th>
-
-                            <th>
-                                Customer
-                            </th>
-
-                            <th>
-                                Type
-                            </th>
-
-                            <th>
-                                Payment
-                            </th>
-
-                            <th>
-                                Items
-                            </th>
-
-                            <th>
-                                Total
-                            </th>
-
-                            <th>
-                                Status
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody id="dailyReportBody">
-
-                        <tr>
-
-                            <td
-                                colspan="10"
-                                class="report-empty"
-                            >
-                                Select a date and load the report.
-
-                            </td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
 
         </div>
 
-    </section>
 
+        <!-- STATS -->
 
-    <!-- =====================================================
-         JAVASCRIPT
-    ====================================================== -->
+        <div class="report-stats">
 
-    <script>
 
-        // =====================================================
-        // SUPABASE CONFIG
-        // =====================================================
+            <div class="stat-card">
 
-        const SUPABASE_URL =
-            "https://qfnjegsbyxxqsdaelqqa.supabase.co";
+                <div class="stat-title">
+                    TOTAL SALES
+                </div>
 
-        const SUPABASE_KEY =
-            "sb_publishable_ttu1AyOaylp3J4x7iTqaNg_1VLOdHoE";
+                <div
+                    class="stat-value"
+                    id="reportTotalSales">
 
+                    ₱0.00
 
-        const supabaseClient =
-            window.supabase.createClient(
-                SUPABASE_URL,
-                SUPABASE_KEY
-            );
+                </div>
 
+            </div>
 
-        // =====================================================
-        // GLOBAL VARIABLES
-        // =====================================================
 
-        let firstOrdersLoaded = false;
+            <div class="stat-card">
 
-        let knownOrderIds = new Set();
+                <div class="stat-title">
+                    COMPLETED ORDERS
+                </div>
 
-        let newOrderIds = new Set();
+                <div
+                    class="stat-value"
+                    id="reportCompletedOrders">
 
-        let orderCheckInterval = null;
-
-        let ringInterval = null;
-
-        let audioContext = null;
-
-        let currentReportOrders = [];
-
-        let currentReportDate = "";
-
-
-        // =====================================================
-        // ERROR HELPERS
-        // =====================================================
-
-        function showError(elementId, message) {
-
-            const element =
-                document.getElementById(elementId);
-
-            if (!element) return;
-
-            element.textContent = message;
-
-            element.className =
-                "admin-message error";
-        }
-
-
-        function showSuccess(elementId, message) {
-
-            const element =
-                document.getElementById(elementId);
-
-            if (!element) return;
-
-            element.textContent = message;
-
-            element.className =
-                "admin-message success";
-        }
-
-
-        function clearMessage(elementId) {
-
-            const element =
-                document.getElementById(elementId);
-
-            if (!element) return;
-
-            element.textContent = "";
-
-            element.className =
-                "admin-message";
-        }
-
-
-        function getSupabaseErrorText(error) {
-
-            if (!error) {
-
-                return "Unknown error.";
-
-            }
-
-            return (
-                error.message ||
-                error.details ||
-                error.hint ||
-                JSON.stringify(error)
-            );
-
-        }
-
-
-        // =====================================================
-        // HTML ESCAPE
-        // =====================================================
-
-        function escapeHTML(value) {
-
-            if (value === null || value === undefined) {
-
-                return "";
-
-            }
-
-            return String(value)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-
-
-        // =====================================================
-        // MONEY
-        // =====================================================
-
-        function formatMoney(value) {
-
-            return "₱" +
-                Number(value || 0).toLocaleString(
-                    "en-PH",
-                    {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    }
-                );
-        }
-
-
-        // =====================================================
-        // DATE HELPERS
-        // =====================================================
-
-        function getLocalDateString(date = new Date()) {
-
-            const year =
-                date.getFullYear();
-
-            const month =
-                String(date.getMonth() + 1)
-                    .padStart(2, "0");
-
-            const day =
-                String(date.getDate())
-                    .padStart(2, "0");
-
-            return `${year}-${month}-${day}`;
-        }
-
-
-        function getLocalDayRange(dateString) {
-
-            const parts =
-                dateString.split("-");
-
-            const year =
-                Number(parts[0]);
-
-            const month =
-                Number(parts[1]) - 1;
-
-            const day =
-                Number(parts[2]);
-
-
-            const start =
-                new Date(
-                    year,
-                    month,
-                    day,
-                    0,
-                    0,
-                    0,
                     0
-                );
+
+                </div>
+
+            </div>
 
 
-            const end =
-                new Date(
-                    year,
-                    month,
-                    day + 1,
-                    0,
-                    0,
-                    0,
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    ONLINE ORDERS
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="reportOnlineOrders">
+
                     0
-                );
 
+                </div>
 
-            return {
+            </div>
 
-                start: start.toISOString(),
 
-                end: end.toISOString()
+            <div class="stat-card">
 
-            };
+                <div class="stat-title">
+                    MANUAL ORDERS
+                </div>
 
-        }
+                <div
+                    class="stat-value"
+                    id="reportManualOrders">
 
+                    0
 
-        // =====================================================
-        // AUDIO / RINGING ALERT
-        // =====================================================
+                </div>
 
-        function playRingSound() {
+            </div>
 
-            try {
 
-                if (!audioContext) {
+            <div class="stat-card">
 
-                    audioContext =
-                        new (
-                            window.AudioContext ||
-                            window.webkitAudioContext
-                        )();
+                <div class="stat-title">
+                    CASH SALES
+                </div>
 
-                }
+                <div
+                    class="stat-value"
+                    id="reportCashSales">
 
+                    ₱0.00
 
-                if (
-                    audioContext.state ===
-                    "suspended"
-                ) {
+                </div>
 
-                    audioContext.resume();
+            </div>
 
-                }
 
+            <div class="stat-card">
 
-                const oscillator =
-                    audioContext.createOscillator();
+                <div class="stat-title">
+                    GCASH SALES
+                </div>
 
-                const gain =
-                    audioContext.createGain();
+                <div
+                    class="stat-value"
+                    id="reportGcashSales">
 
+                    ₱0.00
 
-                oscillator.type =
-                    "sine";
+                </div>
 
+            </div>
 
-                oscillator.frequency.setValueAtTime(
-                    880,
-                    audioContext.currentTime
-                );
 
+        </div>
 
-                oscillator.frequency.setValueAtTime(
-                    660,
-                    audioContext.currentTime + 0.18
-                );
 
+        <!-- REPORT TABLE -->
 
-                gain.gain.setValueAtTime(
-                    0.0001,
-                    audioContext.currentTime
-                );
+        <div class="report-table-wrapper">
 
+            <table class="report-table">
 
-                gain.gain.exponentialRampToValueAtTime(
-                    0.25,
-                    audioContext.currentTime + 0.02
-                );
+                <thead>
 
+                    <tr>
 
-                gain.gain.exponentialRampToValueAtTime(
-                    0.0001,
-                    audioContext.currentTime + 0.4
-                );
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Order #</th>
+                        <th>Source</th>
+                        <th>Customer</th>
+                        <th>Type</th>
+                        <th>Payment</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Status</th>
 
+                    </tr>
 
-                oscillator.connect(gain);
+                </thead>
 
-                gain.connect(audioContext.destination);
 
-
-                oscillator.start();
-
-                oscillator.stop(
-                    audioContext.currentTime + 0.4
-                );
-
-            } catch (error) {
-
-                console.log(
-                    "Audio alert error:",
-                    error
-                );
-
-            }
-
-        }
-
-
-        function startRingAlert() {
-
-            if (ringInterval) {
-
-                return;
-
-            }
-
-
-            playRingSound();
-
-
-            ringInterval =
-                setInterval(
-                    function() {
-
-                        if (newOrderIds.size > 0) {
-
-                            playRingSound();
-
-                        }
-
-                    },
-                    3000
-                );
-
-        }
-
-
-        function stopRingAlert() {
-
-            if (ringInterval) {
-
-                clearInterval(ringInterval);
-
-                ringInterval = null;
-
-            }
-
-        }
-
-
-        // =====================================================
-        // LOGIN
-        // =====================================================
-
-        async function loginAdmin() {
-
-            clearMessage("loginError");
-
-
-            const email =
-                document.getElementById(
-                    "loginEmail"
-                ).value.trim();
-
-
-            const password =
-                document.getElementById(
-                    "loginPassword"
-                ).value;
-
-
-            if (!email || !password) {
-
-                showError(
-                    "loginError",
-                    "Please enter your email and password."
-                );
-
-                return;
-
-            }
-
-
-            const button =
-                document.getElementById(
-                    "loginButton"
-                );
-
-
-            button.disabled = true;
-
-            button.textContent =
-                "LOGGING IN...";
-
-
-            try {
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient.auth
-                        .signInWithPassword({
-                            email: email,
-                            password: password
-                        });
-
-
-                if (error) {
-
-                    throw error;
-
-                }
-
-
-                if (!data.session) {
-
-                    throw new Error(
-                        "Login succeeded but no session was created."
-                    );
-
-                }
-
-
-                await showAdminDashboard();
-
-            } catch (error) {
-
-                console.error(error);
-
-                showError(
-                    "loginError",
-                    "Login failed: " +
-                    getSupabaseErrorText(error)
-                );
-
-            } finally {
-
-                button.disabled = false;
-
-                button.textContent =
-                    "🔐 LOGIN";
-
-            }
-
-        }
-
-
-        async function logoutAdmin() {
-
-            stopOrderChecking();
-
-            stopRingAlert();
-
-
-            await supabaseClient.auth.signOut();
-
-
-            document.getElementById(
-                "adminSection"
-            ).style.display = "none";
-
-
-            document.getElementById(
-                "reportsSection"
-            ).style.display = "none";
-
-
-            document.getElementById(
-                "loginSection"
-            ).style.display = "block";
-
-
-            document.getElementById(
-                "loginPassword"
-            ).value = "";
-
-        }
-
-
-        // =====================================================
-        // SHOW DASHBOARD
-        // =====================================================
-
-        async function showAdminDashboard() {
-
-            document.getElementById(
-                "loginSection"
-            ).style.display = "none";
-
-
-            document.getElementById(
-                "reportsSection"
-            ).style.display = "none";
-
-
-            document.getElementById(
-                "adminSection"
-            ).style.display = "block";
-
-
-            await loadShopStatus();
-
-            await loadMenu();
-
-            await loadOrders();
-
-
-            startOrderChecking();
-
-        }
-
-
-        function showDashboard() {
-
-            document.getElementById(
-                "reportsSection"
-            ).style.display = "none";
-
-
-            document.getElementById(
-                "adminSection"
-            ).style.display = "block";
-
-
-            loadShopStatus();
-
-            loadMenu();
-
-            loadOrders();
-
-        }
-
-
-        // =====================================================
-        // SHOW REPORTS
-        // =====================================================
-
-        function showReports() {
-
-            document.getElementById(
-                "adminSection"
-            ).style.display = "none";
-
-
-            document.getElementById(
-                "reportsSection"
-            ).style.display = "block";
-
-
-            const dateInput =
-                document.getElementById(
-                    "reportDate"
-                );
-
-
-            if (!dateInput.value) {
-
-                dateInput.value =
-                    getLocalDateString();
-
-            }
-
-
-            loadDailyReport();
-
-        }
-
-
-        // =====================================================
-        // SHOP STATUS
-        // =====================================================
-
-        async function loadShopStatus() {
-
-            clearMessage("shopError");
-
-
-            try {
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .from("shop_settings")
-                        .select(
-                            "id, shop_open"
-                        )
-                        .limit(1)
-                        .maybeSingle();
-
-
-                if (error) {
-
-                    throw error;
-
-                }
-
-
-                if (!data) {
-
-                    throw new Error(
-                        "No shop_settings record was found."
-                    );
-
-                }
-
-
-                updateShopStatusDisplay(
-                    data.shop_open
-                );
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                showError(
-                    "shopError",
-                    "Could not load shop status: " +
-                    getSupabaseErrorText(error)
-                );
-
-            }
-
-        }
-
-
-        function updateShopStatusDisplay(isOpen) {
-
-            const element =
-                document.getElementById(
-                    "shopStatus"
-                );
-
-
-            const button =
-                document.getElementById(
-                    "shopToggleButton"
-                );
-
-
-            if (isOpen) {
-
-                element.textContent =
-                    "🟢 SHOP OPEN";
-
-                element.className =
-                    "shop-open";
-
-                button.textContent =
-                    "🔴 CLOSE SHOP";
-
-            } else {
-
-                element.textContent =
-                    "🔴 SHOP CLOSED";
-
-                element.className =
-                    "shop-closed";
-
-                button.textContent =
-                    "🟢 OPEN SHOP";
-
-            }
-
-        }
-
-
-        async function toggleShopStatus() {
-
-            clearMessage("shopError");
-
-
-            const button =
-                document.getElementById(
-                    "shopToggleButton"
-                );
-
-
-            button.disabled = true;
-
-
-            try {
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .from("shop_settings")
-                        .select(
-                            "id, shop_open"
-                        )
-                        .limit(1)
-                        .maybeSingle();
-
-
-                if (error) {
-
-                    throw error;
-
-                }
-
-
-                if (!data) {
-
-                    throw new Error(
-                        "Shop settings record not found."
-                    );
-
-                }
-
-
-                const newStatus =
-                    !data.shop_open;
-
-
-                const {
-                    error: updateError
-                } =
-                    await supabaseClient
-                        .from("shop_settings")
-                        .update({
-                            shop_open: newStatus,
-                            updated_at:
-                                new Date().toISOString()
-                        })
-                        .eq(
-                            "id",
-                            data.id
-                        );
-
-
-                if (updateError) {
-
-                    throw updateError;
-
-                }
-
-
-                updateShopStatusDisplay(
-                    newStatus
-                );
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                showError(
-                    "shopError",
-                    "Could not update shop status: " +
-                    getSupabaseErrorText(error)
-                );
-
-            } finally {
-
-                button.disabled = false;
-
-            }
-
-        }
-
-
-        // =====================================================
-        // MENU
-        // =====================================================
-
-        async function loadMenu() {
-
-            clearMessage("menuError");
-
-
-            const container =
-                document.getElementById(
-                    "menuContainer"
-                );
-
-
-            container.innerHTML =
-                "Loading menu...";
-
-
-            try {
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .from("menu_items")
-                        .select(
-                            "id, product_name, category, available"
-                        );
-
-
-                if (error) {
-
-                    throw error;
-
-                }
-
-
-                const items =
-                    data || [];
-
-
-                items.sort(
-                    function(a, b) {
-
-                        return String(
-                            a.product_name || ""
-                        ).localeCompare(
-                            String(
-                                b.product_name || ""
-                            )
-                        );
-
-                    }
-                );
-
-
-                if (items.length === 0) {
-
-                    container.innerHTML =
-                        "No menu items found.";
-
-                    return;
-
-                }
-
-
-                container.innerHTML =
-                    items.map(
-                        function(item) {
-
-                            const available =
-                                item.available === true;
-
-
-                            return `
-
-                                <div class="menu-item">
-
-                                    <div>
-
-                                        <div class="menu-item-name">
-
-                                            ${escapeHTML(
-                                                item.product_name
-                                            )}
-
-                                        </div>
-
-                                        <div class="menu-item-category">
-
-                                            ${escapeHTML(
-                                                item.category || ""
-                                            )}
-
-                                        </div>
-
-                                    </div>
-
-                                    <button
-                                        class="menu-toggle ${
-                                            available
-                                                ? "available-button"
-                                                : "soldout-button"
-                                        }"
-                                        onclick="toggleMenuItem(
-                                            ${item.id},
-                                            ${available}
-                                        )"
-                                    >
-
-                                        ${
-                                            available
-                                                ? "Mark Sold Out"
-                                                : "Make Available"
-                                        }
-
-                                    </button>
-
-                                </div>
-
-                            `;
-
-                        }
-                    ).join("");
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                container.innerHTML = "";
-
-                showError(
-                    "menuError",
-                    "Could not load menu: " +
-                    getSupabaseErrorText(error)
-                );
-
-            }
-
-        }
-
-
-        async function toggleMenuItem(
-            id,
-            currentAvailability
-        ) {
-
-            clearMessage("menuError");
-
-
-            try {
-
-                const {
-                    error
-                } =
-                    await supabaseClient
-                        .from("menu_items")
-                        .update({
-                            available:
-                                !currentAvailability,
-                            updated_at:
-                                new Date().toISOString()
-                        })
-                        .eq(
-                            "id",
-                            id
-                        );
-
-
-                if (error) {
-
-                    throw error;
-
-                }
-
-
-                await loadMenu();
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                showError(
-                    "menuError",
-                    "Could not update menu item: " +
-                    getSupabaseErrorText(error)
-                );
-
-            }
-
-        }
-
-
-        // =====================================================
-        // ADD MANUAL ORDER
-        // =====================================================
-
-        async function addManualOrder() {
-
-            clearMessage(
-                "manualOrderMessage"
-            );
-
-
-            const name =
-                document.getElementById(
-                    "manualCustomerName"
-                ).value.trim();
-
-
-            const orderType =
-                document.getElementById(
-                    "manualOrderType"
-                ).value;
-
-
-            const paymentMethod =
-                document.getElementById(
-                    "manualPaymentMethod"
-                ).value;
-
-
-            const itemName =
-                document.getElementById(
-                    "manualItemName"
-                ).value.trim();
-
-
-            const price =
-                Number(
-                    document.getElementById(
-                        "manualItemPrice"
-                    ).value
-                );
-
-
-            const quantity =
-                Number(
-                    document.getElementById(
-                        "manualItemQuantity"
-                    ).value
-                );
-
-
-            if (!itemName) {
-
-                showError(
-                    "manualOrderMessage",
-                    "Please enter the item name."
-                );
-
-                return;
-
-            }
-
-
-            if (
-                !Number.isFinite(price) ||
-                price < 0
-            ) {
-
-                showError(
-                    "manualOrderMessage",
-                    "Please enter a valid price."
-                );
-
-                return;
-
-            }
-
-
-            if (
-                !Number.isInteger(quantity) ||
-                quantity < 1
-            ) {
-
-                showError(
-                    "manualOrderMessage",
-                    "Quantity must be at least 1."
-                );
-
-                return;
-
-            }
-
-
-            const total =
-                price * quantity;
-
-
-            const manualOrderNumber =
-                "MANUAL-" +
-                Date.now();
-
-
-            const orderedItems =
-                quantity +
-                " x " +
-                itemName +
-                " @ " +
-                formatMoney(price);
-
-
-            const orderData = {
-
-                order_number:
-                    manualOrderNumber,
-
-                customer_name:
-                    name ||
-                    "Walk-in Customer",
-
-                phone:
-                    "",
-
-                order_type:
-                    orderType,
-
-                delivery_address:
-                    "",
-
-                pickup_time:
-                    "",
-
-                payment_method:
-                    paymentMethod,
-
-                gcash_reference:
-                    "",
-
-                ordered_items:
-                    orderedItems,
-
-                order_notes:
-                    "Manual / Personal Order",
-
-                subtotal:
-                    total,
-
-                delivery_fee:
-                    0,
-
-                grand_total:
-                    total,
-
-                status:
-                    "Completed"
-
-            };
-
-
-            const button =
-                document.getElementById(
-                    "addManualOrderButton"
-                );
-
-
-            button.disabled = true;
-
-            button.textContent =
-                "ADDING ORDER...";
-
-
-            try {
-
-                const {
-                    error
-                } =
-                    await supabaseClient
-                        .from("orders")
-                        .insert([
-                            orderData
-                        ]);
-
-
-                if (error) {
-
-                    throw error;
-
-                }
-
-
-                showSuccess(
-                    "manualOrderMessage",
-                    "✓ Manual order added successfully and included in Daily Reports."
-                );
-
-
-                document.getElementById(
-                    "manualCustomerName"
-                ).value = "";
-
-
-                document.getElementById(
-                    "manualItemName"
-                ).value = "";
-
-
-                document.getElementById(
-                    "manualItemPrice"
-                ).value = "";
-
-
-                document.getElementById(
-                    "manualItemQuantity"
-                ).value = "1";
-
-
-                await loadOrders();
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                showError(
-                    "manualOrderMessage",
-                    "Could not add manual order: " +
-                    getSupabaseErrorText(error)
-                );
-
-            } finally {
-
-                button.disabled = false;
-
-                button.textContent =
-                    "➕ ADD MANUAL ORDER";
-
-            }
-
-        }
-
-
-        // =====================================================
-        // LOAD ACTIVE ORDERS
-        // =====================================================
-
-        async function loadOrders() {
-
-            clearMessage("ordersError");
-
-
-            const container =
-                document.getElementById(
-                    "ordersContainer"
-                );
-
-
-            container.innerHTML =
-                "Loading orders...";
-
-
-            try {
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .from("orders")
-                        .select("*")
-                        .order(
-                            "created_at",
-                            {
-                                ascending: false
-                            }
-                        );
-
-
-                if (error) {
-
-                    throw error;
-
-                }
-
-
-                const allOrders =
-                    data || [];
-
-
-                // =================================================
-                // NEW ORDER DETECTION
-                // =================================================
-
-                if (!firstOrdersLoaded) {
-
-                    allOrders.forEach(
-                        function(order) {
-
-                            knownOrderIds.add(
-                                String(order.id)
-                            );
-
-                        }
-                    );
-
-
-                    firstOrdersLoaded = true;
-
-                } else {
-
-                    allOrders.forEach(
-                        function(order) {
-
-                            const id =
-                                String(order.id);
-
-
-                            if (
-                                !knownOrderIds.has(id)
-                            ) {
-
-                                knownOrderIds.add(id);
-
-
-                                if (
-                                    order.status === "New"
-                                ) {
-
-                                    newOrderIds.add(id);
-
-                                }
-
-                            }
-
-                        }
-                    );
-
-                }
-
-
-                if (newOrderIds.size > 0) {
-
-                    showNewOrderAlert();
-
-                }
-
-
-                // =================================================
-                // ONLY ACTIVE ORDERS
-                // =================================================
-
-                const activeOrders =
-                    allOrders.filter(
-                        function(order) {
-
-                            return (
-                                order.status !==
-                                    "Completed" &&
-                                order.status !==
-                                    "Cancelled"
-                            );
-
-                        }
-                    );
-
-
-                renderOrders(
-                    activeOrders
-                );
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                container.innerHTML = "";
-
-                showError(
-                    "ordersError",
-                    "Could not load orders: " +
-                    getSupabaseErrorText(error)
-                );
-
-            }
-
-        }
-
-
-        // =====================================================
-        // RENDER ACTIVE ORDERS
-        // =====================================================
-
-        function renderOrders(orders) {
-
-            const container =
-                document.getElementById(
-                    "ordersContainer"
-                );
-
-
-            if (!orders.length) {
-
-                container.innerHTML = `
-
-                    <div class="empty-orders">
-
-                        <h3>
-                            ✓ No Active Orders
-                        </h3>
-
-                        <p>
-                            New customer orders will appear here.
-                        </p>
-
-                    </div>
-
-                `;
-
-                return;
-
-            }
-
-
-            container.innerHTML =
-                orders.map(
-                    function(order) {
-
-                        const id =
-                            String(order.id);
-
-
-                        const isNew =
-                            newOrderIds.has(id);
-
-
-                        const isManual =
-                            String(
-                                order.order_number || ""
-                            ).startsWith(
-                                "MANUAL-"
-                            );
-
-
-                        const sourceBadge =
-                            isManual
-
-                                ? `
-                                    <span class="source-badge manual-source">
-                                        📝 MANUAL
-                                    </span>
-                                  `
-
-                                : `
-                                    <span class="source-badge online-source">
-                                        🌐 ONLINE
-                                    </span>
-                                  `;
-
-
-                        const newBadge =
-                            isNew
-
-                                ? `
-                                    <span class="new-order-badge">
-                                        NEW ORDER
-                                    </span>
-                                  `
-
-                                : "";
-
-
-                        const createdAt =
-                            order.created_at
-                                ? new Date(
-                                    order.created_at
-                                ).toLocaleString(
-                                    "en-PH"
-                                )
-                                : "";
-
-
-                        const orderType =
-                            escapeHTML(
-                                order.order_type ||
-                                ""
-                            );
-
-
-                        const payment =
-                            escapeHTML(
-                                order.payment_method ||
-                                ""
-                            );
-
-
-                        const customer =
-                            escapeHTML(
-                                order.customer_name ||
-                                "Customer"
-                            );
-
-
-                        const items =
-                            escapeHTML(
-                                order.ordered_items ||
-                                ""
-                            );
-
-
-                        const notes =
-                            escapeHTML(
-                                order.order_notes ||
-                                ""
-                            );
-
-
-                        return `
-
-                            <div
-                                class="order-card ${
-                                    isNew
-                                        ? "new-order"
-                                        : ""
-                                }"
-                                id="order-card-${escapeHTML(id)}"
-                            >
-
-                                <div class="order-title">
-
-                                    <strong>
-                                        Order #${escapeHTML(
-                                            order.order_number ||
-                                            order.id
-                                        )}
-                                    </strong>
-
-                                    ${sourceBadge}
-
-                                    ${newBadge}
-
-                                </div>
-
-
-                                <div class="order-info">
-
-                                    <strong>
-                                        Customer:
-                                    </strong>
-
-                                    ${customer}
-
-                                    <br>
-
-
-                                    <strong>
-                                        Order Type:
-                                    </strong>
-
-                                    ${orderType}
-
-                                    <br>
-
-
-                                    <strong>
-                                        Payment:
-                                    </strong>
-
-                                    ${payment}
-
-                                    <br>
-
-
-                                    <strong>
-                                        Created:
-                                    </strong>
-
-                                    ${escapeHTML(
-                                        createdAt
-                                    )}
-
-                                </div>
-
-
-                                <div class="order-items">
-
-                                    <strong>
-                                        Items:
-                                    </strong>
-
-                                    <br>
-
-                                    ${items}
-
-                                </div>
-
-
-                                ${
-                                    notes
-
-                                        ? `
-                                            <div class="order-info">
-
-                                                <strong>
-                                                    Notes:
-                                                </strong>
-
-                                                ${notes}
-
-                                            </div>
-                                          `
-
-                                        : ""
-                                }
-
-
-                                <div class="order-total">
-
-                                    Total:
-                                    ${formatMoney(
-                                        order.grand_total
-                                    )}
-
-                                </div>
-
-
-                                <div class="status-row">
-
-                                    <strong>
-                                        Status:
-                                    </strong>
-
-
-                                    <select
-                                        class="status-select"
-                                        id="status-${escapeHTML(id)}"
-                                        onchange="updateOrderStatus(
-                                            '${escapeHTML(id)}'
-                                        )"
-                                    >
-
-                                        <option
-                                            value="New"
-                                            ${
-                                                order.status === "New"
-                                                    ? "selected"
-                                                    : ""
-                                            }
-                                        >
-                                            🆕 New
-                                        </option>
-
-
-                                        <option
-                                            value="Preparing"
-                                            ${
-                                                order.status === "Preparing"
-                                                    ? "selected"
-                                                    : ""
-                                            }
-                                        >
-                                            👨‍🍳 Preparing
-                                        </option>
-
-
-                                        <option
-                                            value="Ready"
-                                            ${
-                                                order.status === "Ready"
-                                                    ? "selected"
-                                                    : ""
-                                            }
-                                        >
-                                            ✅ Ready
-                                        </option>
-
-
-                                        <option
-                                            value="Completed"
-                                        >
-                                            ✔ Completed
-                                        </option>
-
-
-                                        <option
-                                            value="Cancelled"
-                                        >
-                                            ❌ Cancelled
-                                        </option>
-
-                                    </select>
-
-                                </div>
-
-                            </div>
-
-                        `;
-
-                    }
-                ).join("");
-
-        }
-
-
-        // =====================================================
-        // UPDATE ORDER STATUS
-        // =====================================================
-
-        async function updateOrderStatus(
-            orderId
-        ) {
-
-            const select =
-                document.getElementById(
-                    "status-" + orderId
-                );
-
-
-            if (!select) return;
-
-
-            const newStatus =
-                select.value;
-
-
-            if (
-                newStatus ===
-                "Completed"
-            ) {
-
-                const confirmed =
-                    confirm(
-                        "Mark this order as COMPLETED?\n\n" +
-                        "It will disappear from Active Orders " +
-                        "but remain saved for Daily Reports."
-                    );
-
-
-                if (!confirmed) {
-
-                    await loadOrders();
-
-                    return;
-
-                }
-
-            }
-
-
-            try {
-
-                const {
-                    error
-                } =
-                    await supabaseClient
-                        .from("orders")
-                        .update({
-                            status:
-                                newStatus
-                        })
-                        .eq(
-                            "id",
-                            orderId
-                        );
-
-
-                if (error) {
-
-                    throw error;
-
-                }
-
-
-                newOrderIds.delete(
-                    String(orderId)
-                );
-
-
-                updateNewOrderCounter();
-
-                if (
-                    newOrderIds.size === 0
-                ) {
-
-                    stopRingAlert();
-
-                }
-
-
-                await loadOrders();
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                showError(
-                    "ordersError",
-                    "Could not update order status: " +
-                    getSupabaseErrorText(error)
-                );
-
-                await loadOrders();
-
-            }
-
-        }
-
-
-        // =====================================================
-        // NEW ORDER ALERT
-        // =====================================================
-
-        function showNewOrderAlert() {
-
-            if (newOrderIds.size === 0) {
-
-                return;
-
-            }
-
-
-            document.getElementById(
-                "newOrderBanner"
-            ).style.display = "block";
-
-
-            document.getElementById(
-                "newOrderPopup"
-            ).style.display = "block";
-
-
-            updateNewOrderCounter();
-
-            startRingAlert();
-
-        }
-
-
-        function updateNewOrderCounter() {
-
-            const count =
-                newOrderIds.size;
-
-
-            const banner =
-                document.getElementById(
-                    "newOrderBanner"
-                );
-
-
-            if (count > 0) {
-
-                banner.textContent =
-                    "🔔 " +
-                    count +
-                    " NEW HIGHWAY CAFE ORDER" +
-                    (
-                        count > 1
-                            ? "S"
-                            : ""
-                    ) +
-                    " RECEIVED!";
-
-            } else {
-
-                banner.textContent =
-                    "";
-
-                banner.style.display =
-                    "none";
-
-            }
-
-        }
-
-
-        // =====================================================
-        // VIEW NEW ORDERS
-        // =====================================================
-        // IMPORTANT:
-        // VIEW ORDER DOES NOT STOP THE RING.
-        // ACKNOWLEDGE STOPS THE RING.
-
-        function viewNewOrders() {
-
-            document.getElementById(
-                "newOrderPopup"
-            ).style.display = "none";
-
-
-            const ordersSection =
-                document.getElementById(
-                    "ordersContainer"
-                );
-
-
-            if (ordersSection) {
-
-                ordersSection.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
-
-            }
-
-        }
-
-
-        // =====================================================
-        // ACKNOWLEDGE NEW ORDERS
-        // =====================================================
-
-        function acknowledgeNewOrders() {
-
-            newOrderIds.clear();
-
-
-            document.getElementById(
-                "newOrderPopup"
-            ).style.display = "none";
-
-
-            document.getElementById(
-                "newOrderBanner"
-            ).style.display = "none";
-
-
-            stopRingAlert();
-
-            updateNewOrderCounter();
-
-        }
-
-
-        // =====================================================
-        // AUTOMATIC ORDER CHECKING
-        // =====================================================
-
-        function startOrderChecking() {
-
-            stopOrderChecking();
-
-
-            orderCheckInterval =
-                setInterval(
-                    function() {
-
-                        loadOrders();
-
-                    },
-                    10000
-                );
-
-        }
-
-
-        function stopOrderChecking() {
-
-            if (orderCheckInterval) {
-
-                clearInterval(
-                    orderCheckInterval
-                );
-
-                orderCheckInterval = null;
-
-            }
-
-        }
-
-
-        // =====================================================
-        // DAILY REPORT
-        // =====================================================
-
-        async function loadDailyReport() {
-
-            clearMessage(
-                "reportError"
-            );
-
-
-            const dateInput =
-                document.getElementById(
-                    "reportDate"
-                );
-
-
-            if (!dateInput.value) {
-
-                dateInput.value =
-                    getLocalDateString();
-
-            }
-
-
-            const selectedDate =
-                dateInput.value;
-
-
-            currentReportDate =
-                selectedDate;
-
-
-            const {
-                start,
-                end
-            } =
-                getLocalDayRange(
-                    selectedDate
-                );
-
-
-            try {
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .from("orders")
-                        .select(
-                            "id, order_number, customer_name, order_type, payment_method, ordered_items, subtotal, delivery_fee, grand_total, status, created_at"
-                        )
-                        .gte(
-                            "created_at",
-                            start
-                        )
-                        .lt(
-                            "created_at",
-                            end
-                        )
-                        .order(
-                            "created_at",
-                            {
-                                ascending: true
-                            }
-                        );
-
-
-                if (error) {
-
-                    throw error;
-
-                }
-
-
-                const allOrders =
-                    data || [];
-
-
-                // =================================================
-                // ONLY COMPLETED ORDERS ARE SALES
-                // =================================================
-
-                const completedOrders =
-                    allOrders.filter(
-                        function(order) {
-
-                            return (
-                                order.status ===
-                                "Completed"
-                            );
-
-                        }
-                    );
-
-
-                currentReportOrders =
-                    completedOrders;
-
-
-                renderDailyReport(
-                    completedOrders
-                );
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                currentReportOrders = [];
-
-                showError(
-                    "reportError",
-                    "Could not load daily report: " +
-                    getSupabaseErrorText(error)
-                );
-
-
-                renderDailyReport([]);
-
-            }
-
-        }
-
-
-        // =====================================================
-        // RENDER DAILY REPORT
-        // =====================================================
-
-        function renderDailyReport(
-            orders
-        ) {
-
-            const body =
-                document.getElementById(
-                    "dailyReportBody"
-                );
-
-
-            let totalSales = 0;
-
-            let onlineOrders = 0;
-
-            let manualOrders = 0;
-
-            let cashSales = 0;
-
-            let gcashSales = 0;
-
-
-            orders.forEach(
-                function(order) {
-
-                    const total =
-                        Number(
-                            order.grand_total
-                        ) || 0;
-
-
-                    totalSales += total;
-
-
-                    const isManual =
-                        String(
-                            order.order_number || ""
-                        ).startsWith(
-                            "MANUAL-"
-                        );
-
-
-                    if (isManual) {
-
-                        manualOrders++;
-
-                    } else {
-
-                        onlineOrders++;
-
-                    }
-
-
-                    const payment =
-                        String(
-                            order.payment_method ||
-                            ""
-                        ).toLowerCase();
-
-
-                    if (
-                        payment.includes(
-                            "cash"
-                        )
-                    ) {
-
-                        cashSales += total;
-
-                    }
-
-
-                    if (
-                        payment.includes(
-                            "gcash"
-                        ) ||
-                        payment.includes(
-                            "online"
-                        )
-                    ) {
-
-                        gcashSales += total;
-
-                    }
-
-                }
-            );
-
-
-            document.getElementById(
-                "reportTotalSales"
-            ).textContent =
-                formatMoney(
-                    totalSales
-                );
-
-
-            document.getElementById(
-                "reportTotalOrders"
-            ).textContent =
-                orders.length;
-
-
-            document.getElementById(
-                "reportOnlineOrders"
-            ).textContent =
-                onlineOrders;
-
-
-            document.getElementById(
-                "reportManualOrders"
-            ).textContent =
-                manualOrders;
-
-
-            document.getElementById(
-                "reportCashSales"
-            ).textContent =
-                formatMoney(
-                    cashSales
-                );
-
-
-            document.getElementById(
-                "reportGcashSales"
-            ).textContent =
-                formatMoney(
-                    gcashSales
-                );
-
-
-            if (orders.length === 0) {
-
-                body.innerHTML = `
+                <tbody id="reportTableBody">
 
                     <tr>
 
                         <td
                             colspan="10"
-                            class="report-empty"
-                        >
+                            style="text-align:center;">
 
-                            No completed orders for
-                            ${escapeHTML(
-                                currentReportDate
-                            )}.
+                            Select a date and load the report.
 
                         </td>
 
                     </tr>
 
-                `;
+                </tbody>
 
-                return;
+            </table>
 
-            }
-
-
-            body.innerHTML =
-                orders.map(
-                    function(order) {
-
-                        const date =
-                            new Date(
-                                order.created_at
-                            );
+        </div>
 
 
-                        const dateText =
-                            getLocalDateString(
-                                date
-                            );
+        <div class="report-buttons">
+
+            <button onclick="exportReportExcel()">
+                📥 EXPORT EXCEL
+            </button>
+
+        </div>
+
+    </div>
 
 
-                        const timeText =
-                            date.toLocaleTimeString(
-                                "en-PH",
-                                {
-                                    hour:
-                                        "2-digit",
-                                    minute:
-                                        "2-digit"
-                                }
-                            );
+</div>
 
 
-                        const isManual =
-                            String(
-                                order.order_number || ""
-                            ).startsWith(
-                                "MANUAL-"
-                            );
+<script>
 
 
-                        const source =
-                            isManual
-                                ? "MANUAL"
-                                : "ONLINE";
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+    "https://qfnjegsbyxxqsdaelqqa.supabase.co";
 
 
-                        return `
-
-                            <tr>
-
-                                <td>
-                                    ${escapeHTML(
-                                        dateText
-                                    )}
-                                </td>
+const SUPABASE_KEY =
+    "sb_publishable_ttu1AyOaylp3J4x7iTqaNg_1VLOdHoE";
 
 
-                                <td>
-                                    ${escapeHTML(
-                                        timeText
-                                    )}
-                                </td>
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
 
-                                <td>
-                                    ${escapeHTML(
-                                        order.order_number ||
-                                        order.id
-                                    )}
-                                </td>
+/* =====================================================
+   GLOBAL VARIABLES
+===================================================== */
+
+let allOrders = [];
+
+let firstOrdersLoaded = false;
+
+let knownOrderIds = new Set();
+
+let newOrderIds = new Set();
+
+let orderCheckInterval = null;
+
+let ringInterval = null;
+
+let audioContext = null;
+
+let currentReportOrders = [];
+
+let currentReportDate = "";
+
+let menuItems = [];
 
 
-                                <td>
-                                    ${source}
-                                </td>
+/* =====================================================
+   MENU DATA FOR MANUAL ORDERS
+===================================================== */
+
+const MANUAL_MENU = {
 
 
-                                <td>
-                                    ${escapeHTML(
-                                        order.customer_name ||
-                                        "Customer"
-                                    )}
-                                </td>
+    "Iced Coffee": {
+
+        "Americano": {
+
+            variants: [
+                {
+                    name: "16oz",
+                    price: 70
+                },
+                {
+                    name: "22oz",
+                    price: 80
+                }
+            ],
+
+            addons: [
+                {
+                    name: "Extra Espresso",
+                    price: 30
+                }
+            ]
+
+        },
 
 
-                                <td>
-                                    ${escapeHTML(
-                                        order.order_type ||
-                                        ""
-                                    )}
-                                </td>
+        "Vanilla Latte": {
+
+            variants: [
+                {
+                    name: "16oz",
+                    price: 75
+                },
+                {
+                    name: "22oz",
+                    price: 89
+                }
+            ],
+
+            addons: [
+                {
+                    name: "Extra Espresso",
+                    price: 30
+                }
+            ]
+
+        },
 
 
-                                <td>
-                                    ${escapeHTML(
-                                        order.payment_method ||
-                                        ""
-                                    )}
-                                </td>
+        "Spanish Latte": {
+
+            variants: [
+                {
+                    name: "16oz",
+                    price: 75
+                },
+                {
+                    name: "22oz",
+                    price: 89
+                }
+            ],
+
+            addons: [
+                {
+                    name: "Extra Espresso",
+                    price: 30
+                }
+            ]
+
+        },
 
 
-                                <td>
-                                    ${escapeHTML(
-                                        order.ordered_items ||
-                                        ""
-                                    )}
-                                </td>
+        "Mocha Latte": {
+
+            variants: [
+                {
+                    name: "16oz",
+                    price: 75
+                },
+                {
+                    name: "22oz",
+                    price: 89
+                }
+            ],
+
+            addons: [
+                {
+                    name: "Extra Espresso",
+                    price: 30
+                },
+                {
+                    name: "Extra Chocolate",
+                    price: 30
+                }
+            ]
+
+        },
 
 
-                                <td>
-                                    ${formatMoney(
-                                        order.grand_total
-                                    )}
-                                </td>
+        "Dirty Matcha": {
+
+            variants: [
+                {
+                    name: "16oz",
+                    price: 85
+                },
+                {
+                    name: "22oz",
+                    price: 100
+                }
+            ],
+
+            addons: [
+                {
+                    name: "Extra Espresso",
+                    price: 30
+                },
+                {
+                    name: "Extra Matcha",
+                    price: 30
+                }
+            ]
+
+        },
 
 
-                                <td>
-                                    ${escapeHTML(
-                                        order.status
-                                    )}
-                                </td>
+        "Salted Caramel": {
 
-                            </tr>
+            variants: [
+                {
+                    name: "16oz",
+                    price: 75
+                },
+                {
+                    name: "22oz",
+                    price: 89
+                }
+            ],
 
-                        `;
+            addons: [
+                {
+                    name: "Extra Espresso",
+                    price: 30
+                }
+            ]
 
-                    }
-                ).join("");
+        },
 
 
-            body.innerHTML += `
+        "Caramel Macchiato": {
 
-                <tr class="report-total-row">
+            variants: [
+                {
+                    name: "16oz",
+                    price: 75
+                },
+                {
+                    name: "22oz",
+                    price: 89
+                }
+            ],
 
-                    <td colspan="8">
-                        TOTAL SALES
-                    </td>
-
-                    <td>
-                        ${formatMoney(
-                            totalSales
-                        )}
-                    </td>
-
-                    <td>
-                        ${orders.length} orders
-                    </td>
-
-                </tr>
-
-            `;
+            addons: [
+                {
+                    name: "Extra Espresso",
+                    price: 30
+                }
+            ]
 
         }
 
-
-        // =====================================================
-        // EXPORT TO EXCEL
-        // =====================================================
-
-        function exportReportToExcel() {
-
-            if (
-                typeof XLSX ===
-                "undefined"
-            ) {
-
-                alert(
-                    "Excel export library could not be loaded. Please check your internet connection and try again."
-                );
-
-                return;
-
-            }
+    },
 
 
-            if (
-                currentReportOrders.length === 0
-            ) {
-
-                alert(
-                    "There are no completed orders to export for this date."
-                );
-
-                return;
-
-            }
+    "Hot Coffee": {
 
 
-            const rows =
-                currentReportOrders.map(
-                    function(order) {
+        "Hot Choco": {
 
-                        const date =
-                            new Date(
-                                order.created_at
-                            );
+            variants: [
+                {
+                    name: "8oz",
+                    price: 70
+                }
+            ],
 
+            addons: [
+                {
+                    name: "Extra Chocolate",
+                    price: 30
+                }
+            ]
 
-                        const isManual =
-                            String(
-                                order.order_number || ""
-                            ).startsWith(
-                                "MANUAL-"
-                            );
-
-
-                        return {
-
-                            "Date":
-                                getLocalDateString(
-                                    date
-                                ),
-
-                            "Time":
-                                date.toLocaleTimeString(
-                                    "en-PH",
-                                    {
-                                        hour:
-                                            "2-digit",
-                                        minute:
-                                            "2-digit"
-                                    }
-                                ),
-
-                            "Order Number":
-                                order.order_number ||
-                                order.id,
-
-                            "Source":
-                                isManual
-                                    ? "Manual"
-                                    : "Online",
-
-                            "Customer":
-                                order.customer_name ||
-                                "Customer",
-
-                            "Order Type":
-                                order.order_type ||
-                                "",
-
-                            "Payment Method":
-                                order.payment_method ||
-                                "",
-
-                            "Items":
-                                order.ordered_items ||
-                                "",
-
-                            "Subtotal":
-                                Number(
-                                    order.subtotal
-                                ) || 0,
-
-                            "Delivery Fee":
-                                Number(
-                                    order.delivery_fee
-                                ) || 0,
-
-                            "Grand Total":
-                                Number(
-                                    order.grand_total
-                                ) || 0,
-
-                            "Status":
-                                order.status ||
-                                ""
-
-                        };
-
-                    }
-                );
+        },
 
 
-            const worksheet =
-                XLSX.utils.json_to_sheet(
-                    rows
-                );
+        "Americano": {
+
+            variants: [
+                {
+                    name: "8oz",
+                    price: 70
+                }
+            ],
+
+            addons: [
+                {
+                    name: "Extra Espresso",
+                    price: 30
+                }
+            ]
+
+        },
 
 
-            const workbook =
-                XLSX.utils.book_new();
+        "Spanish Latte": {
+
+            variants: [
+                {
+                    name: "8oz",
+                    price: 80
+                }
+            ],
+
+            addons: [
+                {
+                    name: "Extra Espresso",
+                    price: 30
+                }
+            ]
+
+        },
 
 
-            XLSX.utils.book_append_sheet(
-                workbook,
-                worksheet,
-                "Daily Report"
+        "Cafe Latte": {
+
+            variants: [
+                {
+                    name: "8oz",
+                    price: 80
+                }
+            ],
+
+            addons: [
+                {
+                    name: "Extra Espresso",
+                    price: 30
+                }
+            ]
+
+        }
+
+    },
+
+
+    "Soda Series": {
+
+
+        "Green Apple": {
+
+            variants: [
+                {
+                    name: "12oz",
+                    price: 29
+                },
+                {
+                    name: "16oz",
+                    price: 39
+                },
+                {
+                    name: "22oz",
+                    price: 59
+                }
+            ]
+
+        },
+
+
+        "Lychee": {
+
+            variants: [
+                {
+                    name: "12oz",
+                    price: 29
+                },
+                {
+                    name: "16oz",
+                    price: 39
+                },
+                {
+                    name: "22oz",
+                    price: 59
+                }
+            ]
+
+        },
+
+
+        "Strawberry": {
+
+            variants: [
+                {
+                    name: "12oz",
+                    price: 29
+                },
+                {
+                    name: "16oz",
+                    price: 39
+                },
+                {
+                    name: "22oz",
+                    price: 59
+                }
+            ]
+
+        },
+
+
+        "Blueberry": {
+
+            variants: [
+                {
+                    name: "12oz",
+                    price: 29
+                },
+                {
+                    name: "16oz",
+                    price: 39
+                },
+                {
+                    name: "22oz",
+                    price: 59
+                }
+            ]
+
+        }
+
+    },
+
+
+    "Milk Series": {
+
+
+        "Strawberry Milk": {
+
+            variants: [
+                {
+                    name: "16oz",
+                    price: 65
+                },
+                {
+                    name: "22oz",
+                    price: 80
+                }
+            ]
+
+        },
+
+
+        "Blueberry Milk": {
+
+            variants: [
+                {
+                    name: "16oz",
+                    price: 65
+                },
+                {
+                    name: "22oz",
+                    price: 80
+                }
+            ]
+
+        },
+
+
+        "Chocolate Milk": {
+
+            variants: [
+                {
+                    name: "16oz",
+                    price: 65
+                },
+                {
+                    name: "22oz",
+                    price: 80
+                }
+            ],
+
+            addons: [
+                {
+                    name: "Extra Chocolate",
+                    price: 30
+                }
+            ]
+
+        },
+
+
+        "Matcha Latte": {
+
+            variants: [
+                {
+                    name: "16oz",
+                    price: 80
+                },
+                {
+                    name: "22oz",
+                    price: 95
+                }
+            ],
+
+            addons: [
+                {
+                    name: "Extra Matcha",
+                    price: 30
+                }
+            ]
+
+        },
+
+
+        "Cookies and Cream": {
+
+            variants: [
+                {
+                    name: "16oz",
+                    price: 65
+                },
+                {
+                    name: "22oz",
+                    price: 80
+                }
+            ]
+
+        }
+
+    },
+
+
+    "Snack Detour": {
+
+
+        "Nacho's": {
+
+            variants: [
+                {
+                    name: "Regular",
+                    price: 75
+                },
+                {
+                    name: "Overload",
+                    price: 125
+                }
+            ]
+
+        },
+
+
+        "French Fries": {
+
+            variants: [
+                {
+                    name: "Regular",
+                    price: 25
+                },
+                {
+                    name: "Large",
+                    price: 40
+                }
+            ],
+
+            flavors: [
+                "BBQ",
+                "Sour Cream",
+                "Cheese"
+            ]
+
+        },
+
+
+        "Hashbrown": {
+
+            variants: [
+                {
+                    name: "1 pc",
+                    price: 25
+                },
+                {
+                    name: "3 pcs",
+                    price: 65
+                }
+            ]
+
+        },
+
+
+        "Steamed Siomai": {
+
+            variants: [
+                {
+                    name: "5 pcs",
+                    price: 25
+                },
+                {
+                    name: "11 pcs",
+                    price: 50
+                }
+            ]
+
+        },
+
+
+        "Japanese Siomai": {
+
+            variants: [
+                {
+                    name: "1 pc",
+                    price: 10
+                }
+            ]
+
+        },
+
+
+        "Tofu Squares": {
+
+            variants: [
+                {
+                    name: "4 pcs",
+                    price: 25
+                },
+                {
+                    name: "11 pcs",
+                    price: 50
+                }
+            ]
+
+        },
+
+
+        "Flying Saucer": {
+
+            variants: [
+                {
+                    name: "Ham & Cheese",
+                    price: 25
+                },
+                {
+                    name: "Hotdog & Cheese",
+                    price: 25
+                },
+                {
+                    name: "Egg & Cheese",
+                    price: 30
+                },
+                {
+                    name: "Tuna & Cheese",
+                    price: 30
+                }
+            ]
+
+        },
+
+
+        "Shanghai": {
+
+            variants: [
+                {
+                    name: "1 pc",
+                    price: 10
+                },
+                {
+                    name: "11 pcs",
+                    price: 100
+                }
+            ]
+
+        },
+
+
+        "Donuts": {
+
+            variants: [
+                {
+                    name: "1 pc",
+                    price: 10
+                }
+            ],
+
+            flavors: [
+                "Vanilla",
+                "Caramel",
+                "Chocolate"
+            ]
+
+        }
+
+    },
+
+
+    "Pit Stop Plates": {
+
+
+        "Chicken Rice Meal": {
+
+            variants: [
+                {
+                    name: "1 pc Chicken",
+                    price: 50
+                },
+                {
+                    name: "2 pcs Chicken",
+                    price: 80
+                }
+            ],
+
+            addons: [
+
+                {
+                    name: "Highway Cooler 16oz",
+                    price: 35
+                },
+
+                {
+                    name: "Highway Cooler 22oz",
+                    price: 55
+                },
+
+                {
+                    name: "Extra Egg",
+                    price: 10
+                },
+
+                {
+                    name: "Extra Rice",
+                    price: 15
+                }
+
+            ]
+
+        },
+
+
+        "Shanghai Rice Meal": {
+
+            variants: [
+                {
+                    name: "4 pcs Shanghai",
+                    price: 50
+                }
+            ],
+
+            addons: [
+
+                {
+                    name: "Highway Cooler 16oz",
+                    price: 35
+                },
+
+                {
+                    name: "Highway Cooler 22oz",
+                    price: 55
+                },
+
+                {
+                    name: "Extra Egg",
+                    price: 10
+                },
+
+                {
+                    name: "Extra Rice",
+                    price: 15
+                }
+
+            ]
+
+        },
+
+
+        "Siomai Rice Meal": {
+
+            variants: [
+                {
+                    name: "6 pcs Steamed Siomai",
+                    price: 45
+                }
+            ],
+
+            addons: [
+
+                {
+                    name: "Highway Cooler 16oz",
+                    price: 35
+                },
+
+                {
+                    name: "Highway Cooler 22oz",
+                    price: 55
+                },
+
+                {
+                    name: "Extra Egg",
+                    price: 10
+                },
+
+                {
+                    name: "Extra Rice",
+                    price: 15
+                }
+
+            ]
+
+        },
+
+
+        "Hotdog Rice Meal": {
+
+            variants: [
+                {
+                    name: "2 pcs Hotdog",
+                    price: 50
+                }
+            ],
+
+            addons: [
+
+                {
+                    name: "Highway Cooler 16oz",
+                    price: 35
+                },
+
+                {
+                    name: "Highway Cooler 22oz",
+                    price: 55
+                },
+
+                {
+                    name: "Extra Egg",
+                    price: 10
+                },
+
+                {
+                    name: "Extra Rice",
+                    price: 15
+                }
+
+            ]
+
+        },
+
+
+        "Meatloaf Rice Meal": {
+
+            variants: [
+                {
+                    name: "3 pcs Meatloaf",
+                    price: 55
+                }
+            ],
+
+            addons: [
+
+                {
+                    name: "Highway Cooler 16oz",
+                    price: 35
+                },
+
+                {
+                    name: "Highway Cooler 22oz",
+                    price: 55
+                },
+
+                {
+                    name: "Extra Egg",
+                    price: 10
+                },
+
+                {
+                    name: "Extra Rice",
+                    price: 15
+                }
+
+            ]
+
+        },
+
+
+        "Skinless Longganisa": {
+
+            variants: [
+                {
+                    name: "2 pcs",
+                    price: 55
+                }
+            ],
+
+            addons: [
+
+                {
+                    name: "Highway Cooler 16oz",
+                    price: 35
+                },
+
+                {
+                    name: "Highway Cooler 22oz",
+                    price: 55
+                },
+
+                {
+                    name: "Extra Egg",
+                    price: 10
+                },
+
+                {
+                    name: "Extra Rice",
+                    price: 15
+                }
+
+            ]
+
+        }
+
+    }
+
+};
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+async function loginAdmin() {
+
+    const email =
+        document.getElementById("loginEmail").value.trim();
+
+    const password =
+        document.getElementById("loginPassword").value;
+
+
+    const message =
+        document.getElementById("loginMessage");
+
+
+    message.textContent = "";
+
+
+    if (!email || !password) {
+
+        message.textContent =
+            "Please enter email and password.";
+
+        return;
+
+    }
+
+
+    const { error } =
+        await supabaseClient.auth.signInWithPassword({
+
+            email: email,
+            password: password
+
+        });
+
+
+    if (error) {
+
+        message.textContent =
+            error.message;
+
+        return;
+
+    }
+
+
+    showDashboard();
+
+}
+
+
+/* =====================================================
+   SHOW DASHBOARD
+===================================================== */
+
+async function showDashboard() {
+
+    document
+        .getElementById("loginScreen")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("dashboard")
+        .classList.remove("hidden");
+
+
+    await loadShopStatus();
+
+    await loadMenu();
+
+    await loadOrders();
+
+    initializeManualOrder();
+
+    startOrderChecker();
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+async function logoutAdmin() {
+
+    await supabaseClient.auth.signOut();
+
+    location.reload();
+
+}
+
+
+/* =====================================================
+   SHOP STATUS
+===================================================== */
+
+async function loadShopStatus() {
+
+    const { data, error } =
+        await supabaseClient
+            .from("shop_settings")
+            .select("id, shop_open")
+            .limit(1)
+            .single();
+
+
+    if (error) {
+
+        document.getElementById("shopStatus")
+            .textContent =
+            "Error loading shop status.";
+
+        return;
+
+    }
+
+
+    const status =
+        document.getElementById("shopStatus");
+
+
+    const button =
+        document.getElementById("toggleShopButton");
+
+
+    if (data.shop_open) {
+
+        status.textContent =
+            "🟢 SHOP IS OPEN";
+
+        status.className =
+            "open-status";
+
+        button.textContent =
+            "CLOSE SHOP";
+
+    } else {
+
+        status.textContent =
+            "🔴 SHOP IS CLOSED";
+
+        status.className =
+            "closed-status";
+
+        button.textContent =
+            "OPEN SHOP";
+
+    }
+
+
+    window.shopSettingsId = data.id;
+
+}
+
+
+/* =====================================================
+   TOGGLE SHOP
+===================================================== */
+
+async function toggleShop() {
+
+    if (!window.shopSettingsId) {
+
+        alert("Shop settings not loaded.");
+
+        return;
+
+    }
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("shop_settings")
+            .select("shop_open")
+            .eq("id", window.shopSettingsId)
+            .single();
+
+
+    if (error) {
+
+        alert(error.message);
+
+        return;
+
+    }
+
+
+    const { error: updateError } =
+        await supabaseClient
+            .from("shop_settings")
+            .update({
+                shop_open: !data.shop_open,
+                updated_at: new Date().toISOString()
+            })
+            .eq("id", window.shopSettingsId);
+
+
+    if (updateError) {
+
+        alert(updateError.message);
+
+        return;
+
+    }
+
+
+    await loadShopStatus();
+
+}
+
+
+/* =====================================================
+   LOAD MENU
+===================================================== */
+
+async function loadMenu() {
+
+    const { data, error } =
+        await supabaseClient
+            .from("menu_items")
+            .select(
+                "id, product_name, category, available"
             );
 
 
-            const filename =
-                "HIGHWAY_CAFE_REPORT_" +
-                currentReportDate +
-                ".xlsx";
+    if (error) {
+
+        document.getElementById("menuList")
+            .innerHTML =
+            "<div class='empty-message'>" +
+            error.message +
+            "</div>";
+
+        return;
+
+    }
 
 
-            XLSX.writeFile(
-                workbook,
-                filename
+    menuItems = data || [];
+
+
+    menuItems.sort(function(a, b) {
+
+        return a.product_name.localeCompare(
+            b.product_name
+        );
+
+    });
+
+
+    renderMenu();
+
+}
+
+
+/* =====================================================
+   RENDER MENU
+===================================================== */
+
+function renderMenu() {
+
+    const container =
+        document.getElementById("menuList");
+
+
+    if (!menuItems.length) {
+
+        container.innerHTML =
+            "<div class='empty-message'>" +
+            "No menu items found." +
+            "</div>";
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    menuItems.forEach(function(item) {
+
+
+        const row =
+            document.createElement("div");
+
+
+        row.className =
+            "menu-item-row";
+
+
+        const info =
+            document.createElement("div");
+
+
+        const name =
+            document.createElement("div");
+
+
+        name.className =
+            "menu-item-name";
+
+
+        name.textContent =
+            item.product_name;
+
+
+        const category =
+            document.createElement("div");
+
+
+        category.className =
+            "menu-item-category";
+
+
+        category.textContent =
+            item.category;
+
+
+        info.appendChild(name);
+
+        info.appendChild(category);
+
+
+        const button =
+            document.createElement("button");
+
+
+        button.className =
+            item.available
+                ? "available-button"
+                : "sold-button";
+
+
+        button.textContent =
+            item.available
+                ? "AVAILABLE"
+                : "SOLD OUT";
+
+
+        button.onclick =
+            function() {
+
+                toggleMenuItem(
+                    item.id,
+                    item.available
+                );
+
+            };
+
+
+        row.appendChild(info);
+
+        row.appendChild(button);
+
+
+        container.appendChild(row);
+
+    });
+
+}
+
+
+/* =====================================================
+   TOGGLE MENU ITEM
+===================================================== */
+
+async function toggleMenuItem(id, currentStatus) {
+
+    const { error } =
+        await supabaseClient
+            .from("menu_items")
+            .update({
+
+                available: !currentStatus,
+
+                updated_at:
+                    new Date().toISOString()
+
+            })
+            .eq("id", id);
+
+
+    if (error) {
+
+        alert(error.message);
+
+        return;
+
+    }
+
+
+    await loadMenu();
+
+}
+
+
+/* =====================================================
+   LOAD ORDERS
+===================================================== */
+
+async function loadOrders() {
+
+    const { data, error } =
+        await supabaseClient
+            .from("orders")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
             );
 
+
+    if (error) {
+
+        document.getElementById("ordersList")
+            .innerHTML =
+            "<div class='empty-message'>" +
+            error.message +
+            "</div>";
+
+        return;
+
+    }
+
+
+    allOrders =
+        data || [];
+
+
+    checkForNewOrders(allOrders);
+
+    renderActiveOrders();
+
+}
+
+
+/* =====================================================
+   CHECK NEW ORDERS
+===================================================== */
+
+function checkForNewOrders(orders) {
+
+    const currentIds =
+        new Set(
+            orders.map(function(order) {
+
+                return String(order.id);
+
+            })
+        );
+
+
+    if (!firstOrdersLoaded) {
+
+        knownOrderIds =
+            currentIds;
+
+        firstOrdersLoaded =
+            true;
+
+        return;
+
+    }
+
+
+    orders.forEach(function(order) {
+
+        const id =
+            String(order.id);
+
+
+        if (
+            !knownOrderIds.has(id) &&
+            order.status === "New"
+        ) {
+
+            newOrderIds.add(id);
+
+        }
+
+    });
+
+
+    knownOrderIds =
+        currentIds;
+
+
+    if (newOrderIds.size > 0) {
+
+        showNewOrderAlert();
+
+    }
+
+}
+
+
+/* =====================================================
+   NEW ORDER ALERT
+===================================================== */
+
+function showNewOrderAlert() {
+
+    const banner =
+        document.getElementById(
+            "newOrderBanner"
+        );
+
+
+    const count =
+        newOrderIds.size;
+
+
+    document.getElementById(
+        "newOrderBannerText"
+    ).textContent =
+        count +
+        (count === 1
+            ? " new order has arrived."
+            : " new orders have arrived.");
+
+
+    banner.classList.remove("hidden");
+
+
+    startRingAlert();
+
+}
+
+
+/* =====================================================
+   RING ALERT
+===================================================== */
+
+function startRingAlert() {
+
+    if (ringInterval) {
+
+        return;
+
+    }
+
+
+    playAlertSound();
+
+
+    ringInterval =
+        setInterval(
+            function() {
+
+                playAlertSound();
+
+            },
+            3000
+        );
+
+}
+
+
+/* =====================================================
+   STOP RING
+===================================================== */
+
+function stopRingAlert() {
+
+    if (ringInterval) {
+
+        clearInterval(ringInterval);
+
+        ringInterval =
+            null;
+
+    }
+
+}
+
+
+/* =====================================================
+   SOUND
+===================================================== */
+
+function playAlertSound() {
+
+    try {
+
+        if (!audioContext) {
+
+            audioContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
+
         }
 
 
-        // =====================================================
-        // PRINT REPORT
-        // =====================================================
+        const oscillator =
+            audioContext.createOscillator();
 
-        function printDailyReport() {
 
-            if (
-                currentReportOrders.length === 0
-            ) {
+        const gain =
+            audioContext.createGain();
 
-                alert(
-                    "There are no completed orders to print for this date."
+
+        oscillator.frequency.value =
+            880;
+
+
+        oscillator.type =
+            "sine";
+
+
+        gain.gain.setValueAtTime(
+            0.25,
+            audioContext.currentTime
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            audioContext.currentTime + 0.7
+        );
+
+
+        oscillator.connect(gain);
+
+        gain.connect(
+            audioContext.destination
+        );
+
+
+        oscillator.start();
+
+        oscillator.stop(
+            audioContext.currentTime + 0.7
+        );
+
+    } catch (error) {
+
+        console.log(
+            "Audio unavailable."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   VIEW NEW ORDERS
+===================================================== */
+
+function viewNewOrders() {
+
+    showSection("ordersSection");
+
+}
+
+
+/* =====================================================
+   ACKNOWLEDGE
+===================================================== */
+
+function acknowledgeNewOrders() {
+
+    newOrderIds.clear();
+
+    document
+        .getElementById("newOrderBanner")
+        .classList.add("hidden");
+
+    stopRingAlert();
+
+}
+
+
+/* =====================================================
+   RENDER ACTIVE ORDERS
+===================================================== */
+
+function renderActiveOrders() {
+
+    const container =
+        document.getElementById("ordersList");
+
+
+    const activeOrders =
+        allOrders.filter(
+            function(order) {
+
+                return (
+                    order.status !== "Completed" &&
+                    order.status !== "Cancelled"
                 );
-
-                return;
-
-            }
-
-
-            window.print();
-
-        }
-
-
-        // =====================================================
-        // INITIAL SESSION CHECK
-        // =====================================================
-
-        async function checkAdminSession() {
-
-            try {
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .auth
-                        .getSession();
-
-
-                if (error) {
-
-                    throw error;
-
-                }
-
-
-                if (
-                    data &&
-                    data.session
-                ) {
-
-                    await showAdminDashboard();
-
-                } else {
-
-                    document.getElementById(
-                        "loginSection"
-                    ).style.display = "block";
-
-
-                    document.getElementById(
-                        "adminSection"
-                    ).style.display = "none";
-
-
-                    document.getElementById(
-                        "reportsSection"
-                    ).style.display = "none";
-
-                }
-
-            } catch (error) {
-
-                console.error(
-                    "Session error:",
-                    error
-                );
-
-            }
-
-        }
-
-
-        // =====================================================
-        // AUTH STATE LISTENER
-        // =====================================================
-
-        supabaseClient.auth.onAuthStateChange(
-            async function(
-                event,
-                session
-            ) {
-
-                if (
-                    session &&
-                    event === "SIGNED_IN"
-                ) {
-
-                    await showAdminDashboard();
-
-                }
-
-
-                if (
-                    event === "SIGNED_OUT"
-                ) {
-
-                    stopOrderChecking();
-
-                    stopRingAlert();
-
-
-                    document.getElementById(
-                        "adminSection"
-                    ).style.display = "none";
-
-
-                    document.getElementById(
-                        "reportsSection"
-                    ).style.display = "none";
-
-
-                    document.getElementById(
-                        "loginSection"
-                    ).style.display = "block";
-
-                }
 
             }
         );
 
 
-        // =====================================================
-        // START
-        // =====================================================
+    document.getElementById(
+        "orderCount"
+    ).textContent =
+        activeOrders.length +
+        (
+            activeOrders.length === 1
+                ? " order"
+                : " orders"
+        );
 
-        checkAdminSession();
+
+    if (!activeOrders.length) {
+
+        container.innerHTML =
+            "<div class='empty-message'>" +
+            "No active orders." +
+            "</div>";
+
+        return;
+
+    }
 
 
-    </script>
+    container.innerHTML = "";
+
+
+    activeOrders.forEach(function(order) {
+
+        const card =
+            document.createElement("div");
+
+
+        card.className =
+            "order-card";
+
+
+        if (
+            newOrderIds.has(
+                String(order.id)
+            )
+        ) {
+
+            card.classList.add(
+                "new-order"
+            );
+
+        }
+
+
+        const source =
+            String(order.order_number || "")
+                .startsWith("MANUAL-")
+                ? "Manual"
+                : "Online";
+
+
+        const sourceClass =
+            source === "Manual"
+                ? "source-manual"
+                : "source-online";
+
+
+        const date =
+            new Date(order.created_at);
+
+
+        const formattedDate =
+            date.toLocaleString();
+
+
+        let html = "";
+
+
+        html +=
+            "<div class='order-top'>";
+
+
+        html +=
+            "<div>";
+
+
+        html +=
+            "<div class='order-number'>" +
+            escapeHtml(
+                order.order_number || "N/A"
+            ) +
+            "</div>";
+
+
+        html +=
+            "<span class='order-source " +
+            sourceClass +
+            "'>" +
+            source +
+            "</span>";
+
+
+        html +=
+            "</div>";
+
+
+        html +=
+            "<div>" +
+            escapeHtml(
+                formattedDate
+            ) +
+            "</div>";
+
+
+        html +=
+            "</div>";
+
+
+        html +=
+            "<div class='order-info'>";
+
+
+        html +=
+            "<strong>Customer:</strong> " +
+            escapeHtml(
+                order.customer_name ||
+                "N/A"
+            ) +
+            "<br>";
+
+
+        html +=
+            "<strong>Type:</strong> " +
+            escapeHtml(
+                order.order_type ||
+                "N/A"
+            ) +
+            "<br>";
+
+
+        html +=
+            "<strong>Payment:</strong> " +
+            escapeHtml(
+                order.payment_method ||
+                "N/A"
+            );
+
+
+        if (order.phone) {
+
+            html +=
+                "<br><strong>Phone:</strong> " +
+                escapeHtml(
+                    order.phone
+                );
+
+        }
+
+
+        if (order.delivery_address) {
+
+            html +=
+                "<br><strong>Address:</strong> " +
+                escapeHtml(
+                    order.delivery_address
+                );
+
+        }
+
+
+        html +=
+            "</div>";
+
+
+        html +=
+            "<div class='order-items'>" +
+            escapeHtml(
+                order.ordered_items ||
+                ""
+            ) +
+            "</div>";
+
+
+        if (order.order_notes) {
+
+            html +=
+                "<div class='order-info'>" +
+                "<strong>Notes:</strong> " +
+                escapeHtml(
+                    order.order_notes
+                ) +
+                "</div>";
+
+        }
+
+
+        html +=
+            "<div class='order-total'>" +
+            "Total: " +
+            formatMoney(
+                order.grand_total
+            ) +
+            "</div>";
+
+
+        html +=
+            "<div class='order-info'>" +
+            "<strong>Status:</strong> " +
+            escapeHtml(
+                order.status
+            ) +
+            "</div>";
+
+
+        html +=
+            "<div class='order-actions'>";
+
+
+        if (order.status === "New") {
+
+            html +=
+                "<button class='status-button' " +
+                "onclick=\"updateOrderStatus('" +
+                order.id +
+                "','Preparing')\">" +
+                "PREPARING" +
+                "</button>";
+
+        }
+
+
+        if (order.status === "Preparing") {
+
+            html +=
+                "<button class='status-button' " +
+                "onclick=\"updateOrderStatus('" +
+                order.id +
+                "','Ready')\">" +
+                "READY" +
+                "</button>";
+
+        }
+
+
+        if (order.status === "Ready") {
+
+            html +=
+                "<button class='status-button' " +
+                "onclick=\"updateOrderStatus('" +
+                order.id +
+                "','Completed')\">" +
+                "COMPLETED" +
+                "</button>";
+
+        }
+
+
+        html +=
+            "<button class='cancel-button' " +
+            "onclick=\"updateOrderStatus('" +
+            order.id +
+            "','Cancelled')\">" +
+            "CANCEL" +
+            "</button>";
+
+
+        html +=
+            "</div>";
+
+
+        card.innerHTML =
+            html;
+
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+/* =====================================================
+   UPDATE ORDER STATUS
+===================================================== */
+
+async function updateOrderStatus(
+    id,
+    newStatus
+) {
+
+    const { error } =
+        await supabaseClient
+            .from("orders")
+            .update({
+                status: newStatus
+            })
+            .eq("id", id);
+
+
+    if (error) {
+
+        alert(error.message);
+
+        return;
+
+    }
+
+
+    newOrderIds.delete(
+        String(id)
+    );
+
+
+    if (newOrderIds.size === 0) {
+
+        document
+            .getElementById(
+                "newOrderBanner"
+            )
+            .classList.add("hidden");
+
+        stopRingAlert();
+
+    }
+
+
+    await loadOrders();
+
+}
+
+
+/* =====================================================
+   START ORDER CHECKER
+===================================================== */
+
+function startOrderChecker() {
+
+    if (orderCheckInterval) {
+
+        clearInterval(
+            orderCheckInterval
+        );
+
+    }
+
+
+    orderCheckInterval =
+        setInterval(
+            loadOrders,
+            10000
+        );
+
+}
+
+
+/* =====================================================
+   MANUAL ORDER INITIALIZATION
+===================================================== */
+
+function initializeManualOrder() {
+
+    const category =
+        document.getElementById(
+            "manualCategory"
+        );
+
+
+    category.innerHTML =
+        "<option value=''>" +
+        "Select Category" +
+        "</option>";
+
+
+    Object.keys(MANUAL_MENU)
+        .forEach(function(categoryName) {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                categoryName;
+
+
+            option.textContent =
+                categoryName;
+
+
+            category.appendChild(
+                option
+            );
+
+        });
+
+
+    resetManualOrder();
+
+}
+
+
+/* =====================================================
+   CATEGORY CHANGED
+===================================================== */
+
+function manualCategoryChanged() {
+
+    const categoryName =
+        document.getElementById(
+            "manualCategory"
+        ).value;
+
+
+    const itemSelect =
+        document.getElementById(
+            "manualItem"
+        );
+
+
+    const variantSelect =
+        document.getElementById(
+            "manualVariant"
+        );
+
+
+    itemSelect.innerHTML =
+        "<option value=''>" +
+        "Select Menu Item" +
+        "</option>";
+
+
+    variantSelect.innerHTML =
+        "<option value=''>" +
+        "Select Size / Variant" +
+        "</option>";
+
+
+    itemSelect.disabled =
+        true;
+
+
+    variantSelect.disabled =
+        true;
+
+
+    hideManualExtras();
+
+
+    if (!categoryName) {
+
+        updateManualTotal();
+
+        return;
+
+    }
+
+
+    const items =
+        MANUAL_MENU[
+            categoryName
+        ];
+
+
+    Object.keys(items)
+        .forEach(function(itemName) {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                itemName;
+
+
+            option.textContent =
+                itemName;
+
+
+            itemSelect.appendChild(
+                option
+            );
+
+        });
+
+
+    itemSelect.disabled =
+        false;
+
+
+    updateManualTotal();
+
+}
+
+
+/* =====================================================
+   ITEM CHANGED
+===================================================== */
+
+function manualItemChanged() {
+
+    const categoryName =
+        document.getElementById(
+            "manualCategory"
+        ).value;
+
+
+    const itemName =
+        document.getElementById(
+            "manualItem"
+        ).value;
+
+
+    const variantSelect =
+        document.getElementById(
+            "manualVariant"
+        );
+
+
+    variantSelect.innerHTML =
+        "<option value=''>" +
+        "Select Size / Variant" +
+        "</option>";
+
+
+    variantSelect.disabled =
+        true;
+
+
+    hideManualExtras();
+
+
+    if (
+        !categoryName ||
+        !itemName
+    ) {
+
+        updateManualTotal();
+
+        return;
+
+    }
+
+
+    const item =
+        MANUAL_MENU[
+            categoryName
+        ][
+            itemName
+        ];
+
+
+    item.variants.forEach(
+        function(variant, index) {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                index;
+
+
+            option.textContent =
+                variant.name +
+                " — " +
+                formatMoney(
+                    variant.price
+                );
+
+
+            variantSelect.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    variantSelect.disabled =
+        false;
+
+
+    showManualExtras(
+        item
+    );
+
+
+    updateManualTotal();
+
+}
+
+
+/* =====================================================
+   VARIANT CHANGED
+===================================================== */
+
+function manualVariantChanged() {
+
+    updateManualTotal();
+
+}
+
+
+/* =====================================================
+   SHOW MANUAL EXTRAS
+===================================================== */
+
+function showManualExtras(item) {
+
+    const addonField =
+        document.getElementById(
+            "manualAddonsField"
+        );
+
+
+    const addonList =
+        document.getElementById(
+            "manualAddonsList"
+        );
+
+
+    const flavorField =
+        document.getElementById(
+            "manualFlavorField"
+        );
+
+
+    const flavorSelect =
+        document.getElementById(
+            "manualFlavor"
+        );
+
+
+    addonList.innerHTML =
+        "";
+
+
+    flavorSelect.innerHTML =
+        "<option value=''>" +
+        "Select Flavor" +
+        "</option>";
+
+
+    let hasExtras =
+        false;
+
+
+    /* =========================
+       ADDONS
+    ========================= */
+
+    if (
+        item.addons &&
+        item.addons.length > 0
+    ) {
+
+        hasExtras =
+            true;
+
+
+        item.addons.forEach(
+            function(addon, index) {
+
+                const wrapper =
+                    document.createElement(
+                        "label"
+                    );
+
+
+                wrapper.className =
+                    "addon-option";
+
+
+                const checkbox =
+                    document.createElement(
+                        "input"
+                    );
+
+
+                checkbox.type =
+                    "checkbox";
+
+
+                checkbox.className =
+                    "manual-addon-checkbox";
+
+
+                checkbox.dataset.name =
+                    addon.name;
+
+
+                checkbox.dataset.price =
+                    addon.price;
+
+
+                checkbox.addEventListener(
+                    "change",
+                    updateManualTotal
+                );
+
+
+                const text =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                text.textContent =
+                    addon.name +
+                    " +" +
+                    formatMoney(
+                        addon.price
+                    );
+
+
+                wrapper.appendChild(
+                    checkbox
+                );
+
+
+                wrapper.appendChild(
+                    text
+                );
+
+
+                addonList.appendChild(
+                    wrapper
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================
+       FLAVORS
+    ========================= */
+
+    if (
+        item.flavors &&
+        item.flavors.length > 0
+    ) {
+
+        hasExtras =
+            true;
+
+
+        flavorField.classList.remove(
+            "hidden"
+        );
+
+
+        item.flavors.forEach(
+            function(flavor) {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    flavor;
+
+
+                option.textContent =
+                    flavor;
+
+
+                flavorSelect.appendChild(
+                    option
+                );
+
+            }
+        );
+
+    } else {
+
+        flavorField.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if (hasExtras) {
+
+        addonField.classList.remove(
+            "hidden"
+        );
+
+    } else {
+
+        addonField.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   HIDE MANUAL EXTRAS
+===================================================== */
+
+function hideManualExtras() {
+
+    document
+        .getElementById(
+            "manualAddonsField"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+
+    document
+        .getElementById(
+            "manualFlavorField"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+
+    document
+        .getElementById(
+            "manualAddonsList"
+        )
+        .innerHTML =
+        "";
+
+
+    document
+        .getElementById(
+            "manualFlavor"
+        )
+        .innerHTML =
+        "<option value=''>" +
+        "Select Flavor" +
+        "</option>";
+
+}
+
+
+/* =====================================================
+   CALCULATE MANUAL TOTAL
+===================================================== */
+
+function getManualOrderData() {
+
+    const categoryName =
+        document.getElementById(
+            "manualCategory"
+        ).value;
+
+
+    const itemName =
+        document.getElementById(
+            "manualItem"
+        ).value;
+
+
+    const variantIndex =
+        document.getElementById(
+            "manualVariant"
+        ).value;
+
+
+    const quantity =
+        Math.max(
+            1,
+            Number(
+                document.getElementById(
+                    "manualQuantity"
+                ).value
+            ) || 1
+        );
+
+
+    if (
+        !categoryName ||
+        !itemName ||
+        variantIndex === ""
+    ) {
+
+        return null;
+
+    }
+
+
+    const item =
+        MANUAL_MENU[
+            categoryName
+        ][
+            itemName
+        ];
+
+
+    const variant =
+        item.variants[
+            Number(variantIndex)
+        ];
+
+
+    if (!variant) {
+
+        return null;
+
+    }
+
+
+    let unitPrice =
+        Number(
+            variant.price
+        );
+
+
+    const selectedAddons =
+        [];
+
+
+    document
+        .querySelectorAll(
+            ".manual-addon-checkbox:checked"
+        )
+        .forEach(function(checkbox) {
+
+            const addonName =
+                checkbox.dataset.name;
+
+
+            const addonPrice =
+                Number(
+                    checkbox.dataset.price
+                );
+
+
+            unitPrice +=
+                addonPrice;
+
+
+            selectedAddons.push({
+                name: addonName,
+                price: addonPrice
+            });
+
+        });
+
+
+    const flavor =
+        document.getElementById(
+            "manualFlavor"
+        ).value;
+
+
+    const total =
+        unitPrice *
+        quantity;
+
+
+    return {
+
+        category:
+            categoryName,
+
+        itemName:
+            itemName,
+
+        variantName:
+            variant.name,
+
+        flavor:
+            flavor,
+
+        quantity:
+            quantity,
+
+        basePrice:
+            Number(
+                variant.price
+            ),
+
+        addons:
+            selectedAddons,
+
+        unitPrice:
+            unitPrice,
+
+        total:
+            total
+
+    };
+
+}
+
+
+/* =====================================================
+   UPDATE MANUAL TOTAL
+===================================================== */
+
+function updateManualTotal() {
+
+    const data =
+        getManualOrderData();
+
+
+    const totalElement =
+        document.getElementById(
+            "manualTotal"
+        );
+
+
+    if (!data) {
+
+        totalElement.textContent =
+            "₱0.00";
+
+        return;
+
+    }
+
+
+    totalElement.textContent =
+        formatMoney(
+            data.total
+        );
+
+}
+
+
+/* =====================================================
+   ADD MANUAL ORDER
+===================================================== */
+
+async function addManualOrder() {
+
+    const data =
+        getManualOrderData();
+
+
+    if (!data) {
+
+        alert(
+            "Please select a category, menu item, and size/variant."
+        );
+
+        return;
+
+    }
+
+
+    const customerName =
+        document
+            .getElementById(
+                "manualCustomerName"
+            )
+            .value
+            .trim();
+
+
+    const orderType =
+        document
+            .getElementById(
+                "manualOrderType"
+            )
+            .value;
+
+
+    const paymentMethod =
+        document
+            .getElementById(
+                "manualPayment"
+            )
+            .value;
+
+
+    let itemDescription =
+        data.quantity +
+        " x " +
+        data.itemName +
+        " — " +
+        data.variantName;
+
+
+    if (data.flavor) {
+
+        itemDescription +=
+            " — Flavor: " +
+            data.flavor;
+
+    }
+
+
+    if (
+        data.addons &&
+        data.addons.length > 0
+    ) {
+
+        itemDescription +=
+            " — Add-ons: " +
+            data.addons
+                .map(function(addon) {
+
+                    return (
+                        addon.name +
+                        " (+" +
+                        formatMoney(
+                            addon.price
+                        ) +
+                        ")"
+                    );
+
+                })
+                .join(", ");
+
+    }
+
+
+    const orderNumber =
+        "MANUAL-" +
+        Date.now();
+
+
+    const orderData = {
+
+        order_number:
+            orderNumber,
+
+        customer_name:
+            customerName ||
+            "Walk-in Customer",
+
+        phone:
+            "",
+
+        order_type:
+            orderType,
+
+        delivery_address:
+            "",
+
+        pickup_time:
+            "",
+
+        payment_method:
+            paymentMethod,
+
+        gcash_reference:
+            "",
+
+        ordered_items:
+            itemDescription,
+
+        order_notes:
+            "Manual / Personal Order",
+
+        subtotal:
+            data.total,
+
+        delivery_fee:
+            0,
+
+        grand_total:
+            data.total,
+
+        status:
+            "Completed"
+
+    };
+
+
+    const button =
+        document.getElementById(
+            "addManualOrderButton"
+        );
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "ADDING ORDER...";
+
+
+    const { error } =
+        await supabaseClient
+            .from("orders")
+            .insert([
+                orderData
+            ]);
+
+
+    button.disabled =
+        false;
+
+
+    button.textContent =
+        "➕ ADD MANUAL ORDER";
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "Could not add manual order:\n\n" +
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    alert(
+        "✓ Manual order added successfully!\n\n" +
+        "Order: " +
+        orderNumber +
+        "\n" +
+        "Total: " +
+        formatMoney(
+            data.total
+        )
+    );
+
+
+    resetManualOrder();
+
+    await loadOrders();
+
+
+    /* Automatically go to reports
+       if desired later; currently
+       stays in manual order section. */
+
+}
+
+
+/* =====================================================
+   RESET MANUAL ORDER
+===================================================== */
+
+function resetManualOrder() {
+
+    document
+        .getElementById(
+            "manualCustomerName"
+        )
+        .value =
+        "";
+
+
+    document
+        .getElementById(
+            "manualOrderType"
+        )
+        .value =
+        "Walk-in";
+
+
+    document
+        .getElementById(
+            "manualPayment"
+        )
+        .value =
+        "Cash";
+
+
+    document
+        .getElementById(
+            "manualQuantity"
+        )
+        .value =
+        "1";
+
+
+    document
+        .getElementById(
+            "manualCategory"
+        )
+        .value =
+        "";
+
+
+    const item =
+        document.getElementById(
+            "manualItem"
+        );
+
+
+    const variant =
+        document.getElementById(
+            "manualVariant"
+        );
+
+
+    item.innerHTML =
+        "<option value=''>" +
+        "Select Menu Item" +
+        "</option>";
+
+
+    variant.innerHTML =
+        "<option value=''>" +
+        "Select Size / Variant" +
+        "</option>";
+
+
+    item.disabled =
+        true;
+
+
+    variant.disabled =
+        true;
+
+
+    hideManualExtras();
+
+
+    document
+        .getElementById(
+            "manualTotal"
+        )
+        .textContent =
+        "₱0.00";
+
+}
+
+
+/* =====================================================
+   DAILY REPORT
+===================================================== */
+
+function setDefaultReportDate() {
+
+    const today =
+        new Date();
+
+
+    const year =
+        today.getFullYear();
+
+
+    const month =
+        String(
+            today.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const day =
+        String(
+            today.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    document
+        .getElementById(
+            "reportDate"
+        )
+        .value =
+        year +
+        "-" +
+        month +
+        "-" +
+        day;
+
+}
+
+
+/* =====================================================
+   LOCAL DAY RANGE
+===================================================== */
+
+function getLocalDayRange(
+    dateString
+) {
+
+    const parts =
+        dateString.split("-");
+
+
+    const year =
+        Number(parts[0]);
+
+
+    const month =
+        Number(parts[1]) - 1;
+
+
+    const day =
+        Number(parts[2]);
+
+
+    const start =
+        new Date(
+            year,
+            month,
+            day,
+            0,
+            0,
+            0,
+            0
+        );
+
+
+    const end =
+        new Date(
+            year,
+            month,
+            day + 1,
+            0,
+            0,
+            0,
+            0
+        );
+
+
+    return {
+
+        start:
+            start.toISOString(),
+
+        end:
+            end.toISOString()
+
+    };
+
+}
+
+
+/* =====================================================
+   LOAD DAILY REPORT
+===================================================== */
+
+async function loadDailyReport() {
+
+    const dateString =
+        document
+            .getElementById(
+                "reportDate"
+            )
+            .value;
+
+
+    if (!dateString) {
+
+        alert(
+            "Please select a date."
+        );
+
+        return;
+
+    }
+
+
+    currentReportDate =
+        dateString;
+
+
+    const range =
+        getLocalDayRange(
+            dateString
+        );
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("orders")
+            .select("*")
+            .gte(
+                "created_at",
+                range.start
+            )
+            .lt(
+                "created_at",
+                range.end
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if (error) {
+
+        alert(
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    currentReportOrders =
+        (data || []).filter(
+            function(order) {
+
+                return (
+                    order.status ===
+                    "Completed"
+                );
+
+            }
+        );
+
+
+    renderDailyReport();
+
+}
+
+
+/* =====================================================
+   RENDER DAILY REPORT
+===================================================== */
+
+function renderDailyReport() {
+
+    const orders =
+        currentReportOrders;
+
+
+    let totalSales =
+        0;
+
+
+    let onlineOrders =
+        0;
+
+
+    let manualOrders =
+        0;
+
+
+    let cashSales =
+        0;
+
+
+    let gcashSales =
+        0;
+
+
+    orders.forEach(
+        function(order) {
+
+            const total =
+                Number(
+                    order.grand_total
+                ) || 0;
+
+
+            totalSales +=
+                total;
+
+
+            const isManual =
+                String(
+                    order.order_number ||
+                    ""
+                ).startsWith(
+                    "MANUAL-"
+                );
+
+
+            if (isManual) {
+
+                manualOrders++;
+
+            } else {
+
+                onlineOrders++;
+
+            }
+
+
+            const payment =
+                String(
+                    order.payment_method ||
+                    ""
+                ).toLowerCase();
+
+
+            if (
+                payment.includes(
+                    "gcash"
+                )
+            ) {
+
+                gcashSales +=
+                    total;
+
+            } else {
+
+                cashSales +=
+                    total;
+
+            }
+
+        }
+    );
+
+
+    document
+        .getElementById(
+            "reportTotalSales"
+        )
+        .textContent =
+        formatMoney(
+            totalSales
+        );
+
+
+    document
+        .getElementById(
+            "reportCompletedOrders"
+        )
+        .textContent =
+        orders.length;
+
+
+    document
+        .getElementById(
+            "reportOnlineOrders"
+        )
+        .textContent =
+        onlineOrders;
+
+
+    document
+        .getElementById(
+            "reportManualOrders"
+        )
+        .textContent =
+        manualOrders;
+
+
+    document
+        .getElementById(
+            "reportCashSales"
+        )
+        .textContent =
+        formatMoney(
+            cashSales
+        );
+
+
+    document
+        .getElementById(
+            "reportGcashSales"
+        )
+        .textContent =
+        formatMoney(
+            gcashSales
+        );
+
+
+    renderReportTable();
+
+}
+
+
+/* =====================================================
+   REPORT TABLE
+===================================================== */
+
+function renderReportTable() {
+
+    const tbody =
+        document.getElementById(
+            "reportTableBody"
+        );
+
+
+    tbody.innerHTML =
+        "";
+
+
+    if (
+        currentReportOrders.length === 0
+    ) {
+
+        tbody.innerHTML =
+            "<tr>" +
+            "<td colspan='10' " +
+            "style='text-align:center;'>" +
+            "No completed orders for this date." +
+            "</td>" +
+            "</tr>";
+
+        return;
+
+    }
+
+
+    currentReportOrders.forEach(
+        function(order) {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            const date =
+                new Date(
+                    order.created_at
+                );
+
+
+            const dateText =
+                date.toLocaleDateString();
+
+
+            const timeText =
+                date.toLocaleTimeString();
+
+
+            const isManual =
+                String(
+                    order.order_number ||
+                    ""
+                ).startsWith(
+                    "MANUAL-"
+                );
+
+
+            const source =
+                isManual
+                    ? "Manual"
+                    : "Online";
+
+
+            const cells = [
+
+                dateText,
+
+                timeText,
+
+                order.order_number ||
+                    "",
+
+                source,
+
+                order.customer_name ||
+                    "",
+
+                order.order_type ||
+                    "",
+
+                order.payment_method ||
+                    "",
+
+                order.ordered_items ||
+                    "",
+
+                formatMoney(
+                    order.grand_total
+                ),
+
+                order.status ||
+                    ""
+
+            ];
+
+
+            cells.forEach(
+                function(value) {
+
+                    const cell =
+                        document.createElement(
+                            "td"
+                        );
+
+
+                    cell.textContent =
+                        value;
+
+
+                    row.appendChild(
+                        cell
+                    );
+
+                }
+            );
+
+
+            tbody.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   EXPORT EXCEL
+===================================================== */
+
+function exportReportExcel() {
+
+    if (
+        typeof XLSX ===
+        "undefined"
+    ) {
+
+        alert(
+            "Excel export library could not load."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        currentReportOrders.length === 0
+    ) {
+
+        alert(
+            "There are no orders to export."
+        );
+
+        return;
+
+    }
+
+
+    const rows =
+        currentReportOrders.map(
+            function(order) {
+
+                const date =
+                    new Date(
+                        order.created_at
+                    );
+
+
+                const isManual =
+                    String(
+                        order.order_number ||
+                        ""
+                    ).startsWith(
+                        "MANUAL-"
+                    );
+
+
+                return {
+
+                    Date:
+                        date.toLocaleDateString(),
+
+                    Time:
+                        date.toLocaleTimeString(),
+
+                    "Order #":
+                        order.order_number ||
+                        "",
+
+                    Source:
+                        isManual
+                            ? "Manual"
+                            : "Online",
+
+                    Customer:
+                        order.customer_name ||
+                        "",
+
+                    Type:
+                        order.order_type ||
+                        "",
+
+                    Payment:
+                        order.payment_method ||
+                        "",
+
+                    Items:
+                        order.ordered_items ||
+                        "",
+
+                    Total:
+                        Number(
+                            order.grand_total
+                        ) || 0,
+
+                    Status:
+                        order.status ||
+                        ""
+
+                };
+
+            }
+        );
+
+
+    const worksheet =
+        XLSX.utils.json_to_sheet(
+            rows
+        );
+
+
+    const workbook =
+        XLSX.utils.book_new();
+
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Daily Report"
+    );
+
+
+    const filename =
+        "HIGHWAY_CAFE_REPORT_" +
+        currentReportDate +
+        ".xlsx";
+
+
+    XLSX.writeFile(
+        workbook,
+        filename
+    );
+
+}
+
+
+/* =====================================================
+   PRINT REPORT
+===================================================== */
+
+function printReport() {
+
+    if (
+        currentReportOrders.length === 0
+    ) {
+
+        alert(
+            "There is no report to print."
+        );
+
+        return;
+
+    }
+
+
+    window.print();
+
+}
+
+
+/* =====================================================
+   SECTION NAVIGATION
+===================================================== */
+
+function showSection(
+    sectionId
+) {
+
+    const sections = [
+
+        "ordersSection",
+
+        "manualOrderSection",
+
+        "menuSection",
+
+        "reportsSection"
+
+    ];
+
+
+    sections.forEach(
+        function(id) {
+
+            document
+                .getElementById(id)
+                .classList.add(
+                    "hidden"
+                );
+
+        }
+    );
+
+
+    document
+        .getElementById(
+            sectionId
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+
+    if (
+        sectionId ===
+        "reportsSection"
+    ) {
+
+        if (
+            !currentReportDate
+        ) {
+
+            setDefaultReportDate();
+
+        }
+
+    }
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+/* =====================================================
+   FORMAT MONEY
+===================================================== */
+
+function formatMoney(
+    value
+) {
+
+    return (
+        "₱" +
+        Number(
+            value || 0
+        ).toLocaleString(
+            "en-PH",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        )
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   AUTH SESSION
+===================================================== */
+
+async function checkSession() {
+
+    const { data } =
+        await supabaseClient
+            .auth
+            .getSession();
+
+
+    if (
+        data &&
+        data.session
+    ) {
+
+        showDashboard();
+
+    }
+
+}
+
+
+/* =====================================================
+   AUTH STATE LISTENER
+===================================================== */
+
+supabaseClient
+    .auth
+    .onAuthStateChange(
+        function(
+            event,
+            session
+        ) {
+
+            if (
+                session &&
+                document
+                    .getElementById(
+                        "dashboard"
+                    )
+                    .classList
+                    .contains(
+                        "hidden"
+                    )
+            ) {
+
+                showDashboard();
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   START
+===================================================== */
+
+setDefaultReportDate();
+
+checkSession();
+
+
+</script>
+
 
 </body>
 
