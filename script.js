@@ -1,29 +1,35 @@
-// =====================================================
-// HIGHWAY CAFE
-// COMPLETE ORDERING SYSTEM
-// =====================================================
+/* =====================================================
+   HIGHWAY CAFE
+   COMPLETE ORDERING SYSTEM
+===================================================== */
 
 
-// =====================================================
-// CART
-// =====================================================
+/* =====================================================
+   CART
+===================================================== */
 
 let cart = [];
 
 
-// =====================================================
-// PRODUCT VARIABLES
-// =====================================================
+/* =====================================================
+   PRODUCT VARIABLES
+===================================================== */
 
 let selectedProduct = "";
 let selectedCategory = "";
 
+let price8 = 0;
 let price12 = 0;
 let price16 = 0;
 let price22 = 0;
 
 let sizeType = "";
 let selectedSize = 16;
+
+
+/* =====================================================
+   ADD-ONS
+===================================================== */
 
 let espressoAvailable = false;
 let matchaAvailable = false;
@@ -33,22 +39,27 @@ let extraEspresso = false;
 let extraMatcha = false;
 let extraChocolate = false;
 
-let quantity = 1;
-
-
-// Add-on prices
-
 const ESPRESSO_PRICE = 30;
 const MATCHA_PRICE = 30;
 const CHOCOLATE_PRICE = 30;
 
 
-// =====================================================
-// SNACK VARIABLES
-// =====================================================
+/* =====================================================
+   GENERAL
+===================================================== */
+
+let quantity = 1;
+
+const DELIVERY_FEE = 20;
+
+
+/* =====================================================
+   SNACK VARIABLES
+===================================================== */
 
 let selectedSnack = "";
 let selectedSnackCategory = "";
+
 let snackChoices = [];
 let snackFlavors = [];
 
@@ -58,14 +69,13 @@ let selectedSnackFlavor = "";
 let snackQuantity = 1;
 
 
-// =====================================================
-// MEAL VARIABLES
-// =====================================================
+/* =====================================================
+   MEAL VARIABLES
+===================================================== */
 
 let selectedMeal = "";
 
 let mealChoices = [];
-
 let selectedMealChoice = null;
 
 let selectedMealCooler = "None";
@@ -77,21 +87,22 @@ let extraRice = false;
 let mealQuantity = 1;
 
 
-// =====================================================
-// CHECKOUT VARIABLES
-// =====================================================
+/* =====================================================
+   CHECKOUT VARIABLES
+===================================================== */
 
 let orderType = "pickup";
 let paymentMethod = "cash";
 
 
-// =====================================================
-// START ORDER
-// =====================================================
+/* =====================================================
+   START ORDER
+===================================================== */
 
 function startOrder() {
 
-    const menu = document.getElementById("menu");
+    const menu =
+        document.getElementById("menu");
 
     if (!menu) {
 
@@ -110,322 +121,121 @@ function startOrder() {
 }
 
 
-// =====================================================
-// DRINK DATA
-// =====================================================
+/* =====================================================
+   PRODUCT POPUP
+===================================================== */
 
-const drinkData = {
+function openProduct(
+    productName,
+    category,
+    p16,
+    p22,
+    addons,
+    p12 = 0,
+    p8 = 0
+) {
 
-    americano: {
-        name: "Americano",
-        category: "Highway Brews",
-        type: "size16-22",
-        p16: 70,
-        p22: 80,
-        addons: "espresso"
-    },
+    selectedProduct = productName;
+    selectedCategory = category;
 
-    vanillaLatte: {
-        name: "Vanilla Latte",
-        category: "Highway Brews",
-        type: "size16-22",
-        p16: 75,
-        p22: 89,
-        addons: "espresso"
-    },
-
-    spanishLatte: {
-        name: "Spanish Latte",
-        category: "Highway Brews",
-        type: "size16-22",
-        p16: 75,
-        p22: 89,
-        addons: "espresso"
-    },
-
-    mochaLatte: {
-        name: "Mocha Latte",
-        category: "Highway Brews",
-        type: "size16-22",
-        p16: 75,
-        p22: 89,
-        addons: "espresso-chocolate"
-    },
-
-    dirtyMatcha: {
-        name: "Dirty Matcha",
-        category: "Highway Brews",
-        type: "size16-22",
-        p16: 85,
-        p22: 100,
-        addons: "both"
-    },
-
-    saltedCaramel: {
-        name: "Salted Caramel",
-        category: "Highway Brews",
-        type: "size16-22",
-        p16: 75,
-        p22: 89,
-        addons: "espresso"
-    },
-
-    caramelMacchiato: {
-        name: "Caramel Macchiato",
-        category: "Highway Brews",
-        type: "size16-22",
-        p16: 75,
-        p22: 89,
-        addons: "espresso"
-    },
+    price8 = Number(p8) || 0;
+    price12 = Number(p12) || 0;
+    price16 = Number(p16) || 0;
+    price22 = Number(p22) || 0;
 
 
-    // HOT COFFEE
+    /* ---------------------------------------------
+       DETERMINE SIZE TYPE
+    --------------------------------------------- */
 
-    hotChoco: {
-        name: "Hot Choco",
-        category: "Hot-Road Brews",
-        type: "size8",
-        p16: 70,
-        p22: 0,
-        addons: "chocolate"
-    },
+    if (category === "Hot Coffee") {
 
-    hotAmericano: {
-        name: "Americano",
-        category: "Hot-Road Brews",
-        type: "size8",
-        p16: 70,
-        p22: 0,
-        addons: "espresso"
-    },
+        sizeType = "size8";
 
-    hotSpanishLatte: {
-        name: "Spanish Latte",
-        category: "Hot-Road Brews",
-        type: "size8",
-        p16: 80,
-        p22: 0,
-        addons: "espresso"
-    },
+        selectedSize = 8;
 
-    cafeLatte: {
-        name: "Cafe Latte",
-        category: "Hot-Road Brews",
-        type: "size8",
-        p16: 80,
-        p22: 0,
-        addons: "espresso"
-    },
-
-
-    // HIGHWAY COOLERS
-
-    greenApple: {
-        name: "Green Apple",
-        category: "Highway Coolers",
-        type: "size12-16-22",
-        p12: 29,
-        p16: 39,
-        p22: 59,
-        addons: "none"
-    },
-
-    lychee: {
-        name: "Lychee",
-        category: "Highway Coolers",
-        type: "size12-16-22",
-        p12: 29,
-        p16: 39,
-        p22: 59,
-        addons: "none"
-    },
-
-    strawberrySoda: {
-        name: "Strawberry",
-        category: "Highway Coolers",
-        type: "size12-16-22",
-        p12: 29,
-        p16: 39,
-        p22: 59,
-        addons: "none"
-    },
-
-    blueberrySoda: {
-        name: "Blueberry",
-        category: "Highway Coolers",
-        type: "size12-16-22",
-        p12: 29,
-        p16: 39,
-        p22: 59,
-        addons: "none"
-    },
-
-
-    // MILK SERIES
-
-    strawberryMilk: {
-        name: "Strawberry Milk",
-        category: "Creamline Express",
-        type: "size16-22",
-        p16: 65,
-        p22: 80,
-        addons: "none"
-    },
-
-    blueberryMilk: {
-        name: "Blueberry Milk",
-        category: "Creamline Express",
-        type: "size16-22",
-        p16: 65,
-        p22: 80,
-        addons: "none"
-    },
-
-    chocolateMilk: {
-        name: "Chocolate Milk",
-        category: "Creamline Express",
-        type: "size16-22",
-        p16: 65,
-        p22: 80,
-        addons: "chocolate"
-    },
-
-    matchaLatte: {
-        name: "Matcha Latte",
-        category: "Creamline Express",
-        type: "size16-22",
-        p16: 80,
-        p22: 95,
-        addons: "matcha"
-    },
-
-    cookiesCream: {
-        name: "Cookies and Cream",
-        category: "Creamline Express",
-        type: "size16-22",
-        p16: 65,
-        p22: 80,
-        addons: "none"
     }
 
-};
+    else if (category === "Soda Series") {
 
+        sizeType = "size12-16-22";
 
-// =====================================================
-// OPEN DRINK
-// =====================================================
+        price12 = 29;
 
-function openDrink(key) {
-
-    const drink = drinkData[key];
-
-    if (!drink) {
-
-        console.error(
-            "Drink not found:",
-            key
-        );
-
-        return;
-    }
-
-
-    if (drink.type === "size12-16-22") {
-
-        openProduct(
-            drink.name,
-            drink.category,
-            drink.type,
-            drink.p16,
-            drink.p22,
-            drink.addons,
-            drink.p12
-        );
+        selectedSize = 12;
 
     }
 
     else {
 
-        openProduct(
-            drink.name,
-            drink.category,
-            drink.type,
-            drink.p16,
-            drink.p22,
-            drink.addons
-        );
+        sizeType = "size16-22";
+
+        selectedSize = 16;
 
     }
-}
 
 
-// =====================================================
-// OPEN PRODUCT
-// =====================================================
-
-function openProduct(
-    productName,
-    category,
-    type,
-    p16,
-    p22,
-    addons,
-    p12
-) {
-
-    selectedProduct = productName;
-
-    selectedCategory = category;
-
-    sizeType = type;
-
-
-    price12 = p12 || 0;
-
-    price16 = p16 || 0;
-
-    price22 = p22 || 0;
-
-
-    selectedSize = 16;
+    /* ---------------------------------------------
+       RESET QUANTITY
+    --------------------------------------------- */
 
     quantity = 1;
 
+    const quantityInput =
+        document.getElementById("quantity");
+
+    if (quantityInput) {
+        quantityInput.value = 1;
+    }
+
+
+    /* ---------------------------------------------
+       RESET ADD-ONS
+    --------------------------------------------- */
 
     extraEspresso = false;
     extraMatcha = false;
     extraChocolate = false;
 
 
-    espressoAvailable =
-        addons === "espresso" ||
-        addons === "espresso-chocolate" ||
-        addons === "both";
+    /* ---------------------------------------------
+       DETERMINE AVAILABLE ADD-ONS
+    --------------------------------------------- */
 
+    let addonList = [];
+
+    if (Array.isArray(addons)) {
+        addonList = addons;
+    }
+
+    else if (typeof addons === "string") {
+        addonList = [addons];
+    }
+
+
+    espressoAvailable =
+        addonList.includes("espresso");
 
     matchaAvailable =
-        addons === "matcha" ||
-        addons === "both";
-
+        addonList.includes("matcha");
 
     chocolateAvailable =
-        addons === "chocolate" ||
-        addons === "espresso-chocolate" ||
-        addons === "both";
+        addonList.includes("chocolate");
 
+
+    /* ---------------------------------------------
+       DISPLAY PRODUCT
+    --------------------------------------------- */
 
     const productDisplay =
         document.getElementById(
             "selectedProduct"
         );
 
-
     if (productDisplay) {
 
         productDisplay.textContent =
             selectedProduct;
-
     }
 
 
@@ -434,26 +244,26 @@ function openProduct(
             "selectedCategory"
         );
 
-
     if (categoryDisplay) {
 
         categoryDisplay.textContent =
             selectedCategory;
-
     }
 
+
+    /* ---------------------------------------------
+       SIZE BUTTONS
+    --------------------------------------------- */
 
     const size12Button =
         document.getElementById(
             "size12Button"
         );
 
-
     const size16Button =
         document.getElementById(
             "size16Button"
         );
-
 
     const size22Button =
         document.getElementById(
@@ -461,77 +271,106 @@ function openProduct(
         );
 
 
-    // 12oz
+    /* 12oz */
 
     if (size12Button) {
 
-        size12Button.style.display =
-            type === "size12-16-22"
-                ? "inline-block"
-                : "none";
+        if (sizeType === "size12-16-22") {
 
+            size12Button.style.display =
+                "inline-block";
+
+            size12Button.textContent =
+                "12oz - ₱" + price12;
+
+        }
+
+        else {
+
+            size12Button.style.display =
+                "none";
+        }
     }
 
 
-    // 16oz
+    /* 16oz / 8oz */
 
     if (size16Button) {
 
         size16Button.style.display =
             "inline-block";
 
-        size16Button.textContent =
-            type === "size8"
-                ? "8oz"
-                : "16oz";
+        if (sizeType === "size8") {
 
+            size16Button.textContent =
+                "8oz - ₱" + price8;
+
+        }
+
+        else {
+
+            size16Button.textContent =
+                "16oz - ₱" + price16;
+        }
     }
 
 
-    // 22oz
+    /* 22oz */
 
     if (size22Button) {
 
-        size22Button.style.display =
-            (
-                type === "size16-22" ||
-                type === "size12-16-22"
-            )
-                ? "inline-block"
-                : "none";
+        if (
+            sizeType === "size16-22" ||
+            sizeType === "size12-16-22"
+        ) {
 
+            size22Button.style.display =
+                "inline-block";
+
+            size22Button.textContent =
+                "22oz - ₱" + price22;
+
+        }
+
+        else {
+
+            size22Button.style.display =
+                "none";
+        }
     }
 
+
+    /* ---------------------------------------------
+       SIZE TITLE
+    --------------------------------------------- */
 
     const sizeTitle =
         document.getElementById(
             "sizeTitle"
         );
 
-
     if (sizeTitle) {
 
         sizeTitle.textContent =
-            type === "size8"
+            sizeType === "size8"
                 ? "Size"
                 : "Choose Size";
-
     }
 
 
-    // Hide add-ons when unavailable
+    /* ---------------------------------------------
+       ADD-ON VISIBILITY
+    --------------------------------------------- */
 
     const espressoOption =
         document.getElementById(
             "espressoOption"
         );
 
-
     const matchaOption =
         document.getElementById(
             "matchaOption"
         );
-
 
     const chocolateOption =
         document.getElementById(
@@ -545,7 +384,6 @@ function openProduct(
             espressoAvailable
                 ? "block"
                 : "none";
-
     }
 
 
@@ -555,7 +393,6 @@ function openProduct(
             matchaAvailable
                 ? "block"
                 : "none";
-
     }
 
 
@@ -565,26 +402,72 @@ function openProduct(
             chocolateAvailable
                 ? "block"
                 : "none";
-
     }
 
 
     resetAddonButtons();
 
-    updateQuantityDisplay();
+    updateSelectedProductPrice();
 
-
-    showOnlyPopup(
+    showPopup(
+        "productOverlay",
         "productPopup"
     );
 }
 
 
-// =====================================================
-// SELECT SIZE
-// =====================================================
+/* =====================================================
+   PRODUCT PRICE
+===================================================== */
+
+function getBasePriceForSize(size) {
+
+    if (sizeType === "size8") {
+        return price8;
+    }
+
+    if (size === 12) {
+        return price12;
+    }
+
+    if (size === 16) {
+        return price16;
+    }
+
+    if (size === 22) {
+        return price22;
+    }
+
+    return 0;
+}
+
 
 function selectSize(size) {
+
+    if (
+        size === 12 &&
+        sizeType !== "size12-16-22"
+    ) {
+        return;
+    }
+
+
+    if (
+        size === 22 &&
+        sizeType !== "size16-22" &&
+        sizeType !== "size12-16-22"
+    ) {
+        return;
+    }
+
+
+    if (
+        size === 8 &&
+        sizeType !== "size8"
+    ) {
+        return;
+    }
+
 
     selectedSize = size;
 
@@ -602,23 +485,18 @@ function selectSize(size) {
         document.getElementById(
             "size22Button"
         )
-
     ];
 
 
-    buttons.forEach(
-        function(button) {
+    buttons.forEach(function(button) {
 
-            if (button) {
+        if (button) {
 
-                button.classList.remove(
-                    "selected-option"
-                );
-
-            }
-
+            button.classList.remove(
+                "selected-option"
+            );
         }
-    );
+    });
 
 
     let selectedButton = null;
@@ -630,27 +508,25 @@ function selectSize(size) {
             document.getElementById(
                 "size12Button"
             );
-
     }
 
-
-    if (size === 16) {
+    else if (
+        size === 16 ||
+        size === 8
+    ) {
 
         selectedButton =
             document.getElementById(
                 "size16Button"
             );
-
     }
 
-
-    if (size === 22) {
+    else if (size === 22) {
 
         selectedButton =
             document.getElementById(
                 "size22Button"
             );
-
     }
 
 
@@ -659,51 +535,130 @@ function selectSize(size) {
         selectedButton.classList.add(
             "selected-option"
         );
+    }
+
+
+    updateSelectedProductPrice();
+}
+
+
+/* =====================================================
+   PRODUCT PRICE UPDATE
+===================================================== */
+
+function updateSelectedProductPrice() {
+
+    const priceDisplay =
+        document.getElementById(
+            "selectedProductPrice"
+        );
+
+    if (!priceDisplay) {
+        return;
+    }
+
+
+    let finalPrice =
+        getBasePriceForSize(
+            selectedSize
+        );
+
+
+    if (extraEspresso) {
+        finalPrice += ESPRESSO_PRICE;
+    }
+
+    if (extraMatcha) {
+        finalPrice += MATCHA_PRICE;
+    }
+
+    if (extraChocolate) {
+        finalPrice += CHOCOLATE_PRICE;
+    }
+
+
+    priceDisplay.textContent =
+        finalPrice;
+}
+
+
+/* =====================================================
+   ADD-ONS
+===================================================== */
+
+function toggleAddon(type) {
+
+    if (type === "espresso") {
+
+        toggleEspresso();
+
+    }
+
+    else if (type === "matcha") {
+
+        toggleMatcha();
+
+    }
+
+    else if (type === "chocolate") {
+
+        toggleChocolate();
 
     }
 }
 
 
-// =====================================================
-// ADD-ONS
-// =====================================================
-
 function toggleEspresso() {
+
+    if (!espressoAvailable) {
+        return;
+    }
 
     extraEspresso =
         !extraEspresso;
-
 
     updateAddonButton(
         "espressoButton",
         extraEspresso
     );
+
+    updateSelectedProductPrice();
 }
 
 
 function toggleMatcha() {
 
+    if (!matchaAvailable) {
+        return;
+    }
+
     extraMatcha =
         !extraMatcha;
-
 
     updateAddonButton(
         "matchaButton",
         extraMatcha
     );
+
+    updateSelectedProductPrice();
 }
 
 
 function toggleChocolate() {
 
+    if (!chocolateAvailable) {
+        return;
+    }
+
     extraChocolate =
         !extraChocolate;
-
 
     updateAddonButton(
         "chocolateButton",
         extraChocolate
     );
+
+    updateSelectedProductPrice();
 }
 
 
@@ -715,28 +670,14 @@ function updateAddonButton(
     const button =
         document.getElementById(id);
 
-
     if (!button) {
-
         return;
     }
 
-
-    if (selected) {
-
-        button.classList.add(
-            "selected-option"
-        );
-
-    }
-
-    else {
-
-        button.classList.remove(
-            "selected-option"
-        );
-
-    }
+    button.classList.toggle(
+        "selected-option",
+        selected
+    );
 }
 
 
@@ -747,12 +688,10 @@ function resetAddonButtons() {
         false
     );
 
-
     updateAddonButton(
         "matchaButton",
         false
     );
-
 
     updateAddonButton(
         "chocolateButton",
@@ -761,112 +700,71 @@ function resetAddonButtons() {
 }
 
 
-// =====================================================
-// PRODUCT QUANTITY
-// =====================================================
+/* =====================================================
+   PRODUCT QUANTITY
+===================================================== */
 
-function changeQuantity(amount) {
+function getProductQuantity() {
 
-    quantity += amount;
-
-
-    if (quantity < 1) {
-
-        quantity = 1;
-
-    }
-
-
-    updateQuantityDisplay();
-}
-
-
-function updateQuantityDisplay() {
-
-    const display =
+    const input =
         document.getElementById(
             "quantity"
         );
 
-
-    if (display) {
-
-        display.textContent =
-            quantity;
-
+    if (!input) {
+        return 1;
     }
+
+
+    let value =
+        parseInt(
+            input.value,
+            10
+        );
+
+
+    if (
+        isNaN(value) ||
+        value < 1
+    ) {
+        value = 1;
+    }
+
+
+    quantity = value;
+
+    input.value = value;
+
+    return value;
 }
 
 
-// =====================================================
-// PRODUCT PRICE
-// =====================================================
-
-function getSelectedProductBasePrice() {
-
-    if (sizeType === "size8") {
-
-        return price16;
-
-    }
-
-
-    if (selectedSize === 12) {
-
-        return price12;
-
-    }
-
-
-    if (selectedSize === 16) {
-
-        return price16;
-
-    }
-
-
-    if (selectedSize === 22) {
-
-        return price22;
-
-    }
-
-
-    return 0;
-}
-
-
-// =====================================================
-// ADD PRODUCT
-// =====================================================
+/* =====================================================
+   ADD PRODUCT TO CART
+===================================================== */
 
 function addSelectedProduct() {
 
+    const selectedQuantity =
+        getProductQuantity();
+
+
     let finalPrice =
-        getSelectedProductBasePrice();
+        getBasePriceForSize(
+            selectedSize
+        );
 
 
     if (extraEspresso) {
-
-        finalPrice +=
-            ESPRESSO_PRICE;
-
+        finalPrice += ESPRESSO_PRICE;
     }
-
 
     if (extraMatcha) {
-
-        finalPrice +=
-            MATCHA_PRICE;
-
+        finalPrice += MATCHA_PRICE;
     }
 
-
     if (extraChocolate) {
-
-        finalPrice +=
-            CHOCOLATE_PRICE;
-
+        finalPrice += CHOCOLATE_PRICE;
     }
 
 
@@ -886,7 +784,7 @@ function addSelectedProduct() {
 
         price: finalPrice,
 
-        quantity: quantity,
+        quantity: selectedQuantity,
 
         extraEspresso:
             extraEspresso,
@@ -896,7 +794,6 @@ function addSelectedProduct() {
 
         extraChocolate:
             extraChocolate
-
     };
 
 
@@ -908,71 +805,68 @@ function addSelectedProduct() {
 }
 
 
-// =====================================================
-// GENERIC CART ADD
-// =====================================================
+/* =====================================================
+   ADD ITEM TO CART
+===================================================== */
 
 function addItemToCart(newItem) {
 
     const existing =
-        cart.find(
-            function(item) {
+        cart.find(function(item) {
 
-                return (
+            return (
 
-                    item.name ===
+                item.name ===
                     newItem.name &&
 
-                    item.category ===
+                item.category ===
                     newItem.category &&
 
-                    item.size ===
+                item.size ===
                     newItem.size &&
 
-                    item.price ===
+                item.price ===
                     newItem.price &&
 
-                    item.option ===
+                item.option ===
                     newItem.option &&
 
-                    item.flavor ===
+                item.flavor ===
                     newItem.flavor &&
 
-                    item.cooler ===
+                item.cooler ===
                     newItem.cooler &&
 
-                    item.extraEspresso ===
+                item.extraEspresso ===
                     newItem.extraEspresso &&
 
-                    item.extraMatcha ===
+                item.extraMatcha ===
                     newItem.extraMatcha &&
 
-                    item.extraChocolate ===
+                item.extraChocolate ===
                     newItem.extraChocolate &&
 
-                    item.extraEgg ===
+                item.extraEgg ===
                     newItem.extraEgg &&
 
-                    item.extraRice ===
+                item.extraRice ===
                     newItem.extraRice
-
-                );
-
-            }
-        );
+            );
+        });
 
 
     if (existing) {
 
         existing.quantity +=
-            newItem.quantity;
+            Number(
+                newItem.quantity || 1
+            );
 
     }
 
     else {
 
         cart.push(newItem);
-
     }
 
 
@@ -980,119 +874,90 @@ function addItemToCart(newItem) {
 }
 
 
-// =====================================================
-// SHOW ONLY ONE PRODUCT POPUP
-// =====================================================
+/* =====================================================
+   POPUP SYSTEM
+===================================================== */
 
-function showOnlyPopup(id) {
+function showPopup(
+    overlayId,
+    popupId
+) {
+
+    const allOverlays = [
+
+        "productOverlay",
+
+        "snackOverlay",
+
+        "mealOverlay",
+
+        "checkoutOverlay",
+
+        "orderConfirmationPopup"
+    ];
+
+
+    allOverlays.forEach(function(id) {
+
+        const overlay =
+            document.getElementById(id);
+
+        if (overlay) {
+
+            overlay.style.display =
+                "none";
+        }
+    });
+
 
     const overlay =
         document.getElementById(
-            "productOverlay"
+            overlayId
         );
 
-
-    const productPopup =
+    const popup =
         document.getElementById(
-            "productPopup"
+            popupId
         );
-
-
-    const snackPopup =
-        document.getElementById(
-            "snackPopupContent"
-        );
-
-
-    const mealPopup =
-        document.getElementById(
-            "mealPopupContent"
-        );
-
-
-    if (productPopup) {
-
-        productPopup.style.display =
-            "none";
-
-    }
-
-
-    if (snackPopup) {
-
-        snackPopup.style.display =
-            "none";
-
-    }
-
-
-    if (mealPopup) {
-
-        mealPopup.style.display =
-            "none";
-
-    }
-
-
-    const selectedPopup =
-        document.getElementById(id);
-
-
-    if (selectedPopup) {
-
-        selectedPopup.style.display =
-            "block";
-
-    }
 
 
     if (overlay) {
 
         overlay.style.display =
             "flex";
+    }
 
+
+    if (popup) {
+
+        popup.style.display =
+            "block";
     }
 }
 
 
-// =====================================================
-// CLOSE PRODUCT
-// =====================================================
+/* =====================================================
+   CLOSE PRODUCT
+===================================================== */
 
 function closeProduct() {
-
-    const popup =
-        document.getElementById(
-            "productPopup"
-        );
-
 
     const overlay =
         document.getElementById(
             "productOverlay"
         );
 
-
-    if (popup) {
-
-        popup.style.display =
-            "none";
-
-    }
-
-
     if (overlay) {
 
         overlay.style.display =
             "none";
-
     }
 }
 
 
-// =====================================================
-// ORDER NOTICE
-// =====================================================
+/* =====================================================
+   ORDER NOTICE
+===================================================== */
 
 function showOrderNotice() {
 
@@ -1101,312 +966,43 @@ function showOrderNotice() {
             "orderNotice"
         );
 
-
     if (!notice) {
-
         return;
-
     }
+
+
+    notice.textContent =
+        "✓ Order added to cart!";
 
 
     notice.style.display =
         "block";
 
 
-    setTimeout(
-        function() {
+    clearTimeout(
+        window.highwayCafeNoticeTimer
+    );
+
+
+    window.highwayCafeNoticeTimer =
+        setTimeout(function() {
 
             notice.style.display =
                 "none";
 
-        },
-        1800
-    );
+        }, 1800);
 }
 
 
-// =====================================================
-// SNACK DATA
-// =====================================================
-
-const snackData = {
-
-    nachos: {
-
-        name: "Nacho's",
-
-        category: "Snack Detour",
-
-        choices: [
-
-            {
-                name: "Regular",
-                price: 75
-            },
-
-            {
-                name: "Overload",
-                price: 125
-            }
-
-        ],
-
-        flavors: []
-
-    },
-
-
-    fries: {
-
-        name: "French Fries",
-
-        category: "Snack Detour",
-
-        choices: [
-
-            {
-                name: "Regular",
-                price: 25
-            },
-
-            {
-                name: "Large",
-                price: 40
-            }
-
-        ],
-
-        flavors: [
-            "BBQ",
-            "Sour Cream",
-            "Cheese"
-        ]
-
-    },
-
-
-    hashbrown: {
-
-        name: "Hashbrown",
-
-        category: "Snack Detour",
-
-        choices: [
-
-            {
-                name: "1 pc",
-                price: 25
-            },
-
-            {
-                name: "3 pcs",
-                price: 65
-            }
-
-        ],
-
-        flavors: []
-
-    },
-
-
-    steamedSiomai: {
-
-        name: "Steamed Siomai",
-
-        category: "Snack Detour",
-
-        choices: [
-
-            {
-                name: "5 pcs",
-                price: 25
-            },
-
-            {
-                name: "11 pcs",
-                price: 50
-            }
-
-        ],
-
-        flavors: []
-
-    },
-
-
-    japaneseSiomai: {
-
-        name: "Japanese Siomai",
-
-        category: "Snack Detour",
-
-        choices: [
-
-            {
-                name: "1 pc",
-                price: 10
-            }
-
-        ],
-
-        flavors: []
-
-    },
-
-
-    tofu: {
-
-        name: "Tofu Squares",
-
-        category: "Snack Detour",
-
-        choices: [
-
-            {
-                name: "4 pcs",
-                price: 25
-            },
-
-            {
-                name: "11 pcs",
-                price: 50
-            }
-
-        ],
-
-        flavors: []
-
-    },
-
-
-    flyingSaucer: {
-
-        name: "Flying Saucer",
-
-        category: "Snack Detour",
-
-        choices: [
-
-            {
-                name: "Ham & Cheese",
-                price: 25
-            },
-
-            {
-                name: "Hotdog & Cheese",
-                price: 25
-            },
-
-            {
-                name: "Egg & Cheese",
-                price: 30
-            },
-
-            {
-                name: "Tuna & Cheese",
-                price: 30
-            }
-
-        ],
-
-        flavors: []
-
-    },
-
-
-    shanghai: {
-
-        name: "Shanghai",
-
-        category: "Snack Detour",
-
-        choices: [
-
-            {
-                name: "1 pc",
-                price: 10
-            },
-
-            {
-                name: "11 pcs",
-                price: 100
-            }
-
-        ],
-
-        flavors: []
-
-    },
-
-
-    donuts: {
-
-        name: "Donuts",
-
-        category: "Snack Detour",
-
-        choices: [
-
-            {
-                name: "1 pc",
-                price: 10
-            }
-
-        ],
-
-        flavors: [
-
-            "Vanilla",
-            "Caramel",
-            "Chocolate"
-
-        ]
-
-    }
-
-};
-
-
-// =====================================================
-// OPEN SNACK
-// =====================================================
-
-function openSnackByKey(key) {
-
-    const snack =
-        snackData[key];
-
-
-    if (!snack) {
-
-        console.error(
-            "Snack not found:",
-            key
-        );
-
-        return;
-    }
-
-
-    openSnack(
-        snack.name,
-        snack.category,
-        snack.choices,
-        snack.flavors
-    );
-}
-
-
-// =====================================================
-// OPEN SNACK
-// =====================================================
+/* =====================================================
+   SNACK
+===================================================== */
 
 function openSnack(
     snackName,
     category,
     choices,
-    flavors
+    flavors = []
 ) {
 
     selectedSnack =
@@ -1415,27 +1011,78 @@ function openSnack(
     selectedSnackCategory =
         category;
 
-    snackChoices =
-        choices || [];
-
-    snackFlavors =
-        flavors || [];
-
-
     selectedSnackChoice =
         null;
 
     selectedSnackFlavor =
         "";
 
-    snackQuantity =
-        1;
+    snackQuantity = 1;
 
+    snackChoices = [];
+
+
+    /* ---------------------------------------------
+       CONVERT CHOICES
+    --------------------------------------------- */
+
+    if (Array.isArray(choices)) {
+
+        choices.forEach(function(choice) {
+
+            if (Array.isArray(choice)) {
+
+                snackChoices.push({
+
+                    name: choice[0],
+
+                    price:
+                        Number(
+                            choice[1]
+                        ) || 0
+                });
+
+            }
+
+            else if (
+                choice &&
+                typeof choice === "object"
+            ) {
+
+                snackChoices.push({
+
+                    name: choice.name,
+
+                    price:
+                        Number(
+                            choice.price
+                        ) || 0
+                });
+            }
+        });
+    }
+
+
+    snackFlavors =
+        Array.isArray(flavors)
+            ? flavors
+            : [];
+
+
+    /* ---------------------------------------------
+       DISPLAY
+    --------------------------------------------- */
 
     const snackDisplay =
         document.getElementById(
             "selectedSnack"
         );
+
+    if (snackDisplay) {
+
+        snackDisplay.textContent =
+            selectedSnack;
+    }
 
 
     const categoryDisplay =
@@ -1443,22 +1090,27 @@ function openSnack(
             "selectedSnackCategory"
         );
 
-
-    if (snackDisplay) {
-
-        snackDisplay.textContent =
-            selectedSnack;
-
-    }
-
-
     if (categoryDisplay) {
 
         categoryDisplay.textContent =
             selectedSnackCategory;
-
     }
 
+
+    const quantityInput =
+        document.getElementById(
+            "snackQuantity"
+        );
+
+    if (quantityInput) {
+
+        quantityInput.value = 1;
+    }
+
+
+    /* ---------------------------------------------
+       CHOICE BUTTONS
+    --------------------------------------------- */
 
     const choiceContainer =
         document.getElementById(
@@ -1468,8 +1120,7 @@ function openSnack(
 
     if (choiceContainer) {
 
-        choiceContainer.innerHTML =
-            "";
+        choiceContainer.innerHTML = "";
 
 
         snackChoices.forEach(
@@ -1480,10 +1131,7 @@ function openSnack(
                         "button"
                     );
 
-
-                button.type =
-                    "button";
-
+                button.type = "button";
 
                 button.textContent =
                     choice.name +
@@ -1498,7 +1146,6 @@ function openSnack(
                         selectSnackChoice(
                             index
                         );
-
                     }
                 );
 
@@ -1506,18 +1153,19 @@ function openSnack(
                 choiceContainer.appendChild(
                     button
                 );
-
             }
         );
-
     }
 
+
+    /* ---------------------------------------------
+       FLAVORS
+    --------------------------------------------- */
 
     const flavorSection =
         document.getElementById(
             "snackFlavors"
         );
-
 
     const flavorContainer =
         document.getElementById(
@@ -1531,7 +1179,6 @@ function openSnack(
 
             flavorSection.style.display =
                 "block";
-
         }
 
 
@@ -1549,10 +1196,7 @@ function openSnack(
                             "button"
                         );
 
-
-                    button.type =
-                        "button";
-
+                    button.type = "button";
 
                     button.textContent =
                         flavor;
@@ -1565,7 +1209,6 @@ function openSnack(
                             selectSnackFlavor(
                                 flavor
                             );
-
                         }
                     );
 
@@ -1573,10 +1216,8 @@ function openSnack(
                     flavorContainer.appendChild(
                         button
                     );
-
                 }
             );
-
         }
 
     }
@@ -1587,32 +1228,37 @@ function openSnack(
 
             flavorSection.style.display =
                 "none";
-
         }
-
     }
 
+
+    /* ---------------------------------------------
+       AUTO SELECT ONE CHOICE
+    --------------------------------------------- */
 
     if (snackChoices.length === 1) {
 
         selectSnackChoice(0);
-
     }
 
 
-    updateSnackQuantityDisplay();
-
-    showOnlyPopup(
+    showPopup(
+        "snackOverlay",
         "snackPopupContent"
     );
 }
 
 
-// =====================================================
-// SNACK CHOICE
-// =====================================================
+/* =====================================================
+   SNACK CHOICE
+===================================================== */
 
 function selectSnackChoice(index) {
+
+    if (!snackChoices[index]) {
+        return;
+    }
+
 
     selectedSnackChoice =
         snackChoices[index];
@@ -1631,15 +1277,14 @@ function selectSnackChoice(index) {
                 "selected-option",
                 i === index
             );
-
         }
     );
 }
 
 
-// =====================================================
-// SNACK FLAVOR
-// =====================================================
+/* =====================================================
+   SNACK FLAVOR
+===================================================== */
 
 function selectSnackFlavor(flavor) {
 
@@ -1658,54 +1303,61 @@ function selectSnackFlavor(flavor) {
 
             button.classList.toggle(
                 "selected-option",
-                button.textContent === flavor
+                button.textContent ===
+                    flavor
             );
-
         }
     );
 }
 
 
-// =====================================================
-// SNACK QUANTITY
-// =====================================================
+/* =====================================================
+   SNACK QUANTITY
+===================================================== */
 
-function changeSnackQuantity(amount) {
+function getSnackQuantity() {
 
-    snackQuantity += amount;
-
-
-    if (snackQuantity < 1) {
-
-        snackQuantity = 1;
-
-    }
-
-
-    updateSnackQuantityDisplay();
-}
-
-
-function updateSnackQuantityDisplay() {
-
-    const display =
+    const input =
         document.getElementById(
             "snackQuantity"
         );
 
 
-    if (display) {
-
-        display.textContent =
-            snackQuantity;
-
+    if (!input) {
+        return 1;
     }
+
+
+    let value =
+        parseInt(
+            input.value,
+            10
+        );
+
+
+    if (
+        isNaN(value) ||
+        value < 1
+    ) {
+
+        value = 1;
+    }
+
+
+    snackQuantity =
+        value;
+
+    input.value =
+        value;
+
+
+    return value;
 }
 
 
-// =====================================================
-// ADD SNACK
-// =====================================================
+/* =====================================================
+   ADD SNACK
+===================================================== */
 
 function addSnackToCart() {
 
@@ -1732,10 +1384,13 @@ function addSnackToCart() {
     }
 
 
+    const selectedQuantity =
+        getSnackQuantity();
+
+
     const item = {
 
-        name:
-            selectedSnack,
+        name: selectedSnack,
 
         category:
             selectedSnackCategory,
@@ -1750,8 +1405,7 @@ function addSnackToCart() {
             selectedSnackChoice.price,
 
         quantity:
-            snackQuantity
-
+            selectedQuantity
     };
 
 
@@ -1763,181 +1417,28 @@ function addSnackToCart() {
 }
 
 
-// =====================================================
-// CLOSE SNACK
-// =====================================================
+/* =====================================================
+   CLOSE SNACK
+===================================================== */
 
 function closeSnack() {
 
-    const popup =
-        document.getElementById(
-            "snackPopupContent"
-        );
-
-
     const overlay =
         document.getElementById(
-            "productOverlay"
+            "snackOverlay"
         );
-
-
-    if (popup) {
-
-        popup.style.display =
-            "none";
-
-    }
-
 
     if (overlay) {
 
         overlay.style.display =
             "none";
-
     }
 }
 
 
-// =====================================================
-// MEAL DATA
-// =====================================================
-
-const mealData = {
-
-    chickenMeal: {
-
-        name: "Chicken Rice Meal",
-
-        choices: [
-
-            {
-                name: "1 pc Chicken",
-                price: 50
-            },
-
-            {
-                name: "2 pcs Chicken",
-                price: 80
-            }
-
-        ]
-
-    },
-
-
-    shanghaiMeal: {
-
-        name: "Shanghai Rice Meal",
-
-        choices: [
-
-            {
-                name: "4 pcs Shanghai",
-                price: 50
-            }
-
-        ]
-
-    },
-
-
-    siomaiMeal: {
-
-        name: "Siomai Rice Meal",
-
-        choices: [
-
-            {
-                name: "6 pcs Steamed Siomai",
-                price: 45
-            }
-
-        ]
-
-    },
-
-
-    hotdogMeal: {
-
-        name: "Hotdog Rice Meal",
-
-        choices: [
-
-            {
-                name: "2 pcs Hotdog",
-                price: 50
-            }
-
-        ]
-
-    },
-
-
-    meatloafMeal: {
-
-        name: "Meatloaf Rice Meal",
-
-        choices: [
-
-            {
-                name: "3 pcs Meatloaf",
-                price: 55
-            }
-
-        ]
-
-    },
-
-
-    longganisaMeal: {
-
-        name: "Skinless Longganisa",
-
-        choices: [
-
-            {
-                name: "2 pcs Skinless Longganisa",
-                price: 55
-            }
-
-        ]
-
-    }
-
-};
-
-
-// =====================================================
-// OPEN MEAL
-// =====================================================
-
-function openMealByKey(key) {
-
-    const meal =
-        mealData[key];
-
-
-    if (!meal) {
-
-        console.error(
-            "Meal not found:",
-            key
-        );
-
-        return;
-    }
-
-
-    openMeal(
-        meal.name,
-        meal.choices
-    );
-}
-
-
-// =====================================================
-// OPEN MEAL
-// =====================================================
+/* =====================================================
+   MEALS
+===================================================== */
 
 function openMeal(
     mealName,
@@ -1947,8 +1448,45 @@ function openMeal(
     selectedMeal =
         mealName;
 
-    mealChoices =
-        choices || [];
+
+    mealChoices = [];
+
+
+    if (Array.isArray(choices)) {
+
+        choices.forEach(function(choice) {
+
+            if (Array.isArray(choice)) {
+
+                mealChoices.push({
+
+                    name: choice[0],
+
+                    price:
+                        Number(
+                            choice[1]
+                        ) || 0
+                });
+
+            }
+
+            else if (
+                choice &&
+                typeof choice === "object"
+            ) {
+
+                mealChoices.push({
+
+                    name: choice.name,
+
+                    price:
+                        Number(
+                            choice.price
+                        ) || 0
+                });
+            }
+        });
+    }
 
 
     selectedMealChoice =
@@ -1980,9 +1518,12 @@ function openMeal(
 
         mealDisplay.textContent =
             selectedMeal;
-
     }
 
+
+    /* ---------------------------------------------
+       MEAL CHOICES
+    --------------------------------------------- */
 
     const choiceContainer =
         document.getElementById(
@@ -2004,10 +1545,8 @@ function openMeal(
                         "button"
                     );
 
-
                 button.type =
                     "button";
-
 
                 button.textContent =
                     choice.name +
@@ -2022,7 +1561,6 @@ function openMeal(
                         selectMealChoice(
                             index
                         );
-
                     }
                 );
 
@@ -2030,35 +1568,49 @@ function openMeal(
                 choiceContainer.appendChild(
                     button
                 );
-
             }
         );
-
     }
 
 
     if (mealChoices.length === 1) {
 
         selectMealChoice(0);
-
     }
 
 
     resetMealOptions();
 
-    updateMealQuantityDisplay();
 
-    showOnlyPopup(
+    const quantityInput =
+        document.getElementById(
+            "mealQuantity"
+        );
+
+
+    if (quantityInput) {
+
+        quantityInput.value = 1;
+    }
+
+
+    showPopup(
+        "mealOverlay",
         "mealPopupContent"
     );
 }
 
 
-// =====================================================
-// MEAL CHOICE
-// =====================================================
+/* =====================================================
+   MEAL CHOICE
+===================================================== */
 
 function selectMealChoice(index) {
+
+    if (!mealChoices[index]) {
+        return;
+    }
+
 
     selectedMealChoice =
         mealChoices[index];
@@ -2077,26 +1629,49 @@ function selectMealChoice(index) {
                 "selected-option",
                 i === index
             );
-
         }
     );
 }
 
 
-// =====================================================
-// MEAL COOLER
-// =====================================================
+/* =====================================================
+   MEAL COOLER
+===================================================== */
 
-function selectMealCooler(
-    name,
-    price
-) {
+function selectMealCooler(name) {
+
+    let coolerName =
+        "None";
+
+    let coolerPrice =
+        0;
+
+
+    if (name === "16oz") {
+
+        coolerName =
+            "Highway Cooler 16oz";
+
+        coolerPrice =
+            35;
+    }
+
+
+    else if (name === "22oz") {
+
+        coolerName =
+            "Highway Cooler 22oz";
+
+        coolerPrice =
+            55;
+    }
+
 
     selectedMealCooler =
-        name;
+        coolerName;
 
     selectedMealCoolerPrice =
-        price;
+        coolerPrice;
 
 
     const buttons =
@@ -2111,132 +1686,108 @@ function selectMealCooler(
             button.classList.remove(
                 "selected-option"
             );
-
         }
     );
 
 
-    if (name === "None") {
+    let selectedButton =
+        null;
 
-        const button =
+
+    if (coolerName === "None") {
+
+        selectedButton =
             document.getElementById(
                 "coolerNoneButton"
             );
-
-
-        if (button) {
-
-            button.classList.add(
-                "selected-option"
-            );
-
-        }
-
     }
 
-
-    if (
-        name ===
+    else if (
+        coolerName ===
         "Highway Cooler 16oz"
     ) {
 
-        const button =
+        selectedButton =
             document.getElementById(
                 "cooler16Button"
             );
-
-
-        if (button) {
-
-            button.classList.add(
-                "selected-option"
-            );
-
-        }
-
     }
 
-
-    if (
-        name ===
+    else if (
+        coolerName ===
         "Highway Cooler 22oz"
     ) {
 
-        const button =
+        selectedButton =
             document.getElementById(
                 "cooler22Button"
+            );
+    }
+
+
+    if (selectedButton) {
+
+        selectedButton.classList.add(
+            "selected-option"
+        );
+    }
+}
+
+
+/* =====================================================
+   MEAL EXTRAS
+===================================================== */
+
+function toggleMealExtra(type) {
+
+    if (type === "egg") {
+
+        extraEgg =
+            !extraEgg;
+
+
+        const button =
+            document.getElementById(
+                "extraEggButton"
             );
 
 
         if (button) {
 
-            button.classList.add(
-                "selected-option"
+            button.classList.toggle(
+                "selected-option",
+                extraEgg
+            );
+        }
+    }
+
+
+    else if (type === "rice") {
+
+        extraRice =
+            !extraRice;
+
+
+        const button =
+            document.getElementById(
+                "extraRiceButton"
             );
 
+
+        if (button) {
+
+            button.classList.toggle(
+                "selected-option",
+                extraRice
+            );
         }
-
     }
 }
 
 
-// =====================================================
-// EXTRA EGG
-// =====================================================
-
-function toggleExtraEgg() {
-
-    extraEgg =
-        !extraEgg;
-
-
-    const button =
-        document.getElementById(
-            "extraEggButton"
-        );
-
-
-    if (button) {
-
-        button.classList.toggle(
-            "selected-option",
-            extraEgg
-        );
-
-    }
-}
-
-
-// =====================================================
-// EXTRA RICE
-// =====================================================
-
-function toggleExtraRice() {
-
-    extraRice =
-        !extraRice;
-
-
-    const button =
-        document.getElementById(
-            "extraRiceButton"
-        );
-
-
-    if (button) {
-
-        button.classList.toggle(
-            "selected-option",
-            extraRice
-        );
-
-    }
-}
-
-
-// =====================================================
-// RESET MEAL OPTIONS
-// =====================================================
+/* =====================================================
+   RESET MEAL OPTIONS
+===================================================== */
 
 function resetMealOptions() {
 
@@ -2261,7 +1812,6 @@ function resetMealOptions() {
         document.getElementById(
             "extraRiceButton"
         )
-
     ];
 
 
@@ -2273,9 +1823,7 @@ function resetMealOptions() {
                 button.classList.remove(
                     "selected-option"
                 );
-
             }
-
         }
     );
 
@@ -2291,51 +1839,57 @@ function resetMealOptions() {
         noneButton.classList.add(
             "selected-option"
         );
-
     }
 }
 
 
-// =====================================================
-// MEAL QUANTITY
-// =====================================================
+/* =====================================================
+   MEAL QUANTITY
+===================================================== */
 
-function changeMealQuantity(amount) {
+function getMealQuantity() {
 
-    mealQuantity += amount;
-
-
-    if (mealQuantity < 1) {
-
-        mealQuantity = 1;
-
-    }
-
-
-    updateMealQuantityDisplay();
-}
-
-
-function updateMealQuantityDisplay() {
-
-    const display =
+    const input =
         document.getElementById(
             "mealQuantity"
         );
 
 
-    if (display) {
-
-        display.textContent =
-            mealQuantity;
-
+    if (!input) {
+        return 1;
     }
+
+
+    let value =
+        parseInt(
+            input.value,
+            10
+        );
+
+
+    if (
+        isNaN(value) ||
+        value < 1
+    ) {
+
+        value = 1;
+    }
+
+
+    mealQuantity =
+        value;
+
+    input.value =
+        value;
+
+
+    return value;
 }
 
 
-// =====================================================
-// ADD MEAL
-// =====================================================
+/* =====================================================
+   ADD MEAL
+===================================================== */
 
 function addMealToCart() {
 
@@ -2349,6 +1903,10 @@ function addMealToCart() {
     }
 
 
+    const selectedQuantity =
+        getMealQuantity();
+
+
     let finalPrice =
         selectedMealChoice.price;
 
@@ -2360,14 +1918,12 @@ function addMealToCart() {
     if (extraEgg) {
 
         finalPrice += 10;
-
     }
 
 
     if (extraRice) {
 
         finalPrice += 15;
-
     }
 
 
@@ -2389,14 +1945,13 @@ function addMealToCart() {
             finalPrice,
 
         quantity:
-            mealQuantity,
+            selectedQuantity,
 
         extraEgg:
             extraEgg,
 
         extraRice:
             extraRice
-
     };
 
 
@@ -2408,44 +1963,29 @@ function addMealToCart() {
 }
 
 
-// =====================================================
-// CLOSE MEAL
-// =====================================================
+/* =====================================================
+   CLOSE MEAL
+===================================================== */
 
 function closeMeal() {
 
-    const popup =
-        document.getElementById(
-            "mealPopupContent"
-        );
-
-
     const overlay =
         document.getElementById(
-            "productOverlay"
+            "mealOverlay"
         );
-
-
-    if (popup) {
-
-        popup.style.display =
-            "none";
-
-    }
 
 
     if (overlay) {
 
         overlay.style.display =
             "none";
-
     }
 }
 
 
-// =====================================================
-// CART
-// =====================================================
+/* =====================================================
+   CART
+===================================================== */
 
 function updateCart() {
 
@@ -2454,12 +1994,10 @@ function updateCart() {
             "sideCartItems"
         );
 
-
     const cartCount =
         document.getElementById(
             "cartCount"
         );
-
 
     const cartTotal =
         document.getElementById(
@@ -2468,7 +2006,6 @@ function updateCart() {
 
 
     if (!cartItems) {
-
         return;
     }
 
@@ -2476,14 +2013,13 @@ function updateCart() {
     if (cart.length === 0) {
 
         cartItems.innerHTML =
-            "<p>Your cart is empty.</p>";
+            "Your cart is empty.";
 
 
         if (cartCount) {
 
             cartCount.textContent =
                 "0 items";
-
         }
 
 
@@ -2491,7 +2027,6 @@ function updateCart() {
 
             cartTotal.textContent =
                 "0";
-
         }
 
 
@@ -2499,16 +2034,11 @@ function updateCart() {
     }
 
 
-    let html =
-        "";
+    let html = "";
 
+    let total = 0;
 
-    let total =
-        0;
-
-
-    let totalItems =
-        0;
+    let totalItems = 0;
 
 
     cart.forEach(
@@ -2544,7 +2074,8 @@ function updateCart() {
                 <div class="cart-item">
 
                     <strong>
-                        ${itemQuantity} x ${item.name}
+                        ${itemQuantity} x
+                        ${item.name}
                     </strong>
 
                     ${
@@ -2612,36 +2143,29 @@ function updateCart() {
 
                     <button
                         type="button"
-                        onclick="decreaseCartItem(${index})">
-
+                        onclick="decreaseCartItem(${index})"
+                    >
                         −
-
                     </button>
-
 
                     <button
                         type="button"
-                        onclick="increaseCartItem(${index})">
-
+                        onclick="increaseCartItem(${index})"
+                    >
                         +
-
                     </button>
-
 
                     <button
                         type="button"
-                        onclick="removeCartItem(${index})">
-
+                        onclick="removeCartItem(${index})"
+                    >
                         Remove
-
                     </button>
 
                 </div>
 
                 <hr>
-
             `;
-
         }
     );
 
@@ -2659,7 +2183,6 @@ function updateCart() {
                     ? " item"
                     : " items"
             );
-
     }
 
 
@@ -2667,24 +2190,26 @@ function updateCart() {
 
         cartTotal.textContent =
             total;
-
     }
 }
 
 
-// =====================================================
-// CART + / -
-// =====================================================
+/* =====================================================
+   CART + / -
+===================================================== */
 
 function increaseCartItem(index) {
 
     if (!cart[index]) {
-
         return;
     }
 
 
-    cart[index].quantity++;
+    cart[index].quantity =
+        Number(
+            cart[index].quantity || 1
+        ) + 1;
+
 
     updateCart();
 }
@@ -2693,23 +2218,21 @@ function increaseCartItem(index) {
 function decreaseCartItem(index) {
 
     if (!cart[index]) {
-
         return;
     }
 
 
-    cart[index].quantity--;
+    cart[index].quantity =
+        Number(
+            cart[index].quantity || 1
+        ) - 1;
 
 
     if (
         cart[index].quantity <= 0
     ) {
 
-        cart.splice(
-            index,
-            1
-        );
-
+        cart.splice(index, 1);
     }
 
 
@@ -2720,38 +2243,35 @@ function decreaseCartItem(index) {
 function removeCartItem(index) {
 
     if (!cart[index]) {
-
         return;
     }
 
 
-    cart.splice(
-        index,
-        1
-    );
-
+    cart.splice(index, 1);
 
     updateCart();
 }
 
 
-// =====================================================
-// CART TOTAL
-// =====================================================
+/* =====================================================
+   TOTALS
+===================================================== */
 
 function getCartTotal() {
 
-    let total =
-        0;
+    let total = 0;
 
 
     cart.forEach(
         function(item) {
 
             total +=
-                Number(item.price || 0) *
-                Number(item.quantity || 1);
-
+                Number(
+                    item.price || 0
+                ) *
+                Number(
+                    item.quantity || 1
+                );
         }
     );
 
@@ -2760,9 +2280,32 @@ function getCartTotal() {
 }
 
 
-// =====================================================
-// CHECKOUT
-// =====================================================
+function getDeliveryFee() {
+
+    if (
+        orderType === "delivery"
+    ) {
+
+        return DELIVERY_FEE;
+    }
+
+
+    return 0;
+}
+
+
+function getGrandTotal() {
+
+    return (
+        getCartTotal() +
+        getDeliveryFee()
+    );
+}
+
+
+/* =====================================================
+   CHECKOUT
+===================================================== */
 
 function openCheckout() {
 
@@ -2776,52 +2319,7 @@ function openCheckout() {
     }
 
 
-    const overlay =
-        document.getElementById(
-            "checkoutOverlay"
-        );
-
-
-    const checkoutPopup =
-        document.getElementById(
-            "checkoutPopup"
-        );
-
-
-    const confirmationPopup =
-        document.getElementById(
-            "orderConfirmationPopup"
-        );
-
-
-    if (!overlay) {
-
-        alert(
-            "Checkout window could not be opened."
-        );
-
-        return;
-    }
-
-
-    if (checkoutPopup) {
-
-        checkoutPopup.style.display =
-            "block";
-
-    }
-
-
-    if (confirmationPopup) {
-
-        confirmationPopup.style.display =
-            "none";
-
-    }
-
-
-    overlay.style.display =
-        "flex";
+    clearCheckoutInputs();
 
 
     selectOrderType(
@@ -2834,29 +2332,37 @@ function openCheckout() {
     );
 
 
-    clearCheckoutInputs();
-
     updateCheckoutSummary();
 
     updateCheckoutTotal();
+
+
+    showPopup(
+        "checkoutOverlay",
+        "checkoutPopup"
+    );
 }
 
 
-// =====================================================
-// CLEAR CHECKOUT
-// =====================================================
+/* =====================================================
+   CLEAR CHECKOUT
+===================================================== */
 
 function clearCheckoutInputs() {
 
     const ids = [
 
         "customerName",
-        "customerPhone",
-        "deliveryAddress",
-        "orderNotes",
-        "pickupTime",
-        "paymentReference"
 
+        "customerPhone",
+
+        "deliveryAddress",
+
+        "orderNotes",
+
+        "pickupTime",
+
+        "paymentReference"
     ];
 
 
@@ -2869,19 +2375,16 @@ function clearCheckoutInputs() {
 
             if (element) {
 
-                element.value =
-                    "";
-
+                element.value = "";
             }
-
         }
     );
 }
 
 
-// =====================================================
-// ORDER TYPE
-// =====================================================
+/* =====================================================
+   ORDER TYPE
+===================================================== */
 
 function selectOrderType(type) {
 
@@ -2891,7 +2394,6 @@ function selectOrderType(type) {
     ) {
 
         type = "pickup";
-
     }
 
 
@@ -2904,18 +2406,15 @@ function selectOrderType(type) {
             "deliveryButton"
         );
 
-
     const pickupButton =
         document.getElementById(
             "pickupButton"
         );
 
-
     const deliveryDetails =
         document.getElementById(
             "deliveryDetails"
         );
-
 
     const pickupDetails =
         document.getElementById(
@@ -2928,7 +2427,6 @@ function selectOrderType(type) {
         deliveryButton.classList.remove(
             "selected-checkout"
         );
-
     }
 
 
@@ -2937,7 +2435,6 @@ function selectOrderType(type) {
         pickupButton.classList.remove(
             "selected-checkout"
         );
-
     }
 
 
@@ -2948,7 +2445,6 @@ function selectOrderType(type) {
             deliveryButton.classList.add(
                 "selected-checkout"
             );
-
         }
 
 
@@ -2956,7 +2452,6 @@ function selectOrderType(type) {
 
             deliveryDetails.style.display =
                 "block";
-
         }
 
 
@@ -2964,10 +2459,9 @@ function selectOrderType(type) {
 
             pickupDetails.style.display =
                 "none";
-
         }
-
     }
+
 
     else {
 
@@ -2976,7 +2470,6 @@ function selectOrderType(type) {
             pickupButton.classList.add(
                 "selected-checkout"
             );
-
         }
 
 
@@ -2984,7 +2477,6 @@ function selectOrderType(type) {
 
             deliveryDetails.style.display =
                 "none";
-
         }
 
 
@@ -2992,18 +2484,21 @@ function selectOrderType(type) {
 
             pickupDetails.style.display =
                 "block";
-
         }
-
     }
+
+
+    updateCheckoutTotal();
 }
 
 
-// =====================================================
-// PAYMENT
-// =====================================================
+/* =====================================================
+   PAYMENT METHOD
+===================================================== */
 
-function selectPaymentMethod(method) {
+function selectPaymentMethod(
+    method
+) {
 
     if (
         method !== "cash" &&
@@ -3011,7 +2506,6 @@ function selectPaymentMethod(method) {
     ) {
 
         method = "cash";
-
     }
 
 
@@ -3024,12 +2518,10 @@ function selectPaymentMethod(method) {
             "cashButton"
         );
 
-
     const gcashButton =
         document.getElementById(
             "gcashButton"
         );
-
 
     const gcashDetails =
         document.getElementById(
@@ -3042,7 +2534,6 @@ function selectPaymentMethod(method) {
         cashButton.classList.remove(
             "selected-checkout"
         );
-
     }
 
 
@@ -3051,7 +2542,6 @@ function selectPaymentMethod(method) {
         gcashButton.classList.remove(
             "selected-checkout"
         );
-
     }
 
 
@@ -3062,7 +2552,6 @@ function selectPaymentMethod(method) {
             gcashButton.classList.add(
                 "selected-checkout"
             );
-
         }
 
 
@@ -3070,10 +2559,9 @@ function selectPaymentMethod(method) {
 
             gcashDetails.style.display =
                 "block";
-
         }
-
     }
+
 
     else {
 
@@ -3082,7 +2570,6 @@ function selectPaymentMethod(method) {
             cashButton.classList.add(
                 "selected-checkout"
             );
-
         }
 
 
@@ -3090,16 +2577,14 @@ function selectPaymentMethod(method) {
 
             gcashDetails.style.display =
                 "none";
-
         }
-
     }
 }
 
 
-// =====================================================
-// CHECKOUT SUMMARY
-// =====================================================
+/* =====================================================
+   CHECKOUT SUMMARY
+===================================================== */
 
 function updateCheckoutSummary() {
 
@@ -3110,7 +2595,6 @@ function updateCheckoutSummary() {
 
 
     if (!summary) {
-
         return;
     }
 
@@ -3124,8 +2608,7 @@ function updateCheckoutSummary() {
     }
 
 
-    let html =
-        "";
+    let html = "";
 
 
     cart.forEach(
@@ -3151,7 +2634,8 @@ function updateCheckoutSummary() {
                     <div>
 
                         <strong>
-                            ${itemQuantity} x ${item.name}
+                            ${itemQuantity} x
+                            ${item.name}
                         </strong>
 
                         ${
@@ -3179,19 +2663,81 @@ function updateCheckoutSummary() {
                                 : ""
                         }
 
-                    </div>
+                        ${
+                            item.extraEspresso
+                                ? `<small>Extra Espresso</small>`
+                                : ""
+                        }
 
+                        ${
+                            item.extraMatcha
+                                ? `<small>Extra Matcha</small>`
+                                : ""
+                        }
+
+                        ${
+                            item.extraChocolate
+                                ? `<small>Extra Chocolate</small>`
+                                : ""
+                        }
+
+                        ${
+                            item.extraEgg
+                                ? `<small>Extra Egg</small>`
+                                : ""
+                        }
+
+                        ${
+                            item.extraRice
+                                ? `<small>Extra Rice</small>`
+                                : ""
+                        }
+
+                    </div>
 
                     <strong>
                         ₱${itemTotal}
                     </strong>
 
                 </div>
-
             `;
-
         }
     );
+
+
+    const subtotal =
+        getCartTotal();
+
+    const deliveryFee =
+        getDeliveryFee();
+
+
+    html += `
+
+        <div class="checkout-total-line">
+
+            <span>
+                Subtotal
+            </span>
+
+            <strong>
+                ₱${subtotal}
+            </strong>
+
+        </div>
+
+        <div class="checkout-total-line">
+
+            <span>
+                Delivery Fee
+            </span>
+
+            <strong>
+                ₱${deliveryFee}
+            </strong>
+
+        </div>
+    `;
 
 
     summary.innerHTML =
@@ -3199,9 +2745,9 @@ function updateCheckoutSummary() {
 }
 
 
-// =====================================================
-// CHECKOUT TOTAL
-// =====================================================
+/* =====================================================
+   CHECKOUT TOTAL
+===================================================== */
 
 function updateCheckoutTotal() {
 
@@ -3214,15 +2760,17 @@ function updateCheckoutTotal() {
     if (total) {
 
         total.textContent =
-            getCartTotal();
-
+            getGrandTotal();
     }
+
+
+    updateCheckoutSummary();
 }
 
 
-// =====================================================
-// CLOSE CHECKOUT
-// =====================================================
+/* =====================================================
+   CLOSE CHECKOUT
+===================================================== */
 
 function closeCheckout() {
 
@@ -3236,44 +2784,55 @@ function closeCheckout() {
 
         overlay.style.display =
             "none";
-
     }
 }
 
-// =====================================================
-// PLACE ORDER + SEND EMAIL
-// =====================================================
+
+/* =====================================================
+   PLACE ORDER
+===================================================== */
 
 async function placeOrder() {
 
     if (cart.length === 0) {
 
-        alert("Your cart is empty.");
+        alert(
+            "Your cart is empty."
+        );
+
         return;
     }
 
 
-    // =================================================
-    // GET INPUTS
-    // =================================================
-
     const nameInput =
-        document.getElementById("customerName");
+        document.getElementById(
+            "customerName"
+        );
 
     const phoneInput =
-        document.getElementById("customerPhone");
+        document.getElementById(
+            "customerPhone"
+        );
 
     const addressInput =
-        document.getElementById("deliveryAddress");
+        document.getElementById(
+            "deliveryAddress"
+        );
 
     const notesInput =
-        document.getElementById("orderNotes");
+        document.getElementById(
+            "orderNotes"
+        );
 
     const paymentReferenceInput =
-        document.getElementById("paymentReference");
+        document.getElementById(
+            "paymentReference"
+        );
 
     const pickupTimeInput =
-        document.getElementById("pickupTime");
+        document.getElementById(
+            "pickupTime"
+        );
 
 
     const name =
@@ -3281,25 +2840,30 @@ async function placeOrder() {
             ? nameInput.value.trim()
             : "";
 
+
     const phone =
         phoneInput
             ? phoneInput.value.trim()
             : "";
+
 
     const address =
         addressInput
             ? addressInput.value.trim()
             : "";
 
+
     const notes =
         notesInput
             ? notesInput.value.trim()
             : "";
 
+
     const paymentReference =
         paymentReferenceInput
             ? paymentReferenceInput.value.trim()
             : "";
+
 
     const pickupTime =
         pickupTimeInput
@@ -3307,13 +2871,15 @@ async function placeOrder() {
             : "";
 
 
-    // =================================================
-    // VALIDATION
-    // =================================================
+    /* ---------------------------------------------
+       VALIDATION
+    --------------------------------------------- */
 
     if (!name) {
 
-        alert("Please enter your name.");
+        alert(
+            "Please enter your name."
+        );
 
         if (nameInput) {
             nameInput.focus();
@@ -3325,7 +2891,9 @@ async function placeOrder() {
 
     if (!phone) {
 
-        alert("Please enter your phone number.");
+        alert(
+            "Please enter your phone number."
+        );
 
         if (phoneInput) {
             phoneInput.focus();
@@ -3340,7 +2908,9 @@ async function placeOrder() {
         !address
     ) {
 
-        alert("Please enter your delivery address.");
+        alert(
+            "Please enter your delivery address."
+        );
 
         if (addressInput) {
             addressInput.focus();
@@ -3367,9 +2937,9 @@ async function placeOrder() {
     }
 
 
-    // =================================================
-    // ORDER NUMBER
-    // =================================================
+    /* ---------------------------------------------
+       ORDER NUMBER
+    --------------------------------------------- */
 
     const orderNumber =
         "HC-" +
@@ -3378,13 +2948,19 @@ async function placeOrder() {
             .slice(-6);
 
 
-    const total =
+    const subtotal =
         getCartTotal();
 
+    const deliveryFee =
+        getDeliveryFee();
 
-    // =================================================
-    // ORDER SUMMARY
-    // =================================================
+    const total =
+        getGrandTotal();
+
+
+    /* ---------------------------------------------
+       ORDER SUMMARY FOR CONFIRMATION
+    --------------------------------------------- */
 
     let orderSummary =
         "HIGHWAY CAFE\n\n";
@@ -3418,7 +2994,9 @@ async function placeOrder() {
         "\n";
 
 
-    if (orderType === "delivery") {
+    if (
+        orderType === "delivery"
+    ) {
 
         orderSummary +=
             "Address: " +
@@ -3449,7 +3027,9 @@ async function placeOrder() {
         "\n";
 
 
-    if (paymentMethod === "gcash") {
+    if (
+        paymentMethod === "gcash"
+    ) {
 
         orderSummary +=
             "Reference: " +
@@ -3457,10 +3037,6 @@ async function placeOrder() {
             "\n";
     }
 
-
-    // =================================================
-    // ORDER ITEMS
-    // =================================================
 
     orderSummary +=
         "\n--------------------------\n";
@@ -3472,104 +3048,109 @@ async function placeOrder() {
         "--------------------------\n";
 
 
-    cart.forEach(function(item) {
+    cart.forEach(
+        function(item) {
 
-        const itemQuantity =
-            Number(item.quantity || 1);
-
-
-        const itemTotal =
-            Number(item.price || 0) *
-            itemQuantity;
+            const itemQuantity =
+                Number(
+                    item.quantity || 1
+                );
 
 
-        orderSummary +=
-            itemQuantity +
-            " x " +
-            item.name +
-            "\n";
+            const itemTotal =
+                Number(
+                    item.price || 0
+                ) *
+                itemQuantity;
 
-
-        if (item.size) {
 
             orderSummary +=
-                "   Size: " +
-                item.size +
+                itemQuantity +
+                " x " +
+                item.name +
                 "\n";
-        }
 
 
-        if (item.option) {
+            if (item.size) {
+
+                orderSummary +=
+                    "   Size: " +
+                    item.size +
+                    "\n";
+            }
+
+
+            if (item.option) {
+
+                orderSummary +=
+                    "   Option: " +
+                    item.option +
+                    "\n";
+            }
+
+
+            if (item.flavor) {
+
+                orderSummary +=
+                    "   Flavor: " +
+                    item.flavor +
+                    "\n";
+            }
+
+
+            if (
+                item.cooler &&
+                item.cooler !== "None"
+            ) {
+
+                orderSummary +=
+                    "   " +
+                    item.cooler +
+                    "\n";
+            }
+
+
+            if (item.extraEspresso) {
+
+                orderSummary +=
+                    "   Extra Espresso\n";
+            }
+
+
+            if (item.extraMatcha) {
+
+                orderSummary +=
+                    "   Extra Matcha\n";
+            }
+
+
+            if (item.extraChocolate) {
+
+                orderSummary +=
+                    "   Extra Chocolate\n";
+            }
+
+
+            if (item.extraEgg) {
+
+                orderSummary +=
+                    "   Extra Egg\n";
+            }
+
+
+            if (item.extraRice) {
+
+                orderSummary +=
+                    "   Extra Rice\n";
+            }
+
 
             orderSummary +=
-                "   Option: " +
-                item.option +
-                "\n";
+                "   Item Total: ₱" +
+                itemTotal +
+                "\n\n";
         }
-
-
-        if (item.flavor) {
-
-            orderSummary +=
-                "   Flavor: " +
-                item.flavor +
-                "\n";
-        }
-
-
-        if (
-            item.cooler &&
-            item.cooler !== "None"
-        ) {
-
-            orderSummary +=
-                "   " +
-                item.cooler +
-                "\n";
-        }
-
-
-        if (item.extraEspresso) {
-
-            orderSummary +=
-                "   Extra Espresso\n";
-        }
-
-
-        if (item.extraMatcha) {
-
-            orderSummary +=
-                "   Extra Matcha\n";
-        }
-
-
-        if (item.extraChocolate) {
-
-            orderSummary +=
-                "   Extra Chocolate\n";
-        }
-
-
-        if (item.extraEgg) {
-
-            orderSummary +=
-                "   Extra Egg\n";
-        }
-
-
-        if (item.extraRice) {
-
-            orderSummary +=
-                "   Extra Rice\n";
-        }
-
-
-        orderSummary +=
-            "   Item Total: ₱" +
-            itemTotal +
-            "\n\n";
-
-    });
+    );
 
 
     orderSummary +=
@@ -3577,14 +3158,22 @@ async function placeOrder() {
 
 
     orderSummary +=
-        "TOTAL: ₱" +
-        total +
+        "Subtotal: ₱" +
+        subtotal +
         "\n";
 
 
-    // =================================================
-    // NOTES
-    // =================================================
+    orderSummary +=
+        "Delivery Fee: ₱" +
+        deliveryFee +
+        "\n";
+
+
+    orderSummary +=
+        "GRAND TOTAL: ₱" +
+        total +
+        "\n";
+
 
     if (notes) {
 
@@ -3595,16 +3184,16 @@ async function placeOrder() {
     }
 
 
-    // =================================================
-    // PAYMENT STATUS
-    // =================================================
-
-    if (paymentMethod === "gcash") {
+    if (
+        paymentMethod === "gcash"
+    ) {
 
         orderSummary +=
             "\nPayment Status: Waiting for GCash confirmation.";
 
-    } else {
+    }
+
+    else {
 
         orderSummary +=
             "\nPayment Status: Cash upon " +
@@ -3616,9 +3205,9 @@ async function placeOrder() {
     }
 
 
-    // =================================================
-    // PLACE ORDER BUTTON
-    // =================================================
+    /* ---------------------------------------------
+       DISABLE BUTTON
+    --------------------------------------------- */
 
     const placeButton =
         document.getElementById(
@@ -3628,16 +3217,24 @@ async function placeOrder() {
 
     if (placeButton) {
 
-        placeButton.disabled = true;
+        placeButton.disabled =
+            true;
 
         placeButton.textContent =
             "Sending Order...";
     }
 
 
-    // =================================================
-    // PREPARE FORM DATA
-    // =================================================
+    /* =================================================
+       FORMSUBMIT
+
+       IMPORTANT:
+       We use "box" instead of "table".
+
+       This makes the email much cleaner and prevents
+       the long order summary from becoming a cramped
+       table-style email.
+    ================================================= */
 
     const formData =
         new FormData();
@@ -3650,9 +3247,11 @@ async function placeOrder() {
     );
 
 
+    /* CLEANER EMAIL TEMPLATE */
+
     formData.append(
         "_template",
-        "table"
+        "box"
     );
 
 
@@ -3662,103 +3261,141 @@ async function placeOrder() {
     );
 
 
+    /* ---------------------------------------------
+       ORDER INFORMATION
+    --------------------------------------------- */
+
     formData.append(
-        "Order Number",
+        "ORDER NUMBER",
         orderNumber
     );
 
 
     formData.append(
-        "Customer Name",
+        "CUSTOMER NAME",
         name
     );
 
 
     formData.append(
-        "Phone Number",
+        "PHONE NUMBER",
         phone
     );
 
 
     formData.append(
-        "Order Type",
-        (
-            orderType === "delivery"
-                ? "Delivery"
-                : "Pickup"
-        )
+        "ORDER TYPE",
+        orderType === "delivery"
+            ? "Delivery"
+            : "Pickup"
     );
 
 
     formData.append(
-        "Delivery Address",
-        (
-            orderType === "delivery"
-                ? address
-                : "N/A - Pickup"
-        )
+        "DELIVERY ADDRESS",
+        orderType === "delivery"
+            ? address
+            : "N/A - Pickup"
     );
 
 
     formData.append(
-        "Pickup Time",
-        (
-            orderType === "pickup"
-                ? (
-                    pickupTime
-                        ? pickupTime
-                        : "Not specified"
-                )
-                : "N/A - Delivery"
-        )
+        "PICKUP TIME",
+        orderType === "pickup"
+            ? (
+                pickupTime
+                    ? pickupTime
+                    : "Not specified"
+            )
+            : "N/A - Delivery"
     );
 
 
     formData.append(
-        "Payment Method",
-        (
-            paymentMethod === "gcash"
-                ? "GCash / Online Payment"
-                : "Cash"
-        )
+        "PAYMENT METHOD",
+        paymentMethod === "gcash"
+            ? "GCash / Online Payment"
+            : "Cash"
     );
 
 
     formData.append(
-        "GCash Reference",
-        (
-            paymentMethod === "gcash"
-                ? paymentReference
-                : "N/A"
-        )
+        "GCASH REFERENCE",
+        paymentMethod === "gcash"
+            ? paymentReference
+            : "N/A"
     );
 
 
+    /* ---------------------------------------------
+       ORDER ITEMS
+
+       Keep this as a separate field so the customer
+       can easily read the complete order.
+    --------------------------------------------- */
+
     formData.append(
-        "Ordered Items",
+        "ORDER ITEMS",
         orderSummary
     );
 
 
+    /* ---------------------------------------------
+       NOTES
+    --------------------------------------------- */
+
     formData.append(
-        "Order Notes",
-        (
-            notes
-                ? notes
-                : "No notes"
-        )
+        "ORDER NOTES",
+        notes
+            ? notes
+            : "No notes"
+    );
+
+
+    /* ---------------------------------------------
+       TOTALS
+    --------------------------------------------- */
+
+    formData.append(
+        "SUBTOTAL",
+        "₱" + subtotal
     );
 
 
     formData.append(
-        "Grand Total",
+        "DELIVERY FEE",
+        "₱" + deliveryFee
+    );
+
+
+    formData.append(
+        "GRAND TOTAL",
         "₱" + total
     );
 
 
-    // =================================================
-    // SEND TO FORMSUBMIT
-    // =================================================
+    /* ---------------------------------------------
+       PAYMENT STATUS
+    --------------------------------------------- */
+
+    formData.append(
+        "PAYMENT STATUS",
+        paymentMethod === "gcash"
+            ? "Waiting for GCash confirmation."
+            : (
+                "Cash upon " +
+                (
+                    orderType === "delivery"
+                        ? "delivery."
+                        : "pickup."
+                )
+            )
+    );
+
+
+    /* ---------------------------------------------
+       SEND EMAIL
+    --------------------------------------------- */
 
     try {
 
@@ -3788,9 +3425,9 @@ async function placeOrder() {
         );
 
 
-        // =================================================
-        // SUCCESS
-        // =================================================
+        /* -----------------------------------------
+           SUCCESS
+        ----------------------------------------- */
 
         if (
             response.ok &&
@@ -3818,10 +3455,6 @@ async function placeOrder() {
         }
 
 
-        // =================================================
-        // FORMSUBMIT REJECTED
-        // =================================================
-
         throw new Error(
             result.message ||
             "FormSubmit rejected the order."
@@ -3829,6 +3462,10 @@ async function placeOrder() {
 
     }
 
+
+    /* ---------------------------------------------
+       ERROR
+    --------------------------------------------- */
 
     catch (error) {
 
@@ -3853,15 +3490,13 @@ async function placeOrder() {
             "Your order has NOT been submitted.\n\n" +
             "Please try again."
         );
-
     }
-
 }
 
 
-// =====================================================
-// ORDER CONFIRMATION
-// =====================================================
+/* =====================================================
+   CONFIRMATION
+===================================================== */
 
 function showOrderConfirmation(
     orderNumber,
@@ -3903,15 +3538,6 @@ function showOrderConfirmation(
 
         checkoutPopup.style.display =
             "none";
-
-    }
-
-
-    if (confirmationPopup) {
-
-        confirmationPopup.style.display =
-            "block";
-
     }
 
 
@@ -3919,7 +3545,6 @@ function showOrderConfirmation(
 
         orderNumberDisplay.textContent =
             orderNumber;
-
     }
 
 
@@ -3927,23 +3552,27 @@ function showOrderConfirmation(
 
         summaryDisplay.textContent =
             orderSummary;
-
     }
 
 
     if (totalDisplay) {
 
         totalDisplay.textContent =
-            "₱" +
             total;
+    }
 
+
+    if (confirmationPopup) {
+
+        confirmationPopup.style.display =
+            "flex";
     }
 }
 
 
-// =====================================================
-// FINISH ORDER
-// =====================================================
+/* =====================================================
+   FINISH ORDER
+===================================================== */
 
 function finishOrder() {
 
@@ -3953,25 +3582,10 @@ function finishOrder() {
         );
 
 
-    const checkoutOverlay =
-        document.getElementById(
-            "checkoutOverlay"
-        );
-
-
     if (confirmationPopup) {
 
         confirmationPopup.style.display =
             "none";
-
-    }
-
-
-    if (checkoutOverlay) {
-
-        checkoutOverlay.style.display =
-            "none";
-
     }
 
 
@@ -3989,21 +3603,27 @@ function finishOrder() {
         "cash";
 
 
+    clearCheckoutInputs();
+
+
     alert(
         "Thank you for ordering from Highway Cafe!"
     );
 }
 
 
-// =====================================================
-// CLICK OUTSIDE POPUPS
-// =====================================================
+/* =====================================================
+   OVERLAY CLICK
+===================================================== */
 
 document.addEventListener(
     "DOMContentLoaded",
     function() {
 
-        // Start with menu visible
+
+        /* ---------------------------------------------
+           HIDE MENU AT START
+        --------------------------------------------- */
 
         const menu =
             document.getElementById(
@@ -4014,12 +3634,13 @@ document.addEventListener(
         if (menu) {
 
             menu.style.display =
-                "block";
-
+                "none";
         }
 
 
-        // Product overlay
+        /* ---------------------------------------------
+           PRODUCT OVERLAY
+        --------------------------------------------- */
 
         const productOverlay =
             document.getElementById(
@@ -4039,20 +3660,71 @@ document.addEventListener(
                     ) {
 
                         closeProduct();
-
-                        closeSnack();
-
-                        closeMeal();
-
                     }
-
                 }
             );
-
         }
 
 
-        // Checkout overlay
+        /* ---------------------------------------------
+           SNACK OVERLAY
+        --------------------------------------------- */
+
+        const snackOverlay =
+            document.getElementById(
+                "snackOverlay"
+            );
+
+
+        if (snackOverlay) {
+
+            snackOverlay.addEventListener(
+                "click",
+                function(event) {
+
+                    if (
+                        event.target ===
+                        snackOverlay
+                    ) {
+
+                        closeSnack();
+                    }
+                }
+            );
+        }
+
+
+        /* ---------------------------------------------
+           MEAL OVERLAY
+        --------------------------------------------- */
+
+        const mealOverlay =
+            document.getElementById(
+                "mealOverlay"
+            );
+
+
+        if (mealOverlay) {
+
+            mealOverlay.addEventListener(
+                "click",
+                function(event) {
+
+                    if (
+                        event.target ===
+                        mealOverlay
+                    ) {
+
+                        closeMeal();
+                    }
+                }
+            );
+        }
+
+
+        /* ---------------------------------------------
+           CHECKOUT OVERLAY
+        --------------------------------------------- */
 
         const checkoutOverlay =
             document.getElementById(
@@ -4072,18 +3744,41 @@ document.addEventListener(
                     ) {
 
                         closeCheckout();
-
                     }
-
                 }
             );
-
         }
 
 
-        // Initialize cart
+        /* ---------------------------------------------
+           ADD TO CART BUTTON
+        --------------------------------------------- */
+
+        const addToCartButton =
+            document.getElementById(
+                "addToCartButton"
+            );
+
+
+        if (addToCartButton) {
+
+            addToCartButton.addEventListener(
+                "click",
+                addSelectedProduct
+            );
+        }
+
+
+        /* ---------------------------------------------
+           INITIAL CART
+        --------------------------------------------- */
 
         updateCart();
+
+
+        console.log(
+            "HIGHWAY CAFE JavaScript loaded successfully."
+        );
 
     }
 );
