@@ -611,26 +611,37 @@ function updateShopDisplay(
 
 async function toggleShop() {
 
+    /* ---------------------------------------------
+       GET CURRENT SHOP STATUS
+    --------------------------------------------- */
+
     const { data, error } =
         await supabaseClient
             .from("shop_settings")
-            .select("id, shop_open")
+            .select("shop_open")
             .limit(1);
 
 
     if (error) {
 
+        console.error(
+            "Could not read shop status:",
+            error
+        );
+
         alert(
             "Could not read shop status."
         );
-
-        console.error(error);
 
         return;
     }
 
 
     if (!data || data.length === 0) {
+
+        console.error(
+            "No shop settings row found."
+        );
 
         alert(
             "No shop settings were found."
@@ -640,46 +651,55 @@ async function toggleShop() {
     }
 
 
-    const shopSettings =
-        data[0];
+    /* ---------------------------------------------
+       GET CURRENT VALUE
+    --------------------------------------------- */
+
+    const currentStatus =
+        data[0].shop_open;
 
 
     const newStatus =
-        !shopSettings.shop_open;
+        !currentStatus;
 
+
+    /* ---------------------------------------------
+       UPDATE SHOP STATUS
+    --------------------------------------------- */
 
     const { error: updateError } =
         await supabaseClient
             .from("shop_settings")
             .update({
-
-                shop_open:
-                    newStatus,
+                shop_open: newStatus,
 
                 updated_at:
                     new Date().toISOString()
-
             })
             .eq(
-                "id",
-                shopSettings.id
+                "shop_open",
+                currentStatus
             );
 
 
     if (updateError) {
-
-        alert(
-            "Could not update shop status."
-        );
 
         console.error(
             "Shop update error:",
             updateError
         );
 
+        alert(
+            "Could not update shop status."
+        );
+
         return;
     }
 
+
+    /* ---------------------------------------------
+       UPDATE DISPLAY
+    --------------------------------------------- */
 
     updateShopDisplay(
         newStatus
