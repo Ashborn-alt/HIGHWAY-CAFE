@@ -103,39 +103,52 @@ header button:active {
 
 .menu-grid {
     display: grid;
-    grid-template-columns: repeat(
-        auto-fit,
-        minmax(220px, 1fr)
-    );
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(220px, 1fr)
+        );
 
     gap: 15px;
+
     margin-top: 20px;
 }
 
 .menu-item {
     min-height: 90px;
+
     padding: 18px;
 
     border: 2px solid #d5bda9;
+
     border-radius: 12px;
 
     background-color: #fffaf5;
+
     color: #4b2e1f;
 
     cursor: pointer;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     font-size: 18px;
+
     font-weight: bold;
 
     transition: 0.2s;
+
+    /* Helps mobile taps feel better */
+    -webkit-tap-highlight-color: transparent;
 }
 
 .menu-item:hover {
     border-color: #8b4513;
+
     background-color: #f3e5d8;
 
     transform: translateY(-3px);
@@ -172,6 +185,7 @@ header button:active {
     background-color: #fffaf5;
 
     border: 2px solid #d5bda9;
+
     border-radius: 12px;
 
     box-shadow:
@@ -187,6 +201,7 @@ header button:active {
     display: flex;
 
     justify-content: space-between;
+
     align-items: center;
 
     gap: 10px;
@@ -195,28 +210,35 @@ header button:active {
         1px solid #d5bda9;
 
     padding-bottom: 10px;
+
     margin-bottom: 10px;
 }
 
 .cart-header h2 {
     margin: 0;
+
     color: #4b2e1f;
+
     font-size: 20px;
 }
 
 #cartCount {
     color: #795548;
+
     font-size: 13px;
 }
 
 #sideCartItems {
     max-height: 55vh;
+
     overflow-y: auto;
 }
 
 .cart-item {
     padding: 12px 4px;
+
     line-height: 1.5;
+
     font-size: 14px;
 }
 
@@ -230,9 +252,11 @@ header button:active {
     padding: 5px 9px;
 
     border: 1px solid #b99b84;
+
     border-radius: 5px;
 
     background-color: white;
+
     color: #4b2e1f;
 
     cursor: pointer;
@@ -251,6 +275,7 @@ header button:active {
         2px solid #d5bda9;
 
     font-size: 18px;
+
     font-weight: bold;
 
     color: #4b2e1f;
@@ -264,15 +289,20 @@ header button:active {
     padding: 12px;
 
     border: none;
+
     border-radius: 8px;
 
     background-color: #4b2e1f;
+
     color: white;
 
     font-size: 15px;
+
     font-weight: bold;
 
     cursor: pointer;
+
+    min-height: 46px;
 }
 
 #checkoutButton:hover {
@@ -292,6 +322,7 @@ header button:active {
     display: none;
 
     align-items: center;
+
     justify-content: center;
 
     padding: 20px;
@@ -302,6 +333,8 @@ header button:active {
     z-index: 2000;
 
     overflow-y: auto;
+
+    -webkit-overflow-scrolling: touch;
 }
 
 
@@ -313,6 +346,7 @@ header button:active {
     position: relative;
 
     width: 100%;
+
     max-width: 500px;
 
     max-height: 90vh;
@@ -330,15 +364,19 @@ header button:active {
         rgba(0, 0, 0, 0.25);
 
     text-align: center;
+
+    -webkit-overflow-scrolling: touch;
 }
 
 .popup h2 {
     margin-top: 0;
+
     color: #4b2e1f;
 }
 
 .popup h3 {
     margin-top: 22px;
+
     color: #6b5143;
 }
 
@@ -361,6 +399,7 @@ header button:active {
     height: 35px;
 
     border: none;
+
     border-radius: 50%;
 
     background-color: #ead8c8;
@@ -368,9 +407,12 @@ header button:active {
     color: #4b2e1f;
 
     font-size: 24px;
+
     line-height: 30px;
 
     cursor: pointer;
+
+    -webkit-tap-highlight-color: transparent;
 }
 
 .close-button:hover {
@@ -397,10 +439,14 @@ header button:active {
 .addon-option button {
     padding: 11px 15px;
 
+    min-height: 44px;
+
     border: 2px solid #d5bda9;
+
     border-radius: 8px;
 
     background-color: white;
+
     color: #4b2e1f;
 
     font-size: 14px;
@@ -408,12 +454,15 @@ header button:active {
     cursor: pointer;
 
     transition: 0.15s;
+
+    -webkit-tap-highlight-color: transparent;
 }
 
 .option-row button:hover,
 .option-column button:hover,
 .addon-option button:hover {
     border-color: #8b4513;
+
     background-color: #f3e5d8;
 }
 
@@ -441,9 +490,12 @@ header button:active {
 input[type="number"] {
     width: 100px;
 
+    min-height: 44px;
+
     padding: 10px;
 
     border: 1px solid #c9aa91;
+
     border-radius: 7px;
 
     background-color: white;
@@ -465,15 +517,20 @@ input[type="number"]:focus {
 .primary-button {
     width: 100%;
 
+    min-height: 48px;
+
     padding: 14px;
 
     border: none;
+
     border-radius: 8px;
 
     background-color: #4b2e1f;
+
     color: white;
 
     font-size: 16px;
+
     font-weight: bold;
 
     cursor: pointer;
@@ -487,6 +544,7 @@ input[type="number"]:focus {
 
 .primary-button:disabled {
     opacity: 0.6;
+
     cursor: not-allowed;
 }
 
@@ -499,6 +557,7 @@ input[type="number"]:focus {
     position: fixed;
 
     left: 50%;
+
     bottom: 30px;
 
     transform:
@@ -506,11 +565,16 @@ input[type="number"]:focus {
 
     display: none;
 
+    width: max-content;
+
+    max-width: calc(100vw - 30px);
+
     padding: 13px 22px;
 
     border-radius: 8px;
 
     background-color: #4b2e1f;
+
     color: white;
 
     font-weight: bold;
@@ -529,6 +593,7 @@ input[type="number"]:focus {
 
 .checkout-popup {
     max-width: 650px;
+
     text-align: left;
 }
 
@@ -547,6 +612,7 @@ input[type="number"]:focus {
 
 .form-section h3 {
     margin-top: 0;
+
     color: #4b2e1f;
 }
 
@@ -566,17 +632,21 @@ input[type="number"]:focus {
 .form-section textarea {
     width: 100%;
 
+    min-height: 44px;
+
     padding: 11px;
 
     border: 1px solid #c9aa91;
+
     border-radius: 7px;
 
     background-color: white;
+
     color: #3d281d;
 
     font-family: Arial, sans-serif;
 
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .form-section textarea {
@@ -640,11 +710,13 @@ input[type="number"]:focus {
 
 .gcash-payment-box h3 {
     margin-top: 0;
+
     margin-bottom: 10px;
 }
 
 .gcash-number {
     font-size: 20px;
+
     margin: 10px 0 18px;
 }
 
@@ -658,7 +730,10 @@ input[type="number"]:focus {
 
 .gcash-qr img {
     width: 220px;
+
     height: 220px;
+
+    max-width: 100%;
 
     object-fit: contain;
 
@@ -689,7 +764,10 @@ input[type="number"]:focus {
 
 .gcash-payment-box input {
     width: 90%;
+
     max-width: 350px;
+
+    min-height: 44px;
 
     padding: 12px;
 
@@ -732,6 +810,8 @@ input[type="number"]:focus {
     flex-direction: column;
 
     gap: 3px;
+
+    min-width: 0;
 }
 
 .checkout-item small {
@@ -742,6 +822,8 @@ input[type="number"]:focus {
     display: flex;
 
     justify-content: space-between;
+
+    gap: 15px;
 
     padding: 7px 0;
 
@@ -796,9 +878,7 @@ input[type="number"]:focus {
     background-color: #f2e4d7;
 
     text-align: left;
-}
 
-.confirmation-summary {
     white-space: pre-wrap;
 
     font-family: Arial, sans-serif;
@@ -810,7 +890,7 @@ input[type="number"]:focus {
 
 
 /* =====================================================
-   MOBILE
+   TABLET / MOBILE
 ===================================================== */
 
 @media (max-width: 850px) {
@@ -820,15 +900,33 @@ input[type="number"]:focus {
     }
 
     header {
-        margin-top: 30px;
+        margin: 20px auto 35px;
 
-        padding-top: 20px;
+        padding: 20px 10px;
     }
 
     header h1 {
         font-size: 34px;
     }
 
+    header p {
+        font-size: 16px;
+
+        line-height: 1.5;
+
+        margin-bottom: 20px;
+    }
+
+    header button {
+        width: 100%;
+
+        max-width: 320px;
+
+        min-height: 48px;
+    }
+
+
+    /* Cart becomes part of the page on smaller screens */
     #sideCart {
         position: relative;
 
@@ -837,6 +935,8 @@ input[type="number"]:focus {
 
         width: 100%;
 
+        max-width: 600px;
+
         max-height: none;
 
         margin: 0 auto 30px;
@@ -844,32 +944,413 @@ input[type="number"]:focus {
         order: -1;
     }
 
+    #sideCartItems {
+        max-height: 45vh;
+    }
+
+
+    /* Two menu columns on tablets */
     .menu-grid {
         grid-template-columns:
             repeat(2, 1fr);
+
+        gap: 12px;
+    }
+
+    .menu-item {
+        min-height: 85px;
+
+        padding: 15px;
+
+        font-size: 16px;
+    }
+
+
+    #menu h2 {
+        font-size: 25px;
+    }
+
+    #menu h3 {
+        font-size: 18px;
+    }
+
+
+    /* Better popup width */
+    .popup {
+        width: 100%;
+
+        max-width: 650px;
+
+        max-height: 92vh;
+    }
+
+
+    .checkout-popup {
+        max-width: 650px;
     }
 }
 
 
+/* =====================================================
+   PHONE
+===================================================== */
+
 @media (max-width: 520px) {
 
-    .menu-grid {
-        grid-template-columns: 1fr;
+    body {
+        padding: 8px;
     }
 
-    .popup {
-        padding: 22px 16px;
-    }
 
-    .option-row {
-        flex-direction: column;
-    }
+    /* -----------------------------
+       HEADER
+    ----------------------------- */
 
-    .option-row button {
-        width: 100%;
+    header {
+        margin: 10px auto 25px;
+
+        padding: 15px 8px;
     }
 
     header h1 {
-        font-size: 30px;
+        font-size: 29px;
+
+        letter-spacing: 1.5px;
+    }
+
+    header p {
+        font-size: 14px;
+
+        letter-spacing: 0.5px;
+
+        line-height: 1.5;
+    }
+
+
+    /* -----------------------------
+       MENU
+    ----------------------------- */
+
+    #menu {
+        padding-bottom: 50px;
+    }
+
+    #menu section {
+        margin-bottom: 40px;
+    }
+
+    #menu h2 {
+        font-size: 23px;
+
+        padding-bottom: 8px;
+    }
+
+    #menu h3 {
+        font-size: 17px;
+    }
+
+
+    /* One menu item per row */
+    .menu-grid {
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+
+        margin-top: 15px;
+    }
+
+    .menu-item {
+        width: 100%;
+
+        min-height: 64px;
+
+        padding: 14px;
+
+        font-size: 16px;
+
+        border-radius: 10px;
+    }
+
+
+    /* -----------------------------
+       CART
+    ----------------------------- */
+
+    #sideCart {
+        padding: 14px;
+
+        margin-bottom: 20px;
+
+        border-radius: 10px;
+    }
+
+    .cart-header h2 {
+        font-size: 18px;
+    }
+
+    .cart-item {
+        font-size: 13px;
+
+        padding: 10px 2px;
+    }
+
+    .cart-item button {
+        min-height: 38px;
+
+        padding: 7px 10px;
+
+        font-size: 13px;
+    }
+
+    .cart-total {
+        font-size: 17px;
+    }
+
+    #checkoutButton {
+        min-height: 48px;
+
+        font-size: 16px;
+    }
+
+
+    /* -----------------------------
+       POPUP
+    ----------------------------- */
+
+    .overlay {
+        padding: 8px;
+    }
+
+    .popup {
+        width: 100%;
+
+        max-width: none;
+
+        max-height: 94vh;
+
+        padding: 24px 14px 18px;
+
+        border-radius: 12px;
+    }
+
+    .popup h2 {
+        font-size: 21px;
+
+        padding-right: 25px;
+    }
+
+    .popup h3 {
+        font-size: 17px;
+
+        margin-top: 18px;
+    }
+
+    .popup p {
+        font-size: 14px;
+    }
+
+
+    /* -----------------------------
+       CLOSE BUTTON
+    ----------------------------- */
+
+    .close-button {
+        top: 8px;
+
+        right: 8px;
+
+        width: 36px;
+
+        height: 36px;
+    }
+
+
+    /* -----------------------------
+       OPTIONS
+    ----------------------------- */
+
+    .option-row {
+        flex-direction: column;
+
+        gap: 8px;
+    }
+
+    .option-row button,
+    .option-column button,
+    .addon-option button {
+        width: 100%;
+
+        min-height: 46px;
+
+        font-size: 15px;
+    }
+
+
+    /* -----------------------------
+       QUANTITY
+    ----------------------------- */
+
+    input[type="number"] {
+        width: 110px;
+
+        min-height: 46px;
+
+        font-size: 17px;
+    }
+
+
+    /* -----------------------------
+       CHECKOUT
+    ----------------------------- */
+
+    .checkout-popup {
+        text-align: left;
+    }
+
+    .form-section {
+        margin-bottom: 20px;
+
+        padding-bottom: 15px;
+    }
+
+    .form-section label {
+        font-size: 14px;
+    }
+
+    .form-section input,
+    .form-section textarea {
+        width: 100%;
+
+        font-size: 16px;
+    }
+
+
+    /* -----------------------------
+       CHECKOUT SUMMARY
+    ----------------------------- */
+
+    .checkout-item {
+        gap: 10px;
+
+        font-size: 13px;
+    }
+
+    .checkout-total-line {
+        font-size: 14px;
+    }
+
+    .checkout-total {
+        font-size: 19px;
+    }
+
+
+    /* -----------------------------
+       GCASH
+    ----------------------------- */
+
+    .gcash-payment-box {
+        padding: 14px;
+
+        border-radius: 10px;
+    }
+
+    .gcash-number {
+        font-size: 18px;
+    }
+
+    .gcash-qr {
+        margin: 12px 0;
+    }
+
+    .gcash-qr img {
+        width: min(220px, 75vw);
+
+        height: min(220px, 75vw);
+    }
+
+    .gcash-instruction {
+        font-size: 13px;
+
+        line-height: 1.5;
+    }
+
+    .gcash-payment-box input {
+        width: 100%;
+
+        max-width: none;
+    }
+
+
+    /* -----------------------------
+       CONFIRMATION
+    ----------------------------- */
+
+    .confirmation-popup {
+        width: 100%;
+    }
+
+    .confirmation-popup h1 {
+        font-size: 25px;
+
+        letter-spacing: 1px;
+    }
+
+    .confirmation-summary {
+        max-height: 40vh;
+
+        margin: 15px 0;
+
+        padding: 12px;
+
+        font-size: 13px;
+    }
+
+
+    /* -----------------------------
+       ORDER NOTICE
+    ----------------------------- */
+
+    #orderNotice {
+        bottom: 15px;
+
+        width: calc(100vw - 30px);
+
+        max-width: none;
+
+        padding: 12px 15px;
+
+        font-size: 14px;
+    }
+}
+
+
+/* =====================================================
+   VERY SMALL PHONES
+===================================================== */
+
+@media (max-width: 360px) {
+
+    header h1 {
+        font-size: 26px;
+    }
+
+    header p {
+        font-size: 13px;
+    }
+
+    .menu-item {
+        font-size: 15px;
+
+        min-height: 60px;
+    }
+
+    .popup {
+        padding-left: 11px;
+
+        padding-right: 11px;
+    }
+
+    .confirmation-popup h1 {
+        font-size: 22px;
     }
 }
