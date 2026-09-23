@@ -3,31 +3,20 @@
    COMPLETE ORDERING SYSTEM CSS
 ===================================================== */
 
-
-/* =====================================================
-   GENERAL
-===================================================== */
-
 * {
     box-sizing: border-box;
 }
-
 
 html {
     scroll-behavior: smooth;
 }
 
-
 body {
     margin: 0;
     padding: 20px;
-
     background-color: #f5eee6;
-
     color: #3d281d;
-
     font-family: Arial, sans-serif;
-
     text-align: center;
 }
 
@@ -38,62 +27,40 @@ body {
 
 header {
     max-width: 900px;
-
     margin: 40px auto 60px;
-
     padding: 30px 20px;
 }
 
-
 header h1 {
     margin: 0;
-
     color: #4b2e1f;
-
     font-size: 42px;
-
     letter-spacing: 2px;
 }
 
-
 header p {
     margin: 12px 0 25px;
-
     color: #6b5143;
-
     font-size: 18px;
-
     letter-spacing: 1px;
 }
 
-
 header button {
     padding: 14px 32px;
-
     border: none;
-
     border-radius: 8px;
-
     background-color: #4b2e1f;
-
     color: white;
-
     font-size: 16px;
-
     font-weight: bold;
-
     cursor: pointer;
-
     transition: 0.2s;
 }
 
-
 header button:hover {
     background-color: #6b4030;
-
     transform: translateY(-2px);
 }
-
 
 header button:active {
     transform: scale(0.97);
@@ -106,110 +73,80 @@ header button:active {
 
 #menu {
     display: block;
-
     max-width: 1100px;
-
     margin: 0 auto;
-
     padding-bottom: 80px;
 }
-
 
 #menu section {
     margin-bottom: 55px;
 }
 
-
 #menu h2 {
     margin-bottom: 8px;
-
     color: #4b2e1f;
-
     font-size: 28px;
-
     border-bottom: 2px solid #c9aa91;
-
     padding-bottom: 10px;
 }
 
-
 #menu h3 {
     margin-top: 8px;
-
     color: #6b5143;
-
     font-size: 20px;
 }
 
 
 /* =====================================================
-   MENU GRID
+   MENU BUTTONS
 ===================================================== */
 
 .menu-grid {
     display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(220px, 1fr)
+    );
 
     gap: 15px;
-
     margin-top: 20px;
 }
 
-
 .menu-item {
     min-height: 90px;
-
     padding: 18px;
 
     border: 2px solid #d5bda9;
-
     border-radius: 12px;
 
     background-color: #fffaf5;
-
     color: #4b2e1f;
 
     cursor: pointer;
 
     display: flex;
-
-    flex-direction: column;
-
+    align-items: center;
     justify-content: center;
 
-    gap: 8px;
+    font-size: 18px;
+    font-weight: bold;
 
     transition: 0.2s;
 }
 
-
 .menu-item:hover {
     border-color: #8b4513;
-
     background-color: #f3e5d8;
 
     transform: translateY(-3px);
 
-    box-shadow: 0 5px 12px rgba(75, 46, 31, 0.12);
+    box-shadow:
+        0 5px 12px
+        rgba(75, 46, 31, 0.12);
 }
-
 
 .menu-item:active {
     transform: scale(0.97);
-}
-
-
-.menu-item strong {
-    font-size: 18px;
-}
-
-
-.menu-item span {
-    font-size: 15px;
-
-    color: #795548;
 }
 
 
@@ -221,12 +158,12 @@ header button:active {
     position: fixed;
 
     top: 20px;
-
     right: 20px;
 
     width: 300px;
 
-    max-height: calc(100vh - 40px);
+    max-height:
+        calc(100vh - 40px);
 
     overflow-y: auto;
 
@@ -235,70 +172,57 @@ header button:active {
     background-color: #fffaf5;
 
     border: 2px solid #d5bda9;
-
     border-radius: 12px;
 
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.15);
 
     z-index: 1000;
 
     text-align: left;
 }
 
-
 .cart-header {
     display: flex;
 
     justify-content: space-between;
-
     align-items: center;
 
     gap: 10px;
 
-    border-bottom: 1px solid #d5bda9;
+    border-bottom:
+        1px solid #d5bda9;
 
     padding-bottom: 10px;
-
     margin-bottom: 10px;
 }
 
-
 .cart-header h2 {
     margin: 0;
-
     color: #4b2e1f;
-
     font-size: 20px;
 }
 
-
 #cartCount {
     color: #795548;
-
     font-size: 13px;
 }
 
-
 #sideCartItems {
     max-height: 55vh;
-
     overflow-y: auto;
 }
 
-
 .cart-item {
     padding: 12px 4px;
-
     line-height: 1.5;
-
     font-size: 14px;
 }
-
 
 .cart-item strong {
     color: #4b2e1f;
 }
-
 
 .cart-item button {
     margin: 4px 3px 0 0;
@@ -306,36 +230,31 @@ header button:active {
     padding: 5px 9px;
 
     border: 1px solid #b99b84;
-
     border-radius: 5px;
 
     background-color: white;
-
     color: #4b2e1f;
 
     cursor: pointer;
 }
 
-
 .cart-item button:hover {
     background-color: #ead8c8;
 }
-
 
 .cart-total {
     margin-top: 12px;
 
     padding-top: 12px;
 
-    border-top: 2px solid #d5bda9;
+    border-top:
+        2px solid #d5bda9;
 
     font-size: 18px;
-
     font-weight: bold;
 
     color: #4b2e1f;
 }
-
 
 #checkoutButton {
     width: 100%;
@@ -345,20 +264,16 @@ header button:active {
     padding: 12px;
 
     border: none;
-
     border-radius: 8px;
 
     background-color: #4b2e1f;
-
     color: white;
 
     font-size: 15px;
-
     font-weight: bold;
 
     cursor: pointer;
 }
-
 
 #checkoutButton:hover {
     background-color: #6b4030;
@@ -366,7 +281,7 @@ header button:active {
 
 
 /* =====================================================
-   OVERLAY
+   POPUP OVERLAY
 ===================================================== */
 
 .overlay {
@@ -377,12 +292,12 @@ header button:active {
     display: none;
 
     align-items: center;
-
     justify-content: center;
 
     padding: 20px;
 
-    background-color: rgba(0, 0, 0, 0.55);
+    background-color:
+        rgba(0, 0, 0, 0.55);
 
     z-index: 2000;
 
@@ -391,14 +306,13 @@ header button:active {
 
 
 /* =====================================================
-   POPUPS
+   POPUP
 ===================================================== */
 
 .popup {
     position: relative;
 
     width: 100%;
-
     max-width: 500px;
 
     max-height: 90vh;
@@ -411,25 +325,22 @@ header button:active {
 
     background-color: #fffaf5;
 
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+    box-shadow:
+        0 15px 40px
+        rgba(0, 0, 0, 0.25);
 
     text-align: center;
 }
 
-
 .popup h2 {
     margin-top: 0;
-
     color: #4b2e1f;
 }
 
-
 .popup h3 {
     margin-top: 22px;
-
     color: #6b5143;
 }
-
 
 .popup p {
     color: #795548;
@@ -444,15 +355,12 @@ header button:active {
     position: absolute;
 
     top: 10px;
-
     right: 12px;
 
     width: 35px;
-
     height: 35px;
 
     border: none;
-
     border-radius: 50%;
 
     background-color: #ead8c8;
@@ -460,12 +368,10 @@ header button:active {
     color: #4b2e1f;
 
     font-size: 24px;
-
     line-height: 30px;
 
     cursor: pointer;
 }
-
 
 .close-button:hover {
     background-color: #d7bca7;
@@ -486,18 +392,15 @@ header button:active {
     gap: 10px;
 }
 
-
 .option-row button,
 .option-column button,
 .addon-option button {
     padding: 11px 15px;
 
     border: 2px solid #d5bda9;
-
     border-radius: 8px;
 
     background-color: white;
-
     color: #4b2e1f;
 
     font-size: 14px;
@@ -507,38 +410,27 @@ header button:active {
     transition: 0.15s;
 }
 
-
 .option-row button:hover,
 .option-column button:hover,
 .addon-option button:hover {
     border-color: #8b4513;
-
     background-color: #f3e5d8;
 }
 
+
+/* =====================================================
+   SELECTED OPTION
+===================================================== */
 
 .selected-option {
     border-color: #8b4513 !important;
 
     background-color: #ead0b9 !important;
 
-    box-shadow: 0 0 0 2px #8b4513;
+    box-shadow:
+        0 0 0 2px #8b4513;
 
     font-weight: bold;
-}
-
-
-.option-column {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 9px;
-}
-
-
-.addon-option {
-    margin: 8px 0;
 }
 
 
@@ -546,49 +438,23 @@ header button:active {
    QUANTITY
 ===================================================== */
 
-.quantity-control {
-    display: flex;
+input[type="number"] {
+    width: 100px;
 
-    align-items: center;
+    padding: 10px;
 
-    justify-content: center;
+    border: 1px solid #c9aa91;
+    border-radius: 7px;
 
-    gap: 18px;
+    background-color: white;
 
-    margin: 12px 0 20px;
+    font-size: 16px;
+
+    text-align: center;
 }
 
-
-.quantity-control button {
-    width: 42px;
-
-    height: 42px;
-
-    border: none;
-
-    border-radius: 8px;
-
-    background-color: #4b2e1f;
-
-    color: white;
-
-    font-size: 22px;
-
-    cursor: pointer;
-}
-
-
-.quantity-control button:hover {
-    background-color: #6b4030;
-}
-
-
-.quantity-control span {
-    min-width: 30px;
-
-    font-size: 20px;
-
-    font-weight: bold;
+input[type="number"]:focus {
+    outline: 2px solid #8b4513;
 }
 
 
@@ -602,15 +468,12 @@ header button:active {
     padding: 14px;
 
     border: none;
-
     border-radius: 8px;
 
     background-color: #4b2e1f;
-
     color: white;
 
     font-size: 16px;
-
     font-weight: bold;
 
     cursor: pointer;
@@ -618,9 +481,13 @@ header button:active {
     margin-top: 10px;
 }
 
-
 .primary-button:hover {
     background-color: #6b4030;
+}
+
+.primary-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 
@@ -632,10 +499,10 @@ header button:active {
     position: fixed;
 
     left: 50%;
-
     bottom: 30px;
 
-    transform: translateX(-50%);
+    transform:
+        translateX(-50%);
 
     display: none;
 
@@ -644,12 +511,13 @@ header button:active {
     border-radius: 8px;
 
     background-color: #4b2e1f;
-
     color: white;
 
     font-weight: bold;
 
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow:
+        0 5px 15px
+        rgba(0, 0, 0, 0.2);
 
     z-index: 5000;
 }
@@ -661,31 +529,26 @@ header button:active {
 
 .checkout-popup {
     max-width: 650px;
-
     text-align: left;
 }
-
 
 .checkout-popup h2 {
     text-align: center;
 }
-
 
 .form-section {
     margin-bottom: 24px;
 
     padding-bottom: 18px;
 
-    border-bottom: 1px solid #dfcdbc;
+    border-bottom:
+        1px solid #dfcdbc;
 }
-
 
 .form-section h3 {
     margin-top: 0;
-
     color: #4b2e1f;
 }
-
 
 .form-section label {
     display: block;
@@ -699,7 +562,6 @@ header button:active {
     font-size: 14px;
 }
 
-
 .form-section input,
 .form-section textarea {
     width: 100%;
@@ -707,11 +569,9 @@ header button:active {
     padding: 11px;
 
     border: 1px solid #c9aa91;
-
     border-radius: 7px;
 
     background-color: white;
-
     color: #3d281d;
 
     font-family: Arial, sans-serif;
@@ -719,13 +579,11 @@ header button:active {
     font-size: 14px;
 }
 
-
 .form-section textarea {
     min-height: 80px;
 
     resize: vertical;
 }
-
 
 .form-section input:focus,
 .form-section textarea:focus {
@@ -735,39 +593,113 @@ header button:active {
 }
 
 
+/* =====================================================
+   DELIVERY / PICKUP
+===================================================== */
+
 #deliveryDetails,
 #pickupDetails,
 #gcashDetails {
-    display: none;
-
     margin-top: 15px;
 }
 
 
-.gcash-box {
-    margin: 12px 0;
+/* =====================================================
+   CHECKOUT SELECTED BUTTON
+===================================================== */
 
-    padding: 15px;
+.selected-checkout {
+    border-color: #8b4513 !important;
+
+    background-color: #ead0b9 !important;
+
+    box-shadow:
+        0 0 0 2px #8b4513;
+
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   GCASH
+===================================================== */
+
+.gcash-payment-box {
+    background: #f8f8f8;
+
+    border: 1px solid #ddd;
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    margin-top: 15px;
+
+    text-align: center;
+}
+
+.gcash-payment-box h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.gcash-number {
+    font-size: 20px;
+    margin: 10px 0 18px;
+}
+
+.gcash-qr {
+    display: flex;
+
+    justify-content: center;
+
+    margin: 15px 0;
+}
+
+.gcash-qr img {
+    width: 220px;
+    height: 220px;
+
+    object-fit: contain;
 
     border-radius: 8px;
 
-    background-color: #f1e1d2;
+    background: white;
 
-    border: 1px solid #d5bda9;
+    padding: 8px;
+
+    border: 1px solid #ddd;
 }
 
-
-.gcash-box h4 {
-    margin-top: 0;
-
-    color: #4b2e1f;
-}
-
-
-.gcash-box p {
-    margin: 7px 0;
-
+.gcash-instruction {
     font-size: 14px;
+
+    color: #666;
+
+    margin-bottom: 18px;
+}
+
+.gcash-payment-box label {
+    display: block;
+
+    font-weight: bold;
+
+    margin-bottom: 8px;
+}
+
+.gcash-payment-box input {
+    width: 90%;
+    max-width: 350px;
+
+    padding: 12px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 8px;
+
+    font-size: 16px;
+
+    box-sizing: border-box;
 }
 
 
@@ -779,7 +711,6 @@ header button:active {
     margin-top: 10px;
 }
 
-
 .checkout-item {
     display: flex;
 
@@ -789,11 +720,11 @@ header button:active {
 
     padding: 10px 0;
 
-    border-bottom: 1px solid #ead8c8;
+    border-bottom:
+        1px solid #ead8c8;
 
     font-size: 14px;
 }
-
 
 .checkout-item div {
     display: flex;
@@ -803,18 +734,27 @@ header button:active {
     gap: 3px;
 }
 
-
 .checkout-item small {
     color: #795548;
 }
 
+.checkout-total-line {
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 7px 0;
+
+    color: #5c4335;
+}
 
 .checkout-total {
     margin-top: 15px;
 
     padding-top: 15px;
 
-    border-top: 2px solid #4b2e1f;
+    border-top:
+        2px solid #4b2e1f;
 
     text-align: right;
 
@@ -836,13 +776,11 @@ header button:active {
     text-align: center;
 }
 
-
 .confirmation-popup h1 {
     color: #4b2e1f;
 
     letter-spacing: 2px;
 }
-
 
 .confirmation-summary {
     max-height: 350px;
@@ -860,10 +798,7 @@ header button:active {
     text-align: left;
 }
 
-
-.confirmation-summary pre {
-    margin: 0;
-
+.confirmation-summary {
     white-space: pre-wrap;
 
     font-family: Arial, sans-serif;
@@ -884,24 +819,20 @@ header button:active {
         padding: 12px;
     }
 
-
     header {
         margin-top: 30px;
 
         padding-top: 20px;
     }
 
-
     header h1 {
         font-size: 34px;
     }
-
 
     #sideCart {
         position: relative;
 
         top: auto;
-
         right: auto;
 
         width: 100%;
@@ -913,12 +844,10 @@ header button:active {
         order: -1;
     }
 
-
     .menu-grid {
         grid-template-columns:
             repeat(2, 1fr);
     }
-
 }
 
 
@@ -928,24 +857,19 @@ header button:active {
         grid-template-columns: 1fr;
     }
 
-
     .popup {
         padding: 22px 16px;
     }
-
 
     .option-row {
         flex-direction: column;
     }
 
-
     .option-row button {
         width: 100%;
     }
 
-
     header h1 {
         font-size: 30px;
     }
-
 }
