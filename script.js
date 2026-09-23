@@ -4,6 +4,7 @@
    + SUPABASE SHOP STATUS
    + MENU AVAILABILITY
    + ONLINE ORDERS
+   + IMPROVED ORDER CONFIRMATION
 ===================================================== */
 
 
@@ -38,12 +39,9 @@ function loadSupabaseLibrary() {
             window.supabase &&
             typeof window.supabase.createClient === "function"
         ) {
-
             resolve();
-
             return;
         }
-
 
         const script =
             document.createElement("script");
@@ -52,10 +50,8 @@ function loadSupabaseLibrary() {
             "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 
         script.onload = function() {
-
             resolve();
         };
-
 
         script.onerror = function() {
 
@@ -65,7 +61,6 @@ function loadSupabaseLibrary() {
                 )
             );
         };
-
 
         document.head.appendChild(script);
     });
@@ -82,21 +77,17 @@ async function initializeSupabase() {
 
         await loadSupabaseLibrary();
 
-
         supabaseClient =
             window.supabase.createClient(
                 SUPABASE_URL,
                 SUPABASE_KEY
             );
 
-
         supabaseReady = true;
-
 
         console.log(
             "HIGHWAY CAFE Supabase connected."
         );
-
 
         await loadShopStatusForCustomer();
 
@@ -130,13 +121,11 @@ async function loadShopStatusForCustomer() {
         return;
     }
 
-
     const { data, error } =
         await supabaseClient
             .from("shop_settings")
             .select("shop_open")
             .limit(1);
-
 
     if (error) {
 
@@ -147,7 +136,6 @@ async function loadShopStatusForCustomer() {
 
         return;
     }
-
 
     if (
         !data ||
@@ -161,16 +149,13 @@ async function loadShopStatusForCustomer() {
         return;
     }
 
-
     shopIsOpen =
         data[0].shop_open === true;
-
 
     console.log(
         "Shop open:",
         shopIsOpen
     );
-
 
     updateCustomerShopDisplay();
 }
@@ -187,7 +172,6 @@ function updateCustomerShopDisplay() {
             "customerShopStatus"
         );
 
-
     if (!notice) {
 
         notice =
@@ -197,7 +181,6 @@ function updateCustomerShopDisplay() {
 
         notice.id =
             "customerShopStatus";
-
 
         notice.style.width =
             "calc(100% - 40px)";
@@ -223,18 +206,15 @@ function updateCustomerShopDisplay() {
         notice.style.boxSizing =
             "border-box";
 
-
         const header =
             document.querySelector(
                 "header"
             );
 
-
         const menu =
             document.getElementById(
                 "menu"
             );
-
 
         if (header && header.parentNode) {
 
@@ -292,34 +272,21 @@ function updateCustomerShopDisplay() {
             'button[onclick*="startOrder"]'
         );
 
-
     orderNowButtons.forEach(
         function(button) {
 
-            if (shopIsOpen) {
+            button.disabled =
+                !shopIsOpen;
 
-                button.disabled =
-                    false;
+            button.style.opacity =
+                shopIsOpen
+                    ? "1"
+                    : "0.5";
 
-                button.style.opacity =
-                    "1";
-
-                button.style.cursor =
-                    "pointer";
-
-            }
-
-            else {
-
-                button.disabled =
-                    true;
-
-                button.style.opacity =
-                    "0.5";
-
-                button.style.cursor =
-                    "not-allowed";
-            }
+            button.style.cursor =
+                shopIsOpen
+                    ? "pointer"
+                    : "not-allowed";
         }
     );
 
@@ -329,27 +296,20 @@ function updateCustomerShopDisplay() {
             'button[onclick*="openCheckout"]'
         );
 
-
     if (checkoutButton) {
 
-        if (shopIsOpen) {
+        checkoutButton.disabled =
+            !shopIsOpen;
 
-            checkoutButton.disabled =
-                false;
+        checkoutButton.style.opacity =
+            shopIsOpen
+                ? "1"
+                : "0.5";
 
-            checkoutButton.style.opacity =
-                "1";
-
-        }
-
-        else {
-
-            checkoutButton.disabled =
-                true;
-
-            checkoutButton.style.opacity =
-                "0.5";
-        }
+        checkoutButton.style.cursor =
+            shopIsOpen
+                ? "pointer"
+                : "not-allowed";
     }
 
 
@@ -358,19 +318,19 @@ function updateCustomerShopDisplay() {
             "placeOrderButton"
         );
 
-
     if (placeOrderButton) {
 
-        if (!shopIsOpen) {
+        placeOrderButton.disabled =
+            !shopIsOpen;
 
-            placeOrderButton.disabled =
-                true;
-
-            placeOrderButton.style.opacity =
-                "0.5";
-
-        }
+        placeOrderButton.style.opacity =
+            shopIsOpen
+                ? "1"
+                : "0.5";
     }
+
+
+    applyCustomerAvailabilityButtonsOnly();
 }
 
 
@@ -385,25 +345,20 @@ function showShopConnectionWarning() {
             "customerShopConnectionWarning"
         );
 
-
     if (warning) {
         return;
     }
-
 
     warning =
         document.createElement(
             "div"
         );
 
-
     warning.id =
         "customerShopConnectionWarning";
 
-
     warning.textContent =
         "⚠ Shop status could not be checked. Please refresh the page.";
-
 
     warning.style.background =
         "#fff3cd";
@@ -419,7 +374,6 @@ function showShopConnectionWarning() {
 
     warning.style.fontWeight =
         "bold";
-
 
     document.body.insertBefore(
         warning,
@@ -438,14 +392,12 @@ async function loadMenuAvailabilityForCustomer() {
         return;
     }
 
-
     const { data, error } =
         await supabaseClient
             .from("menu_items")
             .select(
                 "product_name, category, available"
             );
-
 
     if (error) {
 
@@ -457,14 +409,11 @@ async function loadMenuAvailabilityForCustomer() {
         return;
     }
 
-
     menuAvailability = {};
-
 
     if (!data) {
         return;
     }
-
 
     data.forEach(
         function(item) {
@@ -475,12 +424,10 @@ async function loadMenuAvailabilityForCustomer() {
                     item.category
                 );
 
-
             menuAvailability[key] =
                 item.available === true;
         }
     );
-
 
     console.log(
         "Menu availability loaded:",
@@ -527,7 +474,6 @@ function isMenuItemAvailable(
             category
         );
 
-
     if (
         Object.prototype.hasOwnProperty.call(
             menuAvailability,
@@ -538,11 +484,9 @@ function isMenuItemAvailable(
         return menuAvailability[key];
     }
 
-
     /*
-       If an item is not found in the database,
-       allow it so existing menu items don't
-       suddenly disappear.
+       Items not yet registered in Supabase
+       remain available.
     */
 
     return true;
@@ -550,19 +494,27 @@ function isMenuItemAvailable(
 
 
 /* =====================================================
-   APPLY MENU AVAILABILITY
+   APPLY CUSTOMER AVAILABILITY
 ===================================================== */
 
 function applyCustomerAvailability() {
 
     updateCustomerShopDisplay();
 
+    applyCustomerAvailabilityButtonsOnly();
+}
+
+
+/* =====================================================
+   APPLY AVAILABILITY TO MENU BUTTONS
+===================================================== */
+
+function applyCustomerAvailabilityButtonsOnly() {
 
     const buttons =
         document.querySelectorAll(
             "button[onclick]"
         );
-
 
     buttons.forEach(
         function(button) {
@@ -572,16 +524,12 @@ function applyCustomerAvailability() {
                     "onclick"
                 );
 
-
             if (!onclick) {
                 return;
             }
 
-
             let productName = null;
-
             let category = null;
-
 
             /* -----------------------------------------
                PRODUCT
@@ -591,7 +539,6 @@ function applyCustomerAvailability() {
                 onclick.match(
                     /openProduct\s*\(\s*['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/
                 );
-
 
             if (match) {
 
@@ -613,7 +560,6 @@ function applyCustomerAvailability() {
                     onclick.match(
                         /openSnack\s*\(\s*['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/
                     );
-
 
                 if (match) {
 
@@ -637,7 +583,6 @@ function applyCustomerAvailability() {
                         /openMeal\s*\(\s*['"]([^'"]+)['"]/
                     );
 
-
                 if (match) {
 
                     productName =
@@ -653,7 +598,6 @@ function applyCustomerAvailability() {
                 !productName ||
                 !category
             ) {
-
                 return;
             }
 
@@ -688,6 +632,7 @@ function applyCustomerAvailability() {
 
                 button.textContent =
                     button.dataset.originalText;
+
             }
 
             else {
@@ -722,7 +667,6 @@ async function refreshCustomerAvailability() {
     if (!supabaseClient) {
         return;
     }
-
 
     await loadShopStatusForCustomer();
 
@@ -838,10 +782,10 @@ function startOrder() {
         return;
     }
 
-
     const menu =
-        document.getElementById("menu");
-
+        document.getElementById(
+            "menu"
+        );
 
     if (!menu) {
 
@@ -852,10 +796,8 @@ function startOrder() {
         return;
     }
 
-
     menu.style.display =
         "block";
-
 
     menu.scrollIntoView({
         behavior: "smooth"
@@ -886,7 +828,6 @@ function openProduct(
         return;
     }
 
-
     if (
         !isMenuItemAvailable(
             productName,
@@ -909,6 +850,7 @@ function openProduct(
     selectedCategory =
         category;
 
+
     price8 =
         Number(p8) || 0;
 
@@ -921,6 +863,33 @@ function openProduct(
     price22 =
         Number(p22) || 0;
 
+
+    /*
+       HOT BREWS PROTECTION
+
+       Some older menu buttons may send the
+       8oz price as the third argument (p16)
+       instead of the final p8 argument.
+
+       If that happens, use the supplied
+       p16 value as the 8oz price instead
+       of showing ₱0.
+    */
+
+    if (
+        category === "Hot Coffee" &&
+        price8 === 0 &&
+        price16 > 0
+    ) {
+
+        price8 =
+            price16;
+    }
+
+
+    /* ---------------------------------------------
+       SIZE TYPE
+    --------------------------------------------- */
 
     if (category === "Hot Coffee") {
 
@@ -936,11 +905,18 @@ function openProduct(
         sizeType =
             "size12-16-22";
 
-        price12 =
-            29;
-
         selectedSize =
             12;
+
+        /*
+           If HTML does not provide the 12oz price,
+           use the Highway Cooler base price.
+        */
+
+        if (price12 === 0) {
+            price12 = 29;
+        }
+
     }
 
     else {
@@ -961,7 +937,6 @@ function openProduct(
         document.getElementById(
             "quantity"
         );
-
 
     if (quantityInput) {
 
@@ -987,6 +962,7 @@ function openProduct(
 
         addonList =
             addons;
+
     }
 
     else if (
@@ -1019,7 +995,6 @@ function openProduct(
             "selectedProduct"
         );
 
-
     if (productDisplay) {
 
         productDisplay.textContent =
@@ -1032,13 +1007,16 @@ function openProduct(
             "selectedCategory"
         );
 
-
     if (categoryDisplay) {
 
         categoryDisplay.textContent =
             selectedCategory;
     }
 
+
+    /* ---------------------------------------------
+       SIZE BUTTONS
+    --------------------------------------------- */
 
     const size12Button =
         document.getElementById(
@@ -1087,12 +1065,14 @@ function openProduct(
 
 
         if (
-            sizeType === "size8"
+            sizeType ===
+            "size8"
         ) {
 
             size16Button.textContent =
                 "8oz - ₱" +
                 price8;
+
         }
 
         else {
@@ -1133,7 +1113,6 @@ function openProduct(
             "sizeTitle"
         );
 
-
     if (sizeTitle) {
 
         sizeTitle.textContent =
@@ -1142,6 +1121,10 @@ function openProduct(
                 : "Choose Size";
     }
 
+
+    /* ---------------------------------------------
+       ADD-ONS
+    --------------------------------------------- */
 
     const espressoOption =
         document.getElementById(
@@ -1242,32 +1225,25 @@ function selectSize(size) {
 
     if (
         size === 12 &&
-        sizeType !==
-            "size12-16-22"
+        sizeType !== "size12-16-22"
     ) {
-
         return;
     }
 
 
     if (
         size === 22 &&
-        sizeType !==
-            "size16-22" &&
-        sizeType !==
-            "size12-16-22"
+        sizeType !== "size16-22" &&
+        sizeType !== "size12-16-22"
     ) {
-
         return;
     }
 
 
     if (
         size === 8 &&
-        sizeType !==
-            "size8"
+        sizeType !== "size8"
     ) {
-
         return;
     }
 
@@ -1315,6 +1291,7 @@ function selectSize(size) {
             document.getElementById(
                 "size12Button"
             );
+
     }
 
     else if (
@@ -1326,6 +1303,7 @@ function selectSize(size) {
             document.getElementById(
                 "size16Button"
             );
+
     }
 
     else if (size === 22) {
@@ -1359,7 +1337,6 @@ function updateSelectedProductPrice() {
         document.getElementById(
             "selectedProductPrice"
         );
-
 
     if (!priceDisplay) {
         return;
@@ -1407,11 +1384,13 @@ function toggleAddon(type) {
     if (type === "espresso") {
 
         toggleEspresso();
+
     }
 
     else if (type === "matcha") {
 
         toggleMatcha();
+
     }
 
     else if (type === "chocolate") {
@@ -1427,16 +1406,13 @@ function toggleEspresso() {
         return;
     }
 
-
     extraEspresso =
         !extraEspresso;
-
 
     updateAddonButton(
         "espressoButton",
         extraEspresso
     );
-
 
     updateSelectedProductPrice();
 }
@@ -1448,16 +1424,13 @@ function toggleMatcha() {
         return;
     }
 
-
     extraMatcha =
         !extraMatcha;
-
 
     updateAddonButton(
         "matchaButton",
         extraMatcha
     );
-
 
     updateSelectedProductPrice();
 }
@@ -1469,16 +1442,13 @@ function toggleChocolate() {
         return;
     }
 
-
     extraChocolate =
         !extraChocolate;
-
 
     updateAddonButton(
         "chocolateButton",
         extraChocolate
     );
-
 
     updateSelectedProductPrice();
 }
@@ -1492,11 +1462,9 @@ function updateAddonButton(
     const button =
         document.getElementById(id);
 
-
     if (!button) {
         return;
     }
-
 
     button.classList.toggle(
         "selected-option",
@@ -1535,7 +1503,6 @@ function getProductQuantity() {
             "quantity"
         );
 
-
     if (!input) {
         return 1;
     }
@@ -1559,7 +1526,6 @@ function getProductQuantity() {
 
     quantity =
         value;
-
 
     input.value =
         value;
@@ -1780,7 +1746,6 @@ function showPopup(
                     id
                 );
 
-
             if (overlay) {
 
                 overlay.style.display =
@@ -1794,7 +1759,6 @@ function showPopup(
         document.getElementById(
             overlayId
         );
-
 
     const popup =
         document.getElementById(
@@ -1828,7 +1792,6 @@ function closeProduct() {
             "productOverlay"
         );
 
-
     if (overlay) {
 
         overlay.style.display =
@@ -1847,7 +1810,6 @@ function showOrderNotice() {
         document.getElementById(
             "orderNotice"
         );
-
 
     if (!notice) {
         return;
@@ -1991,7 +1953,6 @@ function openSnack(
             "selectedSnack"
         );
 
-
     if (snackDisplay) {
 
         snackDisplay.textContent =
@@ -2004,7 +1965,6 @@ function openSnack(
             "selectedSnackCategory"
         );
 
-
     if (categoryDisplay) {
 
         categoryDisplay.textContent =
@@ -2016,7 +1976,6 @@ function openSnack(
         document.getElementById(
             "snackQuantity"
         );
-
 
     if (quantityInput) {
 
@@ -2045,16 +2004,13 @@ function openSnack(
                         "button"
                     );
 
-
                 button.type =
                     "button";
-
 
                 button.textContent =
                     choice.name +
                     " - ₱" +
                     choice.price;
-
 
                 button.addEventListener(
                     "click",
@@ -2065,7 +2021,6 @@ function openSnack(
                         );
                     }
                 );
-
 
                 choiceContainer.appendChild(
                     button
@@ -2079,7 +2034,6 @@ function openSnack(
         document.getElementById(
             "snackFlavors"
         );
-
 
     const flavorContainer =
         document.getElementById(
@@ -2112,14 +2066,11 @@ function openSnack(
                             "button"
                         );
 
-
                     button.type =
                         "button";
 
-
                     button.textContent =
                         flavor;
-
 
                     button.addEventListener(
                         "click",
@@ -2130,7 +2081,6 @@ function openSnack(
                             );
                         }
                     );
-
 
                     flavorContainer.appendChild(
                         button
@@ -2239,7 +2189,6 @@ function getSnackQuantity() {
             "snackQuantity"
         );
 
-
     if (!input) {
         return 1;
     }
@@ -2263,7 +2212,6 @@ function getSnackQuantity() {
 
     snackQuantity =
         value;
-
 
     input.value =
         value;
@@ -2374,7 +2322,6 @@ function closeSnack() {
         document.getElementById(
             "snackOverlay"
         );
-
 
     if (overlay) {
 
@@ -2495,7 +2442,6 @@ function openMeal(
             "selectedMeal"
         );
 
-
     if (mealDisplay) {
 
         mealDisplay.textContent =
@@ -2523,16 +2469,13 @@ function openMeal(
                         "button"
                     );
 
-
                 button.type =
                     "button";
-
 
                 button.textContent =
                     choice.name +
                     " - ₱" +
                     choice.price;
-
 
                 button.addEventListener(
                     "click",
@@ -2543,7 +2486,6 @@ function openMeal(
                         );
                     }
                 );
-
 
                 choiceContainer.appendChild(
                     button
@@ -2684,6 +2626,7 @@ function selectMealCooler(name) {
             document.getElementById(
                 "coolerNoneButton"
             );
+
     }
 
     else if (
@@ -2695,6 +2638,7 @@ function selectMealCooler(name) {
             document.getElementById(
                 "cooler16Button"
             );
+
     }
 
     else if (
@@ -2744,6 +2688,7 @@ function toggleMealExtra(type) {
             );
         }
     }
+
 
     else if (type === "rice") {
 
@@ -2837,7 +2782,6 @@ function getMealQuantity() {
             "mealQuantity"
         );
 
-
     if (!input) {
         return 1;
     }
@@ -2861,7 +2805,6 @@ function getMealQuantity() {
 
     mealQuantity =
         value;
-
 
     input.value =
         value;
@@ -2988,7 +2931,6 @@ function closeMeal() {
             "mealOverlay"
         );
 
-
     if (overlay) {
 
         overlay.style.display =
@@ -2998,7 +2940,7 @@ function closeMeal() {
 
 
 /* =====================================================
-   CART
+   CART DISPLAY
 ===================================================== */
 
 function updateCart() {
@@ -3048,11 +2990,14 @@ function updateCart() {
     }
 
 
-    let html = "";
+    let html =
+        "";
 
-    let total = 0;
+    let total =
+        0;
 
-    let totalItems = 0;
+    let totalItems =
+        0;
 
 
     cart.forEach(
@@ -3063,12 +3008,10 @@ function updateCart() {
                     item.quantity || 1
                 );
 
-
             const itemPrice =
                 Number(
                     item.price || 0
                 );
-
 
             const itemTotal =
                 itemQuantity *
@@ -3077,7 +3020,6 @@ function updateCart() {
 
             total +=
                 itemTotal;
-
 
             totalItems +=
                 itemQuantity;
@@ -3280,7 +3222,8 @@ function removeCartItem(index) {
 
 function getCartTotal() {
 
-    let total = 0;
+    let total =
+        0;
 
 
     cart.forEach(
@@ -3405,7 +3348,6 @@ function clearCheckoutInputs() {
                 document.getElementById(
                     id
                 );
-
 
             if (element) {
 
@@ -3973,11 +3915,8 @@ async function placeOrder() {
 
 
     /*
-       Refresh shop/menu status immediately before
+       Refresh shop and menu status before
        submitting the order.
-
-       This protects against the admin closing the
-       shop while a customer is checking out.
     */
 
     if (supabaseClient) {
@@ -4090,18 +4029,19 @@ async function placeOrder() {
             : "";
 
 
+    /* ---------------------------------------------
+       VALIDATION
+    --------------------------------------------- */
+
     if (!name) {
 
         alert(
             "Please enter your name."
         );
 
-
         if (nameInput) {
-
             nameInput.focus();
         }
-
 
         return;
     }
@@ -4113,12 +4053,9 @@ async function placeOrder() {
             "Please enter your phone number."
         );
 
-
         if (phoneInput) {
-
             phoneInput.focus();
         }
-
 
         return;
     }
@@ -4133,12 +4070,9 @@ async function placeOrder() {
             "Please enter your delivery address."
         );
 
-
         if (addressInput) {
-
             addressInput.focus();
         }
-
 
         return;
     }
@@ -4153,16 +4087,17 @@ async function placeOrder() {
             "Please enter your GCash reference number."
         );
 
-
         if (paymentReferenceInput) {
-
             paymentReferenceInput.focus();
         }
-
 
         return;
     }
 
+
+    /* ---------------------------------------------
+       ORDER NUMBER
+    --------------------------------------------- */
 
     const orderNumber =
         "HC-" +
@@ -4434,6 +4369,10 @@ async function placeOrder() {
     }
 
 
+    /* =================================================
+       DISABLE PLACE ORDER BUTTON
+    ================================================= */
+
     const placeButton =
         document.getElementById(
             "placeOrderButton"
@@ -4699,7 +4638,7 @@ async function placeOrder() {
 
 
     /* =================================================
-       SEND FORM SUBMIT
+       SEND FORMSUBMIT
     ================================================= */
 
     try {
@@ -4747,14 +4686,6 @@ async function placeOrder() {
             }
 
 
-            /*
-               The FormSubmit email succeeded.
-
-               Supabase is also attempted above.
-               If Supabase failed, the email still
-               protects the order from being lost.
-            */
-
             if (!supabaseOrderSaved) {
 
                 console.warn(
@@ -4762,6 +4693,10 @@ async function placeOrder() {
                 );
             }
 
+
+            /*
+               Show the improved confirmation.
+            */
 
             showOrderConfirmation(
                 orderNumber,
@@ -4799,17 +4734,38 @@ async function placeOrder() {
         }
 
 
+        /*
+           If Supabase successfully saved the order,
+           don't falsely tell the customer that
+           nothing was submitted.
+        */
+
+        if (supabaseOrderSaved) {
+
+            showOrderConfirmation(
+                orderNumber,
+                orderSummary,
+                total
+            );
+
+            console.warn(
+                "Supabase saved the order even though email failed."
+            );
+
+            return;
+        }
+
+
         alert(
-            "We could not send your order email.\n\n" +
-            "Your order has NOT been submitted.\n\n" +
-            "Please try again."
+            "We could not send your order.\n\n" +
+            "Please check your internet connection and try again."
         );
     }
 }
 
 
 /* =====================================================
-   CONFIRMATION
+   IMPROVED ORDER CONFIRMATION
 ===================================================== */
 
 function showOrderConfirmation(
@@ -4818,13 +4774,19 @@ function showOrderConfirmation(
     total
 ) {
 
+    const checkoutOverlay =
+        document.getElementById(
+            "checkoutOverlay"
+        );
+
+
     const checkoutPopup =
         document.getElementById(
             "checkoutPopup"
         );
 
 
-    const confirmationPopup =
+    const confirmationOverlay =
         document.getElementById(
             "orderConfirmationPopup"
         );
@@ -4848,12 +4810,27 @@ function showOrderConfirmation(
         );
 
 
+    /* ---------------------------------------------
+       CLOSE CHECKOUT
+    --------------------------------------------- */
+
+    if (checkoutOverlay) {
+
+        checkoutOverlay.style.display =
+            "none";
+    }
+
+
     if (checkoutPopup) {
 
         checkoutPopup.style.display =
             "none";
     }
 
+
+    /* ---------------------------------------------
+       ORDER NUMBER
+    --------------------------------------------- */
 
     if (orderNumberDisplay) {
 
@@ -4862,6 +4839,10 @@ function showOrderConfirmation(
     }
 
 
+    /* ---------------------------------------------
+       ORDER SUMMARY
+    --------------------------------------------- */
+
     if (summaryDisplay) {
 
         summaryDisplay.textContent =
@@ -4869,17 +4850,44 @@ function showOrderConfirmation(
     }
 
 
+    /* ---------------------------------------------
+       TOTAL
+    --------------------------------------------- */
+
     if (totalDisplay) {
 
         totalDisplay.textContent =
-            total;
+            "₱" + total;
     }
 
 
-    if (confirmationPopup) {
+    /* ---------------------------------------------
+       SHOW CONFIRMATION
+    --------------------------------------------- */
 
-        confirmationPopup.style.display =
+    if (confirmationOverlay) {
+
+        confirmationOverlay.style.display =
             "flex";
+    }
+
+
+    /*
+       Scroll the confirmation into view
+       on mobile and desktop.
+    */
+
+    if (confirmationOverlay) {
+
+        setTimeout(
+            function() {
+
+                confirmationOverlay.scrollTop =
+                    0;
+
+            },
+            50
+        );
     }
 }
 
@@ -4903,6 +4911,11 @@ function finishOrder() {
     }
 
 
+    /*
+       Clear cart only after the customer
+       has successfully reached confirmation.
+    */
+
     cart =
         [];
 
@@ -4921,9 +4934,52 @@ function finishOrder() {
     clearCheckoutInputs();
 
 
-    alert(
-        "Thank you for ordering from Highway Cafe!"
+    /*
+       Reset checkout display.
+    */
+
+    const checkoutOverlay =
+        document.getElementById(
+            "checkoutOverlay"
+        );
+
+
+    if (checkoutOverlay) {
+
+        checkoutOverlay.style.display =
+            "none";
+    }
+
+
+    /*
+       Return the customer to the top.
+    */
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+
+    console.log(
+        "HIGHWAY CAFE order finished."
     );
+}
+
+
+/* =====================================================
+   CLOSE CONFIRMATION
+===================================================== */
+
+function closeOrderConfirmation() {
+
+    /*
+       We use the same behavior as finishOrder
+       so the cart doesn't remain after a
+       completed order.
+    */
+
+    finishOrder();
 }
 
 
@@ -4934,6 +4990,10 @@ function finishOrder() {
 document.addEventListener(
     "DOMContentLoaded",
     function() {
+
+        /* ---------------------------------------------
+           MENU
+        --------------------------------------------- */
 
         const menu =
             document.getElementById(
@@ -5061,6 +5121,39 @@ document.addEventListener(
 
 
         /* ---------------------------------------------
+           CONFIRMATION OVERLAY
+        --------------------------------------------- */
+
+        const confirmationOverlay =
+            document.getElementById(
+                "orderConfirmationPopup"
+            );
+
+
+        if (confirmationOverlay) {
+
+            confirmationOverlay.addEventListener(
+                "click",
+                function(event) {
+
+                    /*
+                       Only close if the customer
+                       clicks the dark background.
+                    */
+
+                    if (
+                        event.target ===
+                        confirmationOverlay
+                    ) {
+
+                        finishOrder();
+                    }
+                }
+            );
+        }
+
+
+        /* ---------------------------------------------
            ADD TO CART BUTTON
         --------------------------------------------- */
 
@@ -5071,6 +5164,11 @@ document.addEventListener(
 
 
         if (addToCartButton) {
+
+            /*
+               Remove any previous listener
+               installed by inline/older code.
+            */
 
             addToCartButton.addEventListener(
                 "click",
