@@ -227,101 +227,6 @@ header button:active {
     }
 }
 
-/* =====================================================
-   MENU
-===================================================== */
-
-#menu {
-    display: block;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding-bottom: 80px;
-}
-
-#menu section {
-    margin-bottom: 55px;
-}
-
-#menu h2 {
-    margin-bottom: 8px;
-    color: #4b2e1f;
-    font-size: 28px;
-    border-bottom: 2px solid #c9aa91;
-    padding-bottom: 10px;
-}
-
-#menu h3 {
-    margin-top: 8px;
-    color: #6b5143;
-    font-size: 20px;
-}
-
-
-/* =====================================================
-   MENU BUTTONS
-===================================================== */
-
-.menu-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(220px, 1fr)
-        );
-
-    gap: 15px;
-
-    margin-top: 20px;
-}
-
-.menu-item {
-    min-height: 90px;
-
-    padding: 18px;
-
-    border: 2px solid #d5bda9;
-
-    border-radius: 12px;
-
-    background-color: #fffaf5;
-
-    color: #4b2e1f;
-
-    cursor: pointer;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 18px;
-
-    font-weight: bold;
-
-    transition: 0.2s;
-
-    /* Helps mobile taps feel better */
-    -webkit-tap-highlight-color: transparent;
-}
-
-.menu-item:hover {
-    border-color: #8b4513;
-
-    background-color: #f3e5d8;
-
-    transform: translateY(-3px);
-
-    box-shadow:
-        0 5px 12px
-        rgba(75, 46, 31, 0.12);
-}
-
-.menu-item:active {
-    transform: scale(0.97);
-}
-
 
 /* =====================================================
    SIDE CART
@@ -1078,12 +983,16 @@ input[type="number"]:focus {
     }
 
     header button {
-        width: 100%;
+    width: 100%;
 
-        max-width: 320px;
+    max-width: 320px;
 
-        min-height: 48px;
-    }
+    min-height: 52px;
+
+    padding: 15px 25px;
+
+    font-size: 17px;
+}
 
 
     /* Cart becomes part of the page on smaller screens */
@@ -1172,20 +1081,27 @@ input[type="number"]:focus {
         padding: 15px 8px;
     }
 
-    header h1 {
-        font-size: 29px;
+header h1 {
+    font-size: 32px;
 
-        letter-spacing: 1.5px;
-    }
+    letter-spacing: 2px;
+}
 
-    header p {
-        font-size: 14px;
+header p {
+    font-size: 13px;
 
-        letter-spacing: 0.5px;
+    letter-spacing: 2px;
 
-        line-height: 1.5;
-    }
+    line-height: 1.6;
+}
 
+header button {
+    max-width: 280px;
+
+    font-size: 16px;
+
+    padding: 15px 30px;
+}
 
     /* -----------------------------
        MENU
