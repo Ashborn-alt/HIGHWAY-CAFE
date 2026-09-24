@@ -14,10 +14,25 @@ html {
 body {
     margin: 0;
     padding: 20px;
-    background-color: #f5eee6;
+
+    /* Highway Cafe background */
+    background-image:
+        linear-gradient(
+            rgba(45, 25, 15, 0.48),
+            rgba(45, 25, 15, 0.48)
+        ),
+        url("cafe-background.png");
+
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
     color: #3d281d;
     font-family: Arial, sans-serif;
     text-align: center;
+
+    min-height: 100vh;
 }
 
 
