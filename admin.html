@@ -530,7 +530,7 @@
         .report-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 900px;
+            min-width: 1000px;
         }
 
 
@@ -546,6 +546,23 @@
         .report-table th {
             background: #4b2e1f;
             color: white;
+        }
+
+
+        .report-action-cell {
+            white-space: nowrap;
+        }
+
+
+        .delete-report-button {
+            background: #b00020;
+            color: white;
+            padding: 7px 12px;
+        }
+
+
+        .delete-report-button:hover {
+            opacity: 0.85;
         }
 
 
@@ -595,6 +612,11 @@
 
             .report-controls,
             .report-buttons {
+                display: none !important;
+            }
+
+            .report-action-cell,
+            .report-action-header {
                 display: none !important;
             }
 
@@ -1300,6 +1322,7 @@
                         <th>Items</th>
                         <th>Total</th>
                         <th>Status</th>
+                        <th class="report-action-header">Action</th>
 
                     </tr>
 
@@ -1311,7 +1334,7 @@
                     <tr>
 
                         <td
-                            colspan="10"
+                            colspan="11"
                             style="text-align:center;">
 
                             Select a date and load the report.
@@ -1846,6 +1869,34 @@ const MANUAL_MENU = {
                 {
                     name: "Overload",
                     price: 125
+                }
+            ]
+
+        },
+
+
+        /* =========================
+           CHICKEN
+        ========================= */
+
+        "Chicken": {
+
+            variants: [
+                {
+                    name: "₱25 Chicken",
+                    price: 25
+                },
+                {
+                    name: "₱30 Chicken",
+                    price: 30
+                },
+                {
+                    name: "₱35 Chicken",
+                    price: 35
+                },
+                {
+                    name: "₱40 Chicken",
+                    price: 40
                 }
             ]
 
@@ -3587,7 +3638,7 @@ function showManualExtras(item) {
 
 
         item.addons.forEach(
-            function(addon, index) {
+            function(addon) {
 
                 const wrapper =
                     document.createElement(
@@ -4160,11 +4211,6 @@ async function addManualOrder() {
 
     await loadOrders();
 
-
-    /* Automatically go to reports
-       if desired later; currently
-       stays in manual order section. */
-
 }
 
 
@@ -4621,7 +4667,7 @@ function renderReportTable() {
 
         tbody.innerHTML =
             "<tr>" +
-            "<td colspan='10' " +
+            "<td colspan='11' " +
             "style='text-align:center;'>" +
             "No completed orders for this date." +
             "</td>" +
@@ -4703,6 +4749,10 @@ function renderReportTable() {
             ];
 
 
+            /* =========================
+               NORMAL REPORT CELLS
+            ========================= */
+
             cells.forEach(
                 function(value) {
 
@@ -4724,11 +4774,188 @@ function renderReportTable() {
             );
 
 
+            /* =========================
+               DELETE BUTTON
+            ========================= */
+
+            const actionCell =
+                document.createElement(
+                    "td"
+                );
+
+
+            actionCell.className =
+                "report-action-cell";
+
+
+            const deleteButton =
+                document.createElement(
+                    "button"
+                );
+
+
+            deleteButton.className =
+                "delete-report-button";
+
+
+            deleteButton.textContent =
+                "DELETE";
+
+
+            deleteButton.onclick =
+                function() {
+
+                    deleteReportOrder(
+                        order.id
+                    );
+
+                };
+
+
+            actionCell.appendChild(
+                deleteButton
+            );
+
+
+            row.appendChild(
+                actionCell
+            );
+
+
             tbody.appendChild(
                 row
             );
 
         }
+    );
+
+}
+
+
+/* =====================================================
+   DELETE REPORT ORDER
+===================================================== */
+
+async function deleteReportOrder(id) {
+
+    const order =
+        currentReportOrders.find(
+            function(item) {
+
+                return (
+                    String(item.id) ===
+                    String(id)
+                );
+
+            }
+        );
+
+
+    if (!order) {
+
+        alert(
+            "Order could not be found."
+        );
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+
+            "Are you sure you want to delete this order?\n\n" +
+
+            "Order: " +
+            (
+                order.order_number ||
+                "N/A"
+            ) +
+
+            "\n" +
+
+            "Customer: " +
+            (
+                order.customer_name ||
+                "N/A"
+            ) +
+
+            "\n" +
+
+            "Total: " +
+            formatMoney(
+                order.grand_total
+            ) +
+
+            "\n\n" +
+
+            "This will permanently remove the order from the reports."
+
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    const { error } =
+        await supabaseClient
+            .from("orders")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+
+            "Could not delete the order.\n\n" +
+
+            error.message
+
+        );
+
+        return;
+
+    }
+
+
+    /* Remove from current report */
+
+    currentReportOrders =
+        currentReportOrders.filter(
+            function(item) {
+
+                return (
+                    String(item.id) !==
+                    String(id)
+                );
+
+            }
+        );
+
+
+    /* Refresh report */
+
+    renderDailyReport();
+
+
+    /* Refresh active orders */
+
+    await loadOrders();
+
+
+    alert(
+        "✓ Order deleted successfully."
     );
 
 }
