@@ -1781,3 +1781,549 @@ input[type="number"]:focus {
     }
 }
 
+/* =====================================================
+   HIGHWAY CAFE
+   PREMIUM GLASS / GLOW MENU DESIGN
+   ===================================================== */
+
+/* =====================================================
+   MAIN MENU CONTAINER
+   ===================================================== */
+
+#menu {
+    width: min(100%, 1050px);
+    margin: 0 auto;
+    padding: 15px 20px 100px;
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   MENU SECTIONS
+   ===================================================== */
+
+#menu section {
+    position: relative;
+
+    margin: 0 0 30px;
+    padding: 30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(30, 16, 10, 0.72),
+            rgba(62, 34, 21, 0.58)
+        );
+
+    border: 1px solid rgba(255, 220, 180, 0.20);
+    border-radius: 26px;
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    box-shadow:
+        0 15px 45px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+
+
+/* Soft glow inside every section */
+
+#menu section::before {
+    content: "";
+
+    position: absolute;
+
+    top: -100px;
+    left: 50%;
+
+    width: 300px;
+    height: 200px;
+
+    transform: translateX(-50%);
+
+    background: rgba(190, 120, 65, 0.12);
+
+    filter: blur(60px);
+
+    pointer-events: none;
+}
+
+
+/* Subtle bottom glow */
+
+#menu section::after {
+    content: "";
+
+    position: absolute;
+
+    bottom: -80px;
+    right: -60px;
+
+    width: 220px;
+    height: 160px;
+
+    background: rgba(139, 69, 19, 0.12);
+
+    filter: blur(55px);
+
+    pointer-events: none;
+}
+
+
+/* =====================================================
+   CATEGORY TITLES
+   ===================================================== */
+
+#menu h2 {
+    position: relative;
+
+    margin: 0 0 10px;
+
+    color: #fff4e5;
+
+    font-size: 29px;
+    font-weight: 800;
+
+    letter-spacing: 3px;
+    text-transform: uppercase;
+
+    text-shadow:
+        0 0 8px rgba(255, 220, 180, 0.30),
+        0 0 20px rgba(139, 69, 19, 0.35);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 18px;
+}
+
+
+/* Lines beside category title */
+
+#menu h2::before,
+#menu h2::after {
+    content: "";
+
+    height: 1px;
+
+    flex: 1;
+
+    max-width: 130px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 220, 180, 0.55)
+        );
+}
+
+#menu h2::after {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255, 220, 180, 0.55),
+            transparent
+        );
+}
+
+
+/* =====================================================
+   SUBCATEGORY
+   ===================================================== */
+
+#menu h3 {
+    position: relative;
+
+    display: inline-block;
+
+    margin: 0 0 22px;
+
+    padding: 7px 17px;
+
+    color: #f5d5b0;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+
+    background: rgba(255, 255, 255, 0.06);
+
+    border: 1px solid rgba(255, 220, 180, 0.18);
+
+    border-radius: 50px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.18);
+
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+
+/* =====================================================
+   MENU GRID
+   ===================================================== */
+
+.menu-grid {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin-top: 8px;
+
+    z-index: 2;
+}
+
+
+/* =====================================================
+   MENU PRODUCT CARDS
+   ===================================================== */
+
+.menu-item {
+    position: relative;
+
+    min-height: 105px;
+
+    width: 100%;
+
+    padding: 20px 18px;
+
+    box-sizing: border-box;
+
+    border: 1px solid rgba(255, 220, 180, 0.20);
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.10),
+            rgba(255, 255, 255, 0.035)
+        );
+
+    color: #fff5e9;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    letter-spacing: 0.4px;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+
+    box-shadow:
+        0 8px 22px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+/* =====================================================
+   LIGHT REFLECTION ON PRODUCT CARDS
+   ===================================================== */
+
+.menu-item::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -120%;
+
+    width: 80%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.12),
+            transparent
+        );
+
+    transform: skewX(-20deg);
+
+    transition: left 0.55s ease;
+
+    pointer-events: none;
+}
+
+
+/* =====================================================
+   SMALL GLOW AT TOP OF CARD
+   ===================================================== */
+
+.menu-item::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 15%;
+
+    width: 70%;
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 220, 180, 0.45),
+            transparent
+        );
+
+    opacity: 0.7;
+
+    pointer-events: none;
+}
+
+
+/* =====================================================
+   PRODUCT HOVER
+   ===================================================== */
+
+.menu-item:hover {
+    transform: translateY(-6px);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(139, 69, 19, 0.48),
+            rgba(74, 40, 23, 0.55)
+        );
+
+    border-color: rgba(255, 220, 180, 0.55);
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.35),
+        0 0 18px rgba(139, 69, 19, 0.30),
+        0 0 35px rgba(190, 120, 65, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+    color: #ffffff;
+}
+
+
+/* Moving shine */
+
+.menu-item:hover::before {
+    left: 130%;
+}
+
+
+/* =====================================================
+   PRODUCT CLICK EFFECT
+   ===================================================== */
+
+.menu-item:active {
+    transform: translateY(-2px) scale(0.98);
+
+    box-shadow:
+        0 5px 15px rgba(0, 0, 0, 0.30),
+        0 0 15px rgba(139, 69, 19, 0.25);
+}
+
+
+/* =====================================================
+   KEYBOARD ACCESSIBILITY
+   ===================================================== */
+
+.menu-item:focus-visible {
+    outline: none;
+
+    border-color: rgba(255, 220, 180, 0.75);
+
+    box-shadow:
+        0 0 0 3px rgba(139, 69, 19, 0.35),
+        0 0 25px rgba(190, 120, 65, 0.25);
+}
+
+
+/* =====================================================
+   SECTION HOVER
+   ===================================================== */
+
+#menu section:hover {
+    border-color: rgba(255, 220, 180, 0.28);
+
+    box-shadow:
+        0 18px 50px rgba(0, 0, 0, 0.38),
+        0 0 25px rgba(139, 69, 19, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+
+/* =====================================================
+   TABLET
+   ===================================================== */
+
+@media (max-width: 850px) {
+
+    #menu {
+        width: 100%;
+        padding: 10px 15px 80px;
+    }
+
+    #menu section {
+        padding: 24px 20px;
+        border-radius: 22px;
+        margin-bottom: 24px;
+    }
+
+    #menu h2 {
+        font-size: 25px;
+        letter-spacing: 2px;
+        gap: 12px;
+    }
+
+    #menu h2::before,
+    #menu h2::after {
+        max-width: 80px;
+    }
+
+    #menu h3 {
+        font-size: 15px;
+        margin-bottom: 18px;
+    }
+
+    .menu-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 13px;
+    }
+
+    .menu-item {
+        min-height: 90px;
+
+        padding: 17px 14px;
+
+        font-size: 16px;
+
+        border-radius: 16px;
+    }
+}
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 520px) {
+
+    #menu {
+        padding: 5px 10px 60px;
+    }
+
+    #menu section {
+        padding: 22px 14px;
+
+        border-radius: 20px;
+
+        margin-bottom: 20px;
+    }
+
+    #menu h2 {
+        font-size: 21px;
+
+        letter-spacing: 1.5px;
+
+        gap: 9px;
+
+        margin-bottom: 9px;
+    }
+
+    #menu h2::before,
+    #menu h2::after {
+        max-width: 45px;
+    }
+
+    #menu h3 {
+        font-size: 13px;
+
+        letter-spacing: 1px;
+
+        padding: 6px 13px;
+
+        margin-bottom: 16px;
+    }
+
+    .menu-grid {
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+
+        margin-top: 5px;
+    }
+
+    .menu-item {
+        width: 100%;
+
+        min-height: 68px;
+
+        padding: 15px;
+
+        font-size: 16px;
+
+        border-radius: 14px;
+    }
+
+    .menu-item:hover {
+        transform: translateY(-3px);
+    }
+}
+
+
+/* =====================================================
+   VERY SMALL PHONES
+   ===================================================== */
+
+@media (max-width: 360px) {
+
+    #menu section {
+        padding: 20px 11px;
+    }
+
+    #menu h2 {
+        font-size: 19px;
+    }
+
+    #menu h2::before,
+    #menu h2::after {
+        max-width: 25px;
+    }
+
+    .menu-item {
+        min-height: 64px;
+        font-size: 15px;
+    }
+}
