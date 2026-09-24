@@ -1,4 +1,3 @@
-```javascript
 /* =====================================================
    HIGHWAY CAFE
    COMPLETE ORDERING SYSTEM
@@ -5212,4 +5211,3 @@ document.addEventListener(
 
     }
 );
-```
