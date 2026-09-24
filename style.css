@@ -1,6 +1,8 @@
 /* =====================================================
    HIGHWAY CAFE
    COMPLETE ORDERING SYSTEM CSS
+   + CAFE BACKGROUND
+   + MODERN GLOW DESIGN
 ===================================================== */
 
 * {
@@ -19,11 +21,17 @@ body {
     margin: 0;
     padding: 20px;
 
-    /* COZY HIGHWAY CAFE BACKGROUND */
+    /*
+       CAFE BACKGROUND
+
+       The first layer creates the warm dark tint.
+       The second layer is your actual cafe image.
+    */
+
     background-image:
         linear-gradient(
-            rgba(38, 20, 12, 0.48),
-            rgba(38, 20, 12, 0.48)
+            rgba(35, 18, 10, 0.58),
+            rgba(35, 18, 10, 0.58)
         ),
         url("cafe-background.png");
 
@@ -33,10 +41,43 @@ body {
     background-attachment: fixed;
 
     color: #3d281d;
+
     font-family: Arial, sans-serif;
+
     text-align: center;
 
     min-height: 100vh;
+
+    position: relative;
+}
+
+
+/* =====================================================
+   SOFT CAFE LIGHT EFFECT
+===================================================== */
+
+body::before {
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            circle at 50% 15%,
+            rgba(255, 190, 110, 0.13),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 50% 70%,
+            rgba(255, 150, 70, 0.06),
+            transparent 45%
+        );
+
+    z-index: -1;
 }
 
 
@@ -49,17 +90,59 @@ header {
 
     margin: 70px auto 80px;
 
-    padding: 50px 20px;
+    padding: 55px 25px;
 
-    /* subtle glass effect */
-    background: rgba(35, 20, 13, 0.18);
+    /*
+       Glass / dark cafe panel
+    */
 
-    border-radius: 24px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(45, 25, 15, 0.52),
+            rgba(20, 12, 8, 0.34)
+        );
 
-    backdrop-filter: blur(2px);
+    border: 1px solid rgba(255, 210, 150, 0.20);
+
+    border-radius: 28px;
+
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 
     box-shadow:
-        0 15px 45px rgba(0, 0, 0, 0.25);
+        0 20px 60px rgba(0, 0, 0, 0.42),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* subtle light inside header */
+
+header::before {
+    content: "";
+
+    position: absolute;
+
+    width: 400px;
+    height: 400px;
+
+    left: 50%;
+    top: -250px;
+
+    transform: translateX(-50%);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255, 190, 110, 0.18),
+            transparent 70%
+        );
+
+    pointer-events: none;
 }
 
 
@@ -68,20 +151,22 @@ header {
 ===================================================== */
 
 header h1 {
+    position: relative;
+
     margin: 0;
 
     color: #fff3dc;
 
     font-size: 56px;
 
-    letter-spacing: 4px;
+    letter-spacing: 5px;
 
     font-weight: 800;
 
     text-shadow:
-        0 2px 5px rgba(0, 0, 0, 0.7),
-        0 0 12px rgba(255, 194, 110, 0.35),
-        0 0 25px rgba(255, 164, 70, 0.25);
+        0 3px 7px rgba(0, 0, 0, 0.85),
+        0 0 12px rgba(255, 205, 145, 0.42),
+        0 0 30px rgba(255, 166, 70, 0.28);
 }
 
 
@@ -90,7 +175,9 @@ header h1 {
 ===================================================== */
 
 header p {
-    margin: 18px 0 32px;
+    position: relative;
+
+    margin: 18px 0 35px;
 
     color: #ffe9c9;
 
@@ -101,7 +188,8 @@ header p {
     font-weight: bold;
 
     text-shadow:
-        0 2px 5px rgba(0, 0, 0, 0.8);
+        0 2px 6px rgba(0, 0, 0, 0.9),
+        0 0 8px rgba(255, 190, 110, 0.18);
 }
 
 
@@ -112,17 +200,19 @@ header p {
 header button {
     position: relative;
 
-    padding: 17px 48px;
+    z-index: 2;
 
-    border: 2px solid #dca66a;
+    padding: 17px 52px;
+
+    border: 2px solid #e4ad6c;
 
     border-radius: 50px;
 
     background:
         linear-gradient(
             135deg,
-            #6f371e,
-            #3e1d11
+            #75401f,
+            #3b1b0e
         );
 
     color: #fff4df;
@@ -131,15 +221,15 @@ header button {
 
     font-weight: bold;
 
-    letter-spacing: 0.5px;
+    letter-spacing: 0.7px;
 
     cursor: pointer;
 
     box-shadow:
-        0 0 0 2px rgba(255, 201, 130, 0.12),
-        0 0 12px rgba(226, 157, 82, 0.45),
-        0 0 28px rgba(190, 112, 48, 0.30),
-        0 8px 20px rgba(0, 0, 0, 0.35);
+        0 0 0 2px rgba(255, 205, 145, 0.10),
+        0 0 12px rgba(255, 178, 95, 0.48),
+        0 0 28px rgba(220, 125, 48, 0.38),
+        0 8px 25px rgba(0, 0, 0, 0.45);
 
     transition:
         transform 0.25s ease,
@@ -148,24 +238,47 @@ header button {
 }
 
 
-/* glowing outer ring */
+/* outer glow ring */
 
 header button::before {
     content: "";
 
     position: absolute;
 
-    inset: -5px;
+    inset: -7px;
 
-    border-radius: 55px;
+    border-radius: 60px;
 
-    border: 1px solid rgba(255, 196, 120, 0.45);
-
-    opacity: 0.7;
+    border: 1px solid rgba(255, 205, 145, 0.42);
 
     pointer-events: none;
 
     animation: cafeGlow 2.2s ease-in-out infinite;
+}
+
+
+/* inner light */
+
+header button::after {
+    content: "";
+
+    position: absolute;
+
+    left: 18%;
+
+    right: 18%;
+
+    top: 0;
+
+    height: 1px;
+
+    background:
+        rgba(255, 236, 205, 0.65);
+
+    box-shadow:
+        0 0 10px rgba(255, 210, 150, 0.55);
+
+    pointer-events: none;
 }
 
 
@@ -177,17 +290,19 @@ header button:hover {
     background:
         linear-gradient(
             135deg,
-            #8a4a27,
-            #522815
+            #96552b,
+            #552512
         );
 
-    transform: translateY(-4px) scale(1.03);
+    transform:
+        translateY(-4px)
+        scale(1.04);
 
     box-shadow:
-        0 0 0 3px rgba(255, 210, 145, 0.16),
-        0 0 18px rgba(255, 186, 105, 0.75),
-        0 0 38px rgba(215, 128, 52, 0.55),
-        0 12px 25px rgba(0, 0, 0, 0.4);
+        0 0 0 3px rgba(255, 215, 155, 0.14),
+        0 0 18px rgba(255, 195, 120, 0.82),
+        0 0 40px rgba(220, 130, 55, 0.65),
+        0 12px 30px rgba(0, 0, 0, 0.50);
 }
 
 
@@ -196,35 +311,214 @@ header button:hover {
 ===================================================== */
 
 header button:active {
-    transform: translateY(0) scale(0.97);
+    transform:
+        translateY(0)
+        scale(0.97);
 
     box-shadow:
-        0 0 10px rgba(255, 183, 96, 0.5),
-        0 5px 12px rgba(0, 0, 0, 0.35);
+        0 0 12px rgba(255, 185, 100, 0.55),
+        0 5px 15px rgba(0, 0, 0, 0.40);
 }
 
 
 /* =====================================================
-   SOFT BUTTON GLOW ANIMATION
+   BUTTON GLOW ANIMATION
 ===================================================== */
 
 @keyframes cafeGlow {
 
     0%,
     100% {
-        opacity: 0.35;
+        opacity: 0.30;
 
         box-shadow:
-            0 0 8px rgba(255, 183, 96, 0.25);
+            0 0 8px rgba(255, 185, 100, 0.20);
     }
 
     50% {
-        opacity: 0.9;
+        opacity: 0.95;
 
         box-shadow:
-            0 0 18px rgba(255, 183, 96, 0.65),
-            0 0 30px rgba(214, 127, 51, 0.35);
+            0 0 18px rgba(255, 190, 110, 0.70),
+            0 0 32px rgba(220, 130, 55, 0.42);
     }
+}
+
+
+/* =====================================================
+   MENU
+===================================================== */
+
+#menu {
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    padding-bottom: 70px;
+}
+
+
+/* =====================================================
+   MENU SECTIONS
+===================================================== */
+
+#menu section {
+    margin: 0 auto 55px;
+
+    padding: 30px 25px 35px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(38, 22, 14, 0.70),
+            rgba(24, 14, 9, 0.58)
+        );
+
+    border:
+        1px solid rgba(255, 211, 157, 0.16);
+
+    border-radius: 22px;
+
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.30),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+
+/* =====================================================
+   MENU HEADINGS
+===================================================== */
+
+#menu h2 {
+    margin-top: 0;
+
+    margin-bottom: 10px;
+
+    color: #ffe8c5;
+
+    font-size: 30px;
+
+    letter-spacing: 3px;
+
+    text-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.85),
+        0 0 15px rgba(255, 184, 95, 0.20);
+}
+
+
+#menu h3 {
+    margin-top: 8px;
+
+    margin-bottom: 22px;
+
+    color: #e8c9a3;
+
+    font-size: 18px;
+
+    letter-spacing: 2px;
+
+    text-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+
+/* =====================================================
+   MENU GRID
+===================================================== */
+
+.menu-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+    margin-top: 20px;
+}
+
+
+/* =====================================================
+   MENU ITEMS
+===================================================== */
+
+.menu-item {
+    min-height: 95px;
+
+    padding: 20px;
+
+    border:
+        1px solid rgba(235, 190, 135, 0.42);
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(84, 48, 29, 0.82),
+            rgba(42, 22, 13, 0.82)
+        );
+
+    color: #fff0d7;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    letter-spacing: 0.5px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 7px 18px rgba(0, 0, 0, 0.30),
+        inset 0 1px 0 rgba(255, 255, 255, 0.07);
+
+    transition:
+        transform 0.20s ease,
+        box-shadow 0.20s ease,
+        border-color 0.20s ease,
+        background 0.20s ease;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* =====================================================
+   MENU ITEM HOVER
+===================================================== */
+
+.menu-item:hover {
+    transform:
+        translateY(-4px);
+
+    border-color:
+        rgba(255, 203, 145, 0.85);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(113, 62, 34, 0.92),
+            rgba(55, 27, 15, 0.92)
+        );
+
+    box-shadow:
+        0 0 12px rgba(255, 183, 100, 0.35),
+        0 0 25px rgba(214, 126, 51, 0.22),
+        0 12px 25px rgba(0, 0, 0, 0.40);
+}
+
+
+/* =====================================================
+   MENU ITEM PRESS
+===================================================== */
+
+.menu-item:active {
+    transform:
+        translateY(0)
+        scale(0.98);
 }
 
 
@@ -247,15 +541,16 @@ header button:active {
 
     padding: 18px;
 
-    background-color: #fffaf5;
+    background:
+        rgba(255, 250, 245, 0.97);
 
-    border: 2px solid #d5bda9;
+    border:
+        2px solid #d5bda9;
 
-    border-radius: 12px;
+    border-radius: 14px;
 
     box-shadow:
-        0 8px 25px
-        rgba(0, 0, 0, 0.15);
+        0 12px 35px rgba(0, 0, 0, 0.28);
 
     z-index: 1000;
 
@@ -368,10 +663,16 @@ header button:active {
     cursor: pointer;
 
     min-height: 46px;
+
+    transition:
+        0.2s ease;
 }
 
 #checkoutButton:hover {
     background-color: #6b4030;
+
+    box-shadow:
+        0 0 15px rgba(139, 69, 19, 0.35);
 }
 
 
@@ -393,7 +694,7 @@ header button:active {
     padding: 20px;
 
     background-color:
-        rgba(0, 0, 0, 0.55);
+        rgba(0, 0, 0, 0.68);
 
     z-index: 2000;
 
@@ -420,13 +721,20 @@ header button:active {
 
     padding: 28px;
 
-    border-radius: 14px;
+    border-radius: 16px;
 
-    background-color: #fffaf5;
+    background:
+        linear-gradient(
+            145deg,
+            #fffaf5,
+            #f7eadf
+        );
+
+    border:
+        1px solid #e2cdbb;
 
     box-shadow:
-        0 15px 40px
-        rgba(0, 0, 0, 0.25);
+        0 20px 60px rgba(0, 0, 0, 0.42);
 
     text-align: center;
 
@@ -482,6 +790,8 @@ header button:active {
 
 .close-button:hover {
     background-color: #d7bca7;
+
+    transform: rotate(5deg);
 }
 
 
@@ -529,6 +839,9 @@ header button:active {
     border-color: #8b4513;
 
     background-color: #f3e5d8;
+
+    box-shadow:
+        0 0 10px rgba(139, 69, 19, 0.20);
 }
 
 
@@ -542,7 +855,8 @@ header button:active {
     background-color: #ead0b9 !important;
 
     box-shadow:
-        0 0 0 2px #8b4513;
+        0 0 0 2px #8b4513,
+        0 0 12px rgba(139, 69, 19, 0.25);
 
     font-weight: bold;
 }
@@ -572,6 +886,9 @@ input[type="number"] {
 
 input[type="number"]:focus {
     outline: 2px solid #8b4513;
+
+    box-shadow:
+        0 0 10px rgba(139, 69, 19, 0.18);
 }
 
 
@@ -590,7 +907,12 @@ input[type="number"]:focus {
 
     border-radius: 8px;
 
-    background-color: #4b2e1f;
+    background:
+        linear-gradient(
+            135deg,
+            #60321e,
+            #3f2114
+        );
 
     color: white;
 
@@ -601,10 +923,28 @@ input[type="number"]:focus {
     cursor: pointer;
 
     margin-top: 10px;
+
+    transition:
+        0.2s ease;
+
+    box-shadow:
+        0 5px 15px rgba(0, 0, 0, 0.20);
 }
 
 .primary-button:hover {
-    background-color: #6b4030;
+    background:
+        linear-gradient(
+            135deg,
+            #7a4528,
+            #502716
+        );
+
+    box-shadow:
+        0 0 15px rgba(180, 104, 48, 0.35),
+        0 8px 20px rgba(0, 0, 0, 0.25);
+
+    transform:
+        translateY(-2px);
 }
 
 .primary-button:disabled {
@@ -638,15 +978,20 @@ input[type="number"]:focus {
 
     border-radius: 8px;
 
-    background-color: #4b2e1f;
+    background:
+        linear-gradient(
+            135deg,
+            #60321e,
+            #3f2114
+        );
 
     color: white;
 
     font-weight: bold;
 
     box-shadow:
-        0 5px 15px
-        rgba(0, 0, 0, 0.2);
+        0 0 20px rgba(210, 125, 55, 0.30),
+        0 5px 15px rgba(0, 0, 0, 0.3);
 
     z-index: 5000;
 }
@@ -955,7 +1300,7 @@ input[type="number"]:focus {
 
 
 /* =====================================================
-   TABLET / MOBILE
+   TABLET
 ===================================================== */
 
 @media (max-width: 850px) {
@@ -967,7 +1312,7 @@ input[type="number"]:focus {
     header {
         margin: 20px auto 35px;
 
-        padding: 20px 10px;
+        padding: 35px 15px;
     }
 
     header h1 {
@@ -979,23 +1324,24 @@ input[type="number"]:focus {
 
         line-height: 1.5;
 
-        margin-bottom: 20px;
+        margin-bottom: 25px;
     }
 
     header button {
-    width: 100%;
+        width: 100%;
 
-    max-width: 320px;
+        max-width: 320px;
 
-    min-height: 52px;
+        min-height: 52px;
 
-    padding: 15px 25px;
+        padding: 15px 25px;
 
-    font-size: 17px;
-}
+        font-size: 17px;
+    }
 
 
-    /* Cart becomes part of the page on smaller screens */
+    /* Cart becomes part of page */
+
     #sideCart {
         position: relative;
 
@@ -1018,7 +1364,8 @@ input[type="number"]:focus {
     }
 
 
-    /* Two menu columns on tablets */
+    /* Two menu columns */
+
     .menu-grid {
         grid-template-columns:
             repeat(2, 1fr);
@@ -1044,7 +1391,6 @@ input[type="number"]:focus {
     }
 
 
-    /* Better popup width */
     .popup {
         width: 100%;
 
@@ -1052,7 +1398,6 @@ input[type="number"]:focus {
 
         max-height: 92vh;
     }
-
 
     .checkout-popup {
         max-width: 650px;
@@ -1078,30 +1423,33 @@ input[type="number"]:focus {
     header {
         margin: 10px auto 25px;
 
-        padding: 15px 8px;
+        padding: 28px 8px;
+
+        border-radius: 20px;
     }
 
-header h1 {
-    font-size: 32px;
+    header h1 {
+        font-size: 32px;
 
-    letter-spacing: 2px;
-}
+        letter-spacing: 2px;
+    }
 
-header p {
-    font-size: 13px;
+    header p {
+        font-size: 13px;
 
-    letter-spacing: 2px;
+        letter-spacing: 2px;
 
-    line-height: 1.6;
-}
+        line-height: 1.6;
+    }
 
-header button {
-    max-width: 280px;
+    header button {
+        max-width: 280px;
 
-    font-size: 16px;
+        font-size: 16px;
 
-    padding: 15px 30px;
-}
+        padding: 15px 30px;
+    }
+
 
     /* -----------------------------
        MENU
@@ -1113,6 +1461,11 @@ header button {
 
     #menu section {
         margin-bottom: 40px;
+
+        padding:
+            25px 14px 28px;
+
+        border-radius: 18px;
     }
 
     #menu h2 {
@@ -1126,7 +1479,8 @@ header button {
     }
 
 
-    /* One menu item per row */
+    /* One item per row */
+
     .menu-grid {
         grid-template-columns: 1fr;
 
@@ -1204,7 +1558,8 @@ header button {
 
         max-height: 94vh;
 
-        padding: 24px 14px 18px;
+        padding:
+            24px 14px 18px;
 
         border-radius: 12px;
     }
