@@ -11,15 +11,19 @@ html {
     scroll-behavior: smooth;
 }
 
+/* =====================================================
+   BODY
+===================================================== */
+
 body {
     margin: 0;
     padding: 20px;
 
-    /* Highway Cafe background */
+    /* COZY HIGHWAY CAFE BACKGROUND */
     background-image:
         linear-gradient(
-            rgba(45, 25, 15, 0.48),
-            rgba(45, 25, 15, 0.48)
+            rgba(38, 20, 12, 0.48),
+            rgba(38, 20, 12, 0.48)
         ),
         url("cafe-background.png");
 
@@ -42,45 +46,186 @@ body {
 
 header {
     max-width: 900px;
-    margin: 40px auto 60px;
-    padding: 30px 20px;
+
+    margin: 70px auto 80px;
+
+    padding: 50px 20px;
+
+    /* subtle glass effect */
+    background: rgba(35, 20, 13, 0.18);
+
+    border-radius: 24px;
+
+    backdrop-filter: blur(2px);
+
+    box-shadow:
+        0 15px 45px rgba(0, 0, 0, 0.25);
 }
+
+
+/* =====================================================
+   HIGHWAY CAFE TITLE
+===================================================== */
 
 header h1 {
     margin: 0;
-    color: #4b2e1f;
-    font-size: 42px;
-    letter-spacing: 2px;
+
+    color: #fff3dc;
+
+    font-size: 56px;
+
+    letter-spacing: 4px;
+
+    font-weight: 800;
+
+    text-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.7),
+        0 0 12px rgba(255, 194, 110, 0.35),
+        0 0 25px rgba(255, 164, 70, 0.25);
 }
+
+
+/* =====================================================
+   TAGLINE
+===================================================== */
 
 header p {
-    margin: 12px 0 25px;
-    color: #6b5143;
+    margin: 18px 0 32px;
+
+    color: #ffe9c9;
+
     font-size: 18px;
-    letter-spacing: 1px;
+
+    letter-spacing: 4px;
+
+    font-weight: bold;
+
+    text-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.8);
 }
+
+
+/* =====================================================
+   GLOWING ORDER NOW BUTTON
+===================================================== */
 
 header button {
-    padding: 14px 32px;
-    border: none;
-    border-radius: 8px;
-    background-color: #4b2e1f;
-    color: white;
-    font-size: 16px;
+    position: relative;
+
+    padding: 17px 48px;
+
+    border: 2px solid #dca66a;
+
+    border-radius: 50px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6f371e,
+            #3e1d11
+        );
+
+    color: #fff4df;
+
+    font-size: 18px;
+
     font-weight: bold;
+
+    letter-spacing: 0.5px;
+
     cursor: pointer;
-    transition: 0.2s;
+
+    box-shadow:
+        0 0 0 2px rgba(255, 201, 130, 0.12),
+        0 0 12px rgba(226, 157, 82, 0.45),
+        0 0 28px rgba(190, 112, 48, 0.30),
+        0 8px 20px rgba(0, 0, 0, 0.35);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
 }
+
+
+/* glowing outer ring */
+
+header button::before {
+    content: "";
+
+    position: absolute;
+
+    inset: -5px;
+
+    border-radius: 55px;
+
+    border: 1px solid rgba(255, 196, 120, 0.45);
+
+    opacity: 0.7;
+
+    pointer-events: none;
+
+    animation: cafeGlow 2.2s ease-in-out infinite;
+}
+
+
+/* =====================================================
+   BUTTON HOVER
+===================================================== */
 
 header button:hover {
-    background-color: #6b4030;
-    transform: translateY(-2px);
+    background:
+        linear-gradient(
+            135deg,
+            #8a4a27,
+            #522815
+        );
+
+    transform: translateY(-4px) scale(1.03);
+
+    box-shadow:
+        0 0 0 3px rgba(255, 210, 145, 0.16),
+        0 0 18px rgba(255, 186, 105, 0.75),
+        0 0 38px rgba(215, 128, 52, 0.55),
+        0 12px 25px rgba(0, 0, 0, 0.4);
 }
+
+
+/* =====================================================
+   BUTTON PRESS
+===================================================== */
 
 header button:active {
-    transform: scale(0.97);
+    transform: translateY(0) scale(0.97);
+
+    box-shadow:
+        0 0 10px rgba(255, 183, 96, 0.5),
+        0 5px 12px rgba(0, 0, 0, 0.35);
 }
 
+
+/* =====================================================
+   SOFT BUTTON GLOW ANIMATION
+===================================================== */
+
+@keyframes cafeGlow {
+
+    0%,
+    100% {
+        opacity: 0.35;
+
+        box-shadow:
+            0 0 8px rgba(255, 183, 96, 0.25);
+    }
+
+    50% {
+        opacity: 0.9;
+
+        box-shadow:
+            0 0 18px rgba(255, 183, 96, 0.65),
+            0 0 30px rgba(214, 127, 51, 0.35);
+    }
+}
 
 /* =====================================================
    MENU
