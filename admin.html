@@ -323,6 +323,32 @@
         }
 
 
+        .active-orders-group {
+            margin-top: 20px;
+        }
+
+
+        .active-orders-group:first-child {
+            margin-top: 0;
+        }
+
+
+        .active-orders-group-title {
+            font-size: 20px;
+            font-weight: bold;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: #4b2e1f;
+            color: white;
+        }
+
+
+        .active-orders-group-title.manual {
+            background: #856404;
+        }
+
+
         .order-info {
             margin-top: 10px;
             line-height: 1.6;
@@ -527,10 +553,26 @@
         }
 
 
+        .report-action-cell {
+            white-space: nowrap;
+        }
+
+
+        .delete-report-button {
+            background: #b00020;
+            color: white;
+        }
+
+
+        .delete-report-button:hover {
+            opacity: 0.85;
+        }
+
+
         .report-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 1000px;
+            min-width: 900px;
         }
 
 
@@ -546,23 +588,6 @@
         .report-table th {
             background: #4b2e1f;
             color: white;
-        }
-
-
-        .report-action-cell {
-            white-space: nowrap;
-        }
-
-
-        .delete-report-button {
-            background: #b00020;
-            color: white;
-            padding: 7px 12px;
-        }
-
-
-        .delete-report-button:hover {
-            opacity: 0.85;
         }
 
 
@@ -614,6 +639,7 @@
             .report-buttons {
                 display: none !important;
             }
+
 
             .report-action-cell,
             .report-action-header {
@@ -1875,10 +1901,6 @@ const MANUAL_MENU = {
         },
 
 
-        /* =========================
-           CHICKEN
-        ========================= */
-
         "Chicken": {
 
             variants: [
@@ -2750,9 +2772,15 @@ function checkForNewOrders(orders) {
             String(order.id);
 
 
+        const isManual =
+            String(order.order_number || "")
+                .startsWith("MANUAL-");
+
+
         if (
             !knownOrderIds.has(id) &&
-            order.status === "New"
+            order.status === "New" &&
+            !isManual
         ) {
 
             newOrderIds.add(id);
@@ -3003,252 +3031,318 @@ function renderActiveOrders() {
     container.innerHTML = "";
 
 
-    activeOrders.forEach(function(order) {
+    const onlineOrders =
+        activeOrders.filter(function(order) {
 
-        const card =
+            return !String(order.order_number || "")
+                .startsWith("MANUAL-");
+
+        });
+
+
+    const manualOrders =
+        activeOrders.filter(function(order) {
+
+            return String(order.order_number || "")
+                .startsWith("MANUAL-");
+
+        });
+
+
+    function renderOrderGroup(
+        orders,
+        title,
+        isManual
+    ) {
+
+        if (!orders.length) {
+            return;
+        }
+
+
+        const group =
             document.createElement("div");
 
-
-        card.className =
-            "order-card";
-
-
-        if (
-            newOrderIds.has(
-                String(order.id)
-            )
-        ) {
-
-            card.classList.add(
-                "new-order"
-            );
-
-        }
+        group.className =
+            "active-orders-group";
 
 
-        const source =
-            String(order.order_number || "")
-                .startsWith("MANUAL-")
-                ? "Manual"
-                : "Online";
+        const groupTitle =
+            document.createElement("div");
+
+        groupTitle.className =
+            "active-orders-group-title" +
+            (isManual ? " manual" : "");
+
+        groupTitle.textContent =
+            title + " (" + orders.length + ")";
+
+        group.appendChild(groupTitle);
 
 
-        const sourceClass =
-            source === "Manual"
-                ? "source-manual"
-                : "source-online";
+        orders.forEach(function(order) {
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "order-card";
 
 
-        const date =
-            new Date(order.created_at);
+            if (
+                newOrderIds.has(
+                    String(order.id)
+                )
+            ) {
 
-
-        const formattedDate =
-            date.toLocaleString();
-
-
-        let html = "";
-
-
-        html +=
-            "<div class='order-top'>";
-
-
-        html +=
-            "<div>";
-
-
-        html +=
-            "<div class='order-number'>" +
-            escapeHtml(
-                order.order_number || "N/A"
-            ) +
-            "</div>";
-
-
-        html +=
-            "<span class='order-source " +
-            sourceClass +
-            "'>" +
-            source +
-            "</span>";
-
-
-        html +=
-            "</div>";
-
-
-        html +=
-            "<div>" +
-            escapeHtml(
-                formattedDate
-            ) +
-            "</div>";
-
-
-        html +=
-            "</div>";
-
-
-        html +=
-            "<div class='order-info'>";
-
-
-        html +=
-            "<strong>Customer:</strong> " +
-            escapeHtml(
-                order.customer_name ||
-                "N/A"
-            ) +
-            "<br>";
-
-
-        html +=
-            "<strong>Type:</strong> " +
-            escapeHtml(
-                order.order_type ||
-                "N/A"
-            ) +
-            "<br>";
-
-
-        html +=
-            "<strong>Payment:</strong> " +
-            escapeHtml(
-                order.payment_method ||
-                "N/A"
-            );
-
-
-        if (order.phone) {
-
-            html +=
-                "<br><strong>Phone:</strong> " +
-                escapeHtml(
-                    order.phone
+                card.classList.add(
+                    "new-order"
                 );
 
-        }
+            }
 
 
-        if (order.delivery_address) {
+            const source =
+                isManual
+                    ? "Manual"
+                    : "Online";
+
+
+            const sourceClass =
+                isManual
+                    ? "source-manual"
+                    : "source-online";
+
+
+            const date =
+                new Date(order.created_at);
+
+
+            const formattedDate =
+                date.toLocaleString();
+
+
+            let html = "";
+
 
             html +=
-                "<br><strong>Address:</strong> " +
-                escapeHtml(
-                    order.delivery_address
-                );
+                "<div class='order-top'>";
 
-        }
-
-
-        html +=
-            "</div>";
-
-
-        html +=
-            "<div class='order-items'>" +
-            escapeHtml(
-                order.ordered_items ||
-                ""
-            ) +
-            "</div>";
-
-
-        if (order.order_notes) {
 
             html +=
-                "<div class='order-info'>" +
-                "<strong>Notes:</strong> " +
+                "<div>";
+
+
+            html +=
+                "<div class='order-number'>" +
                 escapeHtml(
-                    order.order_notes
+                    order.order_number || "N/A"
                 ) +
                 "</div>";
 
-        }
-
-
-        html +=
-            "<div class='order-total'>" +
-            "Total: " +
-            formatMoney(
-                order.grand_total
-            ) +
-            "</div>";
-
-
-        html +=
-            "<div class='order-info'>" +
-            "<strong>Status:</strong> " +
-            escapeHtml(
-                order.status
-            ) +
-            "</div>";
-
-
-        html +=
-            "<div class='order-actions'>";
-
-
-        if (order.status === "New") {
 
             html +=
-                "<button class='status-button' " +
-                "onclick=\"updateOrderStatus('" +
-                order.id +
-                "','Preparing')\">" +
-                "PREPARING" +
-                "</button>";
+                "<span class='order-source " +
+                sourceClass +
+                "'>" +
+                source +
+                "</span>";
 
-        }
-
-
-        if (order.status === "Preparing") {
 
             html +=
-                "<button class='status-button' " +
-                "onclick=\"updateOrderStatus('" +
-                order.id +
-                "','Ready')\">" +
-                "READY" +
-                "</button>";
+                "</div>";
 
-        }
-
-
-        if (order.status === "Ready") {
 
             html +=
-                "<button class='status-button' " +
+                "<div>" +
+                escapeHtml(
+                    formattedDate
+                ) +
+                "</div>";
+
+
+            html +=
+                "</div>";
+
+
+            html +=
+                "<div class='order-info'>";
+
+
+            html +=
+                "<strong>Customer:</strong> " +
+                escapeHtml(
+                    order.customer_name ||
+                    "N/A"
+                ) +
+                "<br>";
+
+
+            html +=
+                "<strong>Type:</strong> " +
+                escapeHtml(
+                    order.order_type ||
+                    "N/A"
+                ) +
+                "<br>";
+
+
+            html +=
+                "<strong>Payment:</strong> " +
+                escapeHtml(
+                    order.payment_method ||
+                    "N/A"
+                );
+
+
+            if (order.phone) {
+
+                html +=
+                    "<br><strong>Phone:</strong> " +
+                    escapeHtml(
+                        order.phone
+                    );
+
+            }
+
+
+            if (order.delivery_address) {
+
+                html +=
+                    "<br><strong>Address:</strong> " +
+                    escapeHtml(
+                        order.delivery_address
+                    );
+
+            }
+
+
+            html +=
+                "</div>";
+
+
+            html +=
+                "<div class='order-items'>" +
+                escapeHtml(
+                    order.ordered_items ||
+                    ""
+                ) +
+                "</div>";
+
+
+            if (order.order_notes) {
+
+                html +=
+                    "<div class='order-info'>" +
+                    "<strong>Notes:</strong> " +
+                    escapeHtml(
+                        order.order_notes
+                    ) +
+                    "</div>";
+
+            }
+
+
+            html +=
+                "<div class='order-total'>" +
+                "Total: " +
+                formatMoney(
+                    order.grand_total
+                ) +
+                "</div>";
+
+
+            html +=
+                "<div class='order-info'>" +
+                "<strong>Status:</strong> " +
+                escapeHtml(
+                    order.status
+                ) +
+                "</div>";
+
+
+            html +=
+                "<div class='order-actions'>";
+
+
+            if (order.status === "New") {
+
+                html +=
+                    "<button class='status-button' " +
+                    "onclick=\"updateOrderStatus('" +
+                    order.id +
+                    "','Preparing')\">" +
+                    "PREPARING" +
+                    "</button>";
+
+            }
+
+
+            if (order.status === "Preparing") {
+
+                html +=
+                    "<button class='status-button' " +
+                    "onclick=\"updateOrderStatus('" +
+                    order.id +
+                    "','Ready')\">" +
+                    "READY" +
+                    "</button>";
+
+            }
+
+
+            if (order.status === "Ready") {
+
+                html +=
+                    "<button class='status-button' " +
+                    "onclick=\"updateOrderStatus('" +
+                    order.id +
+                    "','Completed')\">" +
+                    "COMPLETED" +
+                    "</button>";
+
+            }
+
+
+            html +=
+                "<button class='cancel-button' " +
                 "onclick=\"updateOrderStatus('" +
                 order.id +
-                "','Completed')\">" +
-                "COMPLETED" +
+                "','Cancelled')\">" +
+                "CANCEL" +
                 "</button>";
 
-        }
+
+            html +=
+                "</div>";
 
 
-        html +=
-            "<button class='cancel-button' " +
-            "onclick=\"updateOrderStatus('" +
-            order.id +
-            "','Cancelled')\">" +
-            "CANCEL" +
-            "</button>";
+            card.innerHTML =
+                html;
 
 
-        html +=
-            "</div>";
+            group.appendChild(card);
+
+        });
 
 
-        card.innerHTML =
-            html;
+        container.appendChild(group);
+
+    }
 
 
-        container.appendChild(card);
+    renderOrderGroup(
+        onlineOrders,
+        "🟢 ONLINE ORDERS",
+        false
+    );
 
-    });
+
+    renderOrderGroup(
+        manualOrders,
+        "🟠 MANUAL ORDERS",
+        true
+    );
 
 }
 
@@ -3638,7 +3732,7 @@ function showManualExtras(item) {
 
 
         item.addons.forEach(
-            function(addon) {
+            function(addon, index) {
 
                 const wrapper =
                     document.createElement(
@@ -4146,7 +4240,7 @@ async function addManualOrder() {
             data.total,
 
         status:
-            "Completed"
+            "New"
 
     };
 
@@ -4210,6 +4304,11 @@ async function addManualOrder() {
     resetManualOrder();
 
     await loadOrders();
+
+
+    /* Automatically go to reports
+       if desired later; currently
+       stays in manual order section. */
 
 }
 
@@ -4749,10 +4848,6 @@ function renderReportTable() {
             ];
 
 
-            /* =========================
-               NORMAL REPORT CELLS
-            ========================= */
-
             cells.forEach(
                 function(value) {
 
@@ -4774,33 +4869,21 @@ function renderReportTable() {
             );
 
 
-            /* =========================
-               DELETE BUTTON
-            ========================= */
-
             const actionCell =
-                document.createElement(
-                    "td"
-                );
-
+                document.createElement("td");
 
             actionCell.className =
                 "report-action-cell";
 
 
             const deleteButton =
-                document.createElement(
-                    "button"
-                );
-
+                document.createElement("button");
 
             deleteButton.className =
                 "delete-report-button";
 
-
             deleteButton.textContent =
                 "DELETE";
-
 
             deleteButton.onclick =
                 function() {
@@ -4815,7 +4898,6 @@ function renderReportTable() {
             actionCell.appendChild(
                 deleteButton
             );
-
 
             row.appendChild(
                 actionCell
@@ -4842,10 +4924,8 @@ async function deleteReportOrder(id) {
         currentReportOrders.find(
             function(item) {
 
-                return (
-                    String(item.id) ===
-                    String(id)
-                );
+                return String(item.id) ===
+                    String(id);
 
             }
         );
@@ -4864,41 +4944,22 @@ async function deleteReportOrder(id) {
 
     const confirmed =
         confirm(
-
             "Are you sure you want to delete this order?\n\n" +
-
             "Order: " +
-            (
-                order.order_number ||
-                "N/A"
-            ) +
-
+            (order.order_number || "N/A") +
             "\n" +
-
             "Customer: " +
-            (
-                order.customer_name ||
-                "N/A"
-            ) +
-
+            (order.customer_name || "N/A") +
             "\n" +
-
             "Total: " +
-            formatMoney(
-                order.grand_total
-            ) +
-
+            formatMoney(order.grand_total) +
             "\n\n" +
-
             "This will permanently remove the order from the reports."
-
         );
 
 
     if (!confirmed) {
-
         return;
-
     }
 
 
@@ -4906,10 +4967,7 @@ async function deleteReportOrder(id) {
         await supabaseClient
             .from("orders")
             .delete()
-            .eq(
-                "id",
-                id
-            );
+            .eq("id", id);
 
 
     if (error) {
@@ -4917,11 +4975,8 @@ async function deleteReportOrder(id) {
         console.error(error);
 
         alert(
-
             "Could not delete the order.\n\n" +
-
             error.message
-
         );
 
         return;
@@ -4929,27 +4984,18 @@ async function deleteReportOrder(id) {
     }
 
 
-    /* Remove from current report */
-
     currentReportOrders =
         currentReportOrders.filter(
             function(item) {
 
-                return (
-                    String(item.id) !==
-                    String(id)
-                );
+                return String(item.id) !==
+                    String(id);
 
             }
         );
 
 
-    /* Refresh report */
-
     renderDailyReport();
-
-
-    /* Refresh active orders */
 
     await loadOrders();
 
