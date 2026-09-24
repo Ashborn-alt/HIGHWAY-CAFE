@@ -1,4 +1,3 @@
-
 /* =====================================================
    HIGHWAY CAFE
    COMPLETE ORDERING SYSTEM
@@ -532,6 +531,7 @@ function applyCustomerAvailabilityButtonsOnly() {
             let productName = null;
             let category = null;
 
+
             /* -----------------------------------------
                PRODUCT
             ----------------------------------------- */
@@ -828,6 +828,7 @@ function openProduct(
 
         return;
     }
+
 
     if (
         !isMenuItemAvailable(
@@ -1170,6 +1171,24 @@ function openProduct(
     }
 
 
+    /*
+       =================================================
+       ADD-ONS HEADING FIX
+
+       Hide the "Add-ons" heading when the selected
+       product has no available add-ons.
+
+       The individual add-on buttons were already
+       being hidden correctly. This additionally
+       hides the heading/container so products such
+       as Highway Coolers and most Creamline Express
+       items do not show the word "Add-ons".
+       =================================================
+    */
+
+    updateAddonSectionVisibility();
+
+
     resetAddonButtons();
 
     updateSelectedProductPrice();
@@ -1178,6 +1197,175 @@ function openProduct(
     showPopup(
         "productOverlay",
         "productPopup"
+    );
+}
+
+
+/* =====================================================
+   ADD-ON SECTION VISIBILITY
+===================================================== */
+
+function updateAddonSectionVisibility() {
+
+    const espressoOption =
+        document.getElementById(
+            "espressoOption"
+        );
+
+    const matchaOption =
+        document.getElementById(
+            "matchaOption"
+        );
+
+    const chocolateOption =
+        document.getElementById(
+            "chocolateOption"
+        );
+
+
+    const hasAddon =
+        espressoAvailable ||
+        matchaAvailable ||
+        chocolateAvailable;
+
+
+    /*
+       First try to find an element specifically
+       containing all three add-on options.
+    */
+
+    const options = [
+        espressoOption,
+        matchaOption,
+        chocolateOption
+    ].filter(
+        function(element) {
+            return element !== null;
+        }
+    );
+
+
+    /*
+       Find a common parent that contains all
+       available add-on option elements.
+    */
+
+    let addonContainer = null;
+
+
+    if (options.length > 0) {
+
+        let current =
+            options[0].parentElement;
+
+
+        while (
+            current &&
+            current !== document.body
+        ) {
+
+            let containsAll =
+                true;
+
+
+            options.forEach(
+                function(option) {
+
+                    if (
+                        !current.contains(
+                            option
+                        )
+                    ) {
+
+                        containsAll =
+                            false;
+                    }
+                }
+            );
+
+
+            if (containsAll) {
+
+                /*
+                   Stop at a reasonable container
+                   instead of hiding the entire popup.
+                */
+
+                if (
+                    current.id ===
+                        "productPopup"
+                ) {
+
+                    break;
+                }
+
+
+                addonContainer =
+                    current;
+
+                break;
+            }
+
+
+            current =
+                current.parentElement;
+        }
+    }
+
+
+    /*
+       If a suitable common container was found,
+       hide it when there are no add-ons.
+    */
+
+    if (addonContainer) {
+
+        addonContainer.style.display =
+            hasAddon
+                ? ""
+                : "none";
+    }
+
+
+    /*
+       Also find a heading whose text is exactly
+       "Add-ons" / "Add-ons:" and hide it when
+       there are no add-ons.
+
+       This makes the fix work even if the heading
+       is outside the option container.
+    */
+
+    const headingCandidates =
+        document.querySelectorAll(
+            "h1, h2, h3, h4, h5, h6, p, strong, label, span, div"
+        );
+
+
+    headingCandidates.forEach(
+        function(element) {
+
+            /*
+               Only target simple text headings.
+               This prevents hiding a large container
+               just because it contains the word.
+            */
+
+            if (
+                element.children.length === 0 &&
+                element.textContent
+                    .trim()
+                    .toLowerCase()
+                    .replace(/:$/, "") ===
+                    "add-ons"
+            ) {
+
+                element.style.display =
+                    hasAddon
+                        ? ""
+                        : "none";
+            }
+        }
     );
 }
 
@@ -4858,7 +5046,7 @@ function showOrderConfirmation(
     if (totalDisplay) {
 
         totalDisplay.textContent =
-             total;
+            total;
     }
 
 
