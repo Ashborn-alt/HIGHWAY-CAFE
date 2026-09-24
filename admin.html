@@ -3,769 +3,811 @@
 
 <head>
 
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
-    <title>HIGHWAY CAFE - Admin</title>
-
-    <!-- SUPABASE -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- EXCEL EXPORT -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-            background: #f5eee6;
-            color: #3e2a20;
-        }
-
-
-        h1,
-        h2,
-        h3 {
-            margin-top: 0;
-        }
-
-
-        button {
-            cursor: pointer;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 15px;
-            font-weight: bold;
-        }
-
-
-        input,
-        select {
-            width: 100%;
-            padding: 11px;
-            border: 1px solid #cbb9aa;
-            border-radius: 7px;
-            font-size: 15px;
-            background: white;
-        }
-
-
-        .hidden {
-            display: none !important;
-        }
-
-
-        /* =========================
-           LOGIN
-        ========================= */
-
-        #loginScreen {
-            max-width: 420px;
-            margin: 70px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
-        }
-
-
-        #loginScreen h1 {
-            text-align: center;
-            color: #4b2e1f;
-        }
-
-
-        .login-field {
-            margin-bottom: 15px;
-        }
-
-
-        .login-field label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: bold;
-        }
-
-
-        #loginButton {
-            width: 100%;
-            background: #4b2e1f;
-            color: white;
-        }
-
-
-        #loginMessage {
-            margin-top: 15px;
-            text-align: center;
-            color: #b00020;
-        }
-
-
-        /* =========================
-           DASHBOARD
-        ========================= */
-
-        #dashboard {
-            max-width: 1250px;
-            margin: auto;
-        }
-
-
-        .top-header {
-            background: #4b2e1f;
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-        }
-
-
-        .top-header h1 {
-            margin-bottom: 5px;
-        }
-
-
-        .top-header p {
-            margin: 0;
-        }
-
-
-        .top-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-
-        .top-buttons button {
-            background: #ffffff;
-            color: #4b2e1f;
-            border: 1px solid #bca99a;
-        }
-
-
-        .logout-button {
-            margin-left: auto;
-        }
-
-
-        /* =========================
-           SHOP STATUS
-        ========================= */
-
-        .shop-status-card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-        }
-
-
-        #shopStatus {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 12px;
-        }
-
-
-        .open-status {
-            color: green;
-        }
-
-
-        .closed-status {
-            color: #b00020;
-        }
-
-
-        #toggleShopButton {
-            background: #4b2e1f;
-            color: white;
-        }
-
-
-        /* =========================
-           SECTIONS
-        ========================= */
-
-        .admin-section {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-        }
-
-
-        /* =========================
-           MENU
-        ========================= */
-
-        .menu-item-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-        }
-
-
-        .menu-item-row:last-child {
-            border-bottom: none;
-        }
-
-
-        .menu-item-name {
-            font-weight: bold;
-        }
-
-
-        .menu-item-category {
-            font-size: 13px;
-            color: #777;
-        }
-
-
-        .available-button {
-            background: #2e7d32;
-            color: white;
-        }
-
-
-        .sold-button {
-            background: #b00020;
-            color: white;
-        }
-
-
-        /* =========================
-           ORDERS
-        ========================= */
-
-        .orders-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-
-        #orderCount {
-            background: #4b2e1f;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 14px;
-        }
-
-
-        .order-card {
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 12px;
-            background: #fffdfb;
-        }
-
-
-        .order-card.new-order {
-            border: 3px solid #d97706;
-            background: #fff8eb;
-        }
-
-
-        .order-top {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-
-        .order-number {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-
-        .order-source {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 5px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-
-
-        .source-online {
-            background: #e3f2fd;
-            color: #1565c0;
-        }
-
-
-        .source-manual {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-
-        .active-orders-group {
-            margin-top: 20px;
-        }
-
-
-        .active-orders-group:first-child {
-            margin-top: 0;
-        }
-
-
-        .active-orders-group-title {
-            font-size: 20px;
-            font-weight: bold;
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            background: #4b2e1f;
-            color: white;
-        }
-
-
-        .active-orders-group-title.manual {
-            background: #856404;
-        }
-
-
-        .order-info {
-            margin-top: 10px;
-            line-height: 1.6;
-        }
-
-
-        .order-items {
-            background: #f7f2ed;
-            padding: 10px;
-            border-radius: 7px;
-            margin-top: 10px;
-            white-space: pre-wrap;
-        }
-
-
-        .order-total {
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-
-        .order-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 12px;
-        }
-
-
-        .status-button {
-            background: #4b2e1f;
-            color: white;
-        }
-
-
-        .cancel-button {
-            background: #b00020;
-            color: white;
-        }
-
-
-        /* =========================
-           NEW ORDER ALERT
-        ========================= */
-
-        #newOrderBanner {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            background: #b45309;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.25);
-            max-width: 320px;
-        }
-
-
-        #newOrderBanner button {
-            margin-top: 10px;
-            background: white;
-            color: #4b2e1f;
-        }
-
-
-        /* =========================
-           MANUAL ORDER
-        ========================= */
-
-        .manual-cart-box {
-            background: #fffdfb;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 18px;
-            text-align: left;
-        }
-
-
-        .manual-cart-box h3 {
-            margin-top: 0;
-        }
-
-
-        .manual-cart-item {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-
-        .manual-cart-item:last-child {
-            border-bottom: none;
-        }
-
-
-        .manual-cart-item-details {
-            flex: 1;
-        }
-
-
-        .manual-cart-remove {
-            background: #b00020;
-            color: white;
-            padding: 7px 10px;
-            font-size: 12px;
-        }
-
-
-        .manual-cart-empty {
-            color: #777;
-            padding: 5px 0;
-        }
-
-
-        .manual-add-product-button {
-            background: #856404;
-            color: white;
-            margin-bottom: 10px;
-        }
-
-
-        .manual-place-order-button {
-            background: #2e7d32;
-            color: white;
-        }
-
-
-        .manual-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-
-
-        .manual-field {
-            margin-bottom: 5px;
-        }
-
-
-        .manual-field.full {
-            grid-column: 1 / -1;
-        }
-
-
-        .manual-field label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
-
-
-        .manual-addons {
-            margin-top: 15px;
-            padding: 15px;
-            background: #f8f3ee;
-            border-radius: 10px;
-        }
-
-
-        .manual-addons h3 {
-            margin-bottom: 10px;
-        }
-
-
-        .addon-option {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-        }
-
-
-        .addon-option input {
-            width: auto;
-        }
-
-
-        .manual-total-box {
-            margin-top: 15px;
-            padding: 15px;
-            background: #4b2e1f;
-            color: white;
-            border-radius: 10px;
-            font-size: 20px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-
-        #addManualOrderButton {
-            margin-top: 15px;
-            width: 100%;
-            background: #4b2e1f;
-            color: white;
-            font-size: 16px;
-        }
-
-
-        /* =========================
-           REPORTS
-        ========================= */
-
-        .report-controls {
-            display: grid;
-            grid-template-columns: 1fr auto auto;
-            gap: 10px;
-            align-items: end;
-            margin-bottom: 20px;
-        }
-
-
-        .report-control label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
-
-
-        .report-control button {
-            height: 43px;
-            background: #4b2e1f;
-            color: white;
-        }
-
-
-        .report-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-
-        .stat-card {
-            background: #f8f3ee;
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-
-        .stat-title {
-            font-size: 13px;
-            color: #777;
-        }
-
-
-        .stat-value {
-            font-size: 22px;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-
-
-        .report-table-wrapper {
-            overflow-x: auto;
-        }
-
-
-        .report-action-cell {
-            white-space: nowrap;
-        }
-
-
-        .delete-report-button {
-            background: #b00020;
-            color: white;
-        }
-
-
-        .delete-report-button:hover {
-            opacity: 0.85;
-        }
-
-
-        .report-table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 900px;
-        }
-
-
-        .report-table th,
-        .report-table td {
-            padding: 9px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-            vertical-align: top;
-        }
-
-
-        .report-table th {
-            background: #4b2e1f;
-            color: white;
-        }
-
-
-        .report-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-
-        .report-buttons button {
-            background: #4b2e1f;
-            color: white;
-        }
-
-
-        /* =========================
-           EMPTY
-        ========================= */
-
-        .empty-message {
-            padding: 20px;
-            text-align: center;
-            color: #777;
-        }
-
-
-        /* =========================
-           PRINT
-        ========================= */
-
-        @media print {
-
-            body {
-                background: white;
-                padding: 0;
-            }
-
-            #dashboard > *:not(#reportsSection) {
-                display: none !important;
-            }
-
-            #reportsSection {
-                display: block !important;
-                box-shadow: none;
-            }
-
-            .report-controls,
-            .report-buttons {
-                display: none !important;
-            }
-
-
-            .report-action-cell,
-            .report-action-header {
-                display: none !important;
-            }
-
-            .report-table {
-                min-width: 0;
-            }
-
-        }
-
-
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media (max-width: 700px) {
-
-            body {
-                padding: 10px;
-            }
-
-
-            .manual-grid {
-                grid-template-columns: 1fr;
-            }
-
-
-            .manual-field.full {
-                grid-column: auto;
-            }
-
-
-            .report-controls {
-                grid-template-columns: 1fr;
-            }
-
-
-            .report-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-
-            .top-buttons {
-                flex-direction: column;
-            }
-
-
-            .logout-button {
-                margin-left: 0;
-            }
-
-
-            #newOrderBanner {
-                left: 10px;
-                right: 10px;
-                top: 10px;
-                max-width: none;
-            }
-
-        }
-
-    </style>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HIGHWAY CAFE - Admin</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: #f5eee6;
+    color: #3e2a20;
+}
+
+h1,
+h2,
+h3 {
+    margin-top: 0;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-weight: bold;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbb9aa;
+    border-radius: 7px;
+    font-size: 15px;
+    background: white;
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+#loginScreen {
+    max-width: 420px;
+    margin: 70px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+}
+
+#loginScreen h1 {
+    text-align: center;
+    color: #4b2e1f;
+}
+
+.login-field {
+    margin-bottom: 15px;
+}
+
+.login-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+#loginButton {
+    width: 100%;
+    background: #4b2e1f;
+    color: white;
+}
+
+#loginMessage {
+    margin-top: 15px;
+    text-align: center;
+    color: #b00020;
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+#dashboard {
+    max-width: 1250px;
+    margin: auto;
+}
+
+.top-header {
+    background: #4b2e1f;
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+}
+
+.top-header h1 {
+    margin-bottom: 5px;
+}
+
+.top-header p {
+    margin: 0;
+}
+
+.top-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.top-buttons button {
+    background: #ffffff;
+    color: #4b2e1f;
+    border: 1px solid #bca99a;
+}
+
+.logout-button {
+    margin-left: auto;
+}
+
+
+/* =====================================================
+   SHOP STATUS
+===================================================== */
+
+.shop-status-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+#shopStatus {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.open-status {
+    color: green;
+}
+
+.closed-status {
+    color: #b00020;
+}
+
+#toggleShopButton {
+    background: #4b2e1f;
+    color: white;
+}
+
+
+/* =====================================================
+   SECTIONS
+===================================================== */
+
+.admin-section {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+
+/* =====================================================
+   MENU
+===================================================== */
+
+.menu-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.menu-item-row:last-child {
+    border-bottom: none;
+}
+
+.menu-item-name {
+    font-weight: bold;
+}
+
+.menu-item-category {
+    font-size: 13px;
+    color: #777;
+}
+
+.available-button {
+    background: #2e7d32;
+    color: white;
+}
+
+.sold-button {
+    background: #b00020;
+    color: white;
+}
+
+
+/* =====================================================
+   ORDERS
+===================================================== */
+
+.orders-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#orderCount {
+    background: #4b2e1f;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.order-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 12px;
+    background: #fffdfb;
+}
+
+.order-card.new-order {
+    border: 3px solid #d97706;
+    background: #fff8eb;
+}
+
+.order-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.order-number {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.order-source {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.source-online {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.source-manual {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.active-orders-group {
+    margin-top: 20px;
+}
+
+.active-orders-group:first-child {
+    margin-top: 0;
+}
+
+.active-orders-group-title {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: #4b2e1f;
+    color: white;
+}
+
+.active-orders-group-title.manual {
+    background: #856404;
+}
+
+.order-info {
+    margin-top: 10px;
+    line-height: 1.6;
+}
+
+.order-items {
+    background: #f7f2ed;
+    padding: 10px;
+    border-radius: 7px;
+    margin-top: 10px;
+    white-space: pre-wrap;
+}
+
+.order-total {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.order-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.status-button {
+    background: #4b2e1f;
+    color: white;
+}
+
+.cancel-button {
+    background: #b00020;
+    color: white;
+}
+
+
+/* =====================================================
+   NEW ORDER ALERT
+===================================================== */
+
+#newOrderBanner {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: #b45309;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+    max-width: 320px;
+}
+
+#newOrderBanner button {
+    margin-top: 10px;
+    background: white;
+    color: #4b2e1f;
+}
+
+
+/* =====================================================
+   MANUAL ORDER
+===================================================== */
+
+.manual-cart-box {
+    background: #fffdfb;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 18px;
+    text-align: left;
+}
+
+.manual-cart-box h3 {
+    margin-top: 0;
+}
+
+.manual-cart-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.manual-cart-item:last-child {
+    border-bottom: none;
+}
+
+.manual-cart-item-details {
+    flex: 1;
+}
+
+.manual-cart-remove {
+    background: #b00020;
+    color: white;
+    padding: 7px 10px;
+    font-size: 12px;
+}
+
+.manual-cart-empty {
+    color: #777;
+    padding: 5px 0;
+}
+
+.manual-add-product-button {
+    background: #856404;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.manual-place-order-button {
+    background: #2e7d32;
+    color: white;
+}
+
+.manual-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.manual-field {
+    margin-bottom: 5px;
+}
+
+.manual-field.full {
+    grid-column: 1 / -1;
+}
+
+.manual-field label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.manual-addons {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f8f3ee;
+    border-radius: 10px;
+}
+
+.manual-addons h3 {
+    margin-bottom: 10px;
+}
+
+.addon-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+}
+
+.addon-option input {
+    width: auto;
+}
+
+.manual-total-box {
+    margin-top: 15px;
+    padding: 15px;
+    background: #4b2e1f;
+    color: white;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+#addManualOrderButton {
+    margin-top: 15px;
+    width: 100%;
+    background: #4b2e1f;
+    color: white;
+    font-size: 16px;
+}
+
+
+/* =====================================================
+   DAILY REPORTS
+===================================================== */
+
+.report-controls {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 10px;
+    align-items: end;
+    margin-bottom: 20px;
+}
+
+.report-control label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.report-control button {
+    height: 43px;
+    background: #4b2e1f;
+    color: white;
+}
+
+.report-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background: #f8f3ee;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.stat-title {
+    font-size: 13px;
+    color: #777;
+}
+
+.stat-value {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.report-table-wrapper {
+    overflow-x: auto;
+}
+
+.report-action-cell {
+    white-space: nowrap;
+}
+
+.delete-report-button {
+    background: #b00020;
+    color: white;
+}
+
+.delete-report-button:hover {
+    opacity: 0.85;
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+}
+
+.report-table th,
+.report-table td {
+    padding: 9px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    vertical-align: top;
+}
+
+.report-table th {
+    background: #4b2e1f;
+    color: white;
+}
+
+.report-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.report-buttons button {
+    background: #4b2e1f;
+    color: white;
+}
+
+
+/* =====================================================
+   MONTHLY / YEARLY REPORT DESIGN
+===================================================== */
+
+.analytics-controls {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 10px;
+    align-items: end;
+    margin-bottom: 20px;
+}
+
+.analytics-control label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.analytics-control button {
+    height: 43px;
+    background: #4b2e1f;
+    color: white;
+}
+
+.analytics-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.analytics-card {
+    background: #f8f3ee;
+    padding: 18px;
+    border-radius: 10px;
+}
+
+.analytics-card-title {
+    font-size: 13px;
+    color: #777;
+}
+
+.analytics-card-value {
+    font-size: 23px;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.analytics-card-small {
+    font-size: 13px;
+    color: #777;
+    margin-top: 5px;
+}
+
+.analytics-panel {
+    background: #fffdfb;
+    border: 1px solid #e2d8d0;
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 18px;
+}
+
+.analytics-panel h3 {
+    margin-bottom: 15px;
+}
+
+.chart-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.chart-container canvas {
+    display: block;
+    width: 100%;
+    min-width: 700px;
+    height: 330px;
+}
+
+.best-seller-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.best-seller-table th,
+.best-seller-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.best-seller-table th {
+    background: #4b2e1f;
+    color: white;
+}
+
+.rank-number {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.analytics-highlight {
+    background: #f8f3ee;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.analytics-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+}
+
+.analytics-buttons button {
+    background: #4b2e1f;
+    color: white;
+}
+
+.analytics-empty {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty-message {
+    padding: 20px;
+    text-align: center;
+    color: #777;
+}
+
+
+/* =====================================================
+   PRINT
+===================================================== */
+
+@media print {
+
+    body {
+        background: white;
+        padding: 0;
+    }
+
+    #dashboard > *:not(#reportsSection) {
+        display: none !important;
+    }
+
+    #reportsSection {
+        display: block !important;
+        box-shadow: none;
+    }
+
+    .report-controls,
+    .report-buttons {
+        display: none !important;
+    }
+
+    .report-action-cell,
+    .report-action-header {
+        display: none !important;
+    }
+
+    .report-table {
+        min-width: 0;
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    body {
+        padding: 10px;
+    }
+
+    .manual-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .manual-field.full {
+        grid-column: auto;
+    }
+
+    .report-controls,
+    .analytics-controls {
+        grid-template-columns: 1fr;
+    }
+
+    .report-stats,
+    .analytics-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .top-buttons {
+        flex-direction: column;
+    }
+
+    .logout-button {
+        margin-left: 0;
+    }
+
+    #newOrderBanner {
+        left: 10px;
+        right: 10px;
+        top: 10px;
+        max-width: none;
+    }
+
+}
+
+</style>
 
 </head>
 
@@ -785,7 +827,6 @@
         Admin Dashboard
     </p>
 
-
     <div class="login-field">
 
         <label>Email</label>
@@ -796,7 +837,6 @@
             placeholder="Admin email">
 
     </div>
-
 
     <div class="login-field">
 
@@ -809,7 +849,6 @@
 
     </div>
 
-
     <button
         id="loginButton"
         onclick="loginAdmin()">
@@ -817,7 +856,6 @@
         LOGIN
 
     </button>
-
 
     <div id="loginMessage"></div>
 
@@ -887,6 +925,14 @@
             📊 DAILY REPORTS
         </button>
 
+        <button onclick="showSection('monthlyReportSection')">
+            📅 MONTHLY REPORT
+        </button>
+
+        <button onclick="showSection('yearlyReportSection')">
+            📆 YEARLY REPORT
+        </button>
+
         <button
             class="logout-button"
             onclick="logoutAdmin()">
@@ -939,12 +985,10 @@
 
         </div>
 
-
         <p style="color:#777;">
             Completed and cancelled orders are removed from
             this list but remain available in Daily Reports.
         </p>
-
 
         <div id="ordersList">
 
@@ -972,11 +1016,7 @@
             menu. Prices and add-ons are calculated automatically.
         </p>
 
-
         <div class="manual-grid">
-
-
-            <!-- CUSTOMER -->
 
             <div class="manual-field">
 
@@ -990,9 +1030,6 @@
                     placeholder="Walk-in Customer">
 
             </div>
-
-
-            <!-- ORDER TYPE -->
 
             <div class="manual-field">
 
@@ -1018,9 +1055,6 @@
 
             </div>
 
-
-            <!-- CATEGORY -->
-
             <div class="manual-field">
 
                 <label>
@@ -1038,9 +1072,6 @@
                 </select>
 
             </div>
-
-
-            <!-- ITEM -->
 
             <div class="manual-field">
 
@@ -1061,9 +1092,6 @@
 
             </div>
 
-
-            <!-- VARIANT -->
-
             <div class="manual-field">
 
                 <label>
@@ -1083,9 +1111,6 @@
 
             </div>
 
-
-            <!-- QUANTITY -->
-
             <div class="manual-field">
 
                 <label>
@@ -1101,9 +1126,6 @@
                     oninput="updateManualTotal()">
 
             </div>
-
-
-            <!-- PAYMENT -->
 
             <div class="manual-field">
 
@@ -1125,9 +1147,6 @@
 
             </div>
 
-
-            <!-- FLAVOR -->
-
             <div
                 class="manual-field hidden"
                 id="manualFlavorField">
@@ -1148,9 +1167,6 @@
 
             </div>
 
-
-            <!-- ADDONS -->
-
             <div
                 class="manual-field full hidden"
                 id="manualAddonsField">
@@ -1167,20 +1183,19 @@
 
             </div>
 
-
         </div>
 
-
-        <!-- TOTAL -->
 
         <div class="manual-cart-box">
 
             <h3>🛒 Current Manual Order</h3>
 
             <div id="manualCartItems">
+
                 <div class="manual-cart-empty">
                     No products added yet. Select a product above and click ADD PRODUCT.
                 </div>
+
             </div>
 
         </div>
@@ -1220,7 +1235,6 @@
 
         </button>
 
-
     </div>
 
 
@@ -1237,7 +1251,6 @@
         <p style="color:#777;">
             Turn individual menu items on or off.
         </p>
-
 
         <div id="menuList">
 
@@ -1267,7 +1280,6 @@
 
         <div class="report-controls">
 
-
             <div class="report-control">
 
                 <label>
@@ -1280,7 +1292,6 @@
 
             </div>
 
-
             <div class="report-control">
 
                 <label>&nbsp;</label>
@@ -1290,7 +1301,6 @@
                 </button>
 
             </div>
-
 
             <div class="report-control">
 
@@ -1302,14 +1312,10 @@
 
             </div>
 
-
         </div>
 
 
-        <!-- STATS -->
-
         <div class="report-stats">
-
 
             <div class="stat-card">
 
@@ -1327,7 +1333,6 @@
 
             </div>
 
-
             <div class="stat-card">
 
                 <div class="stat-title">
@@ -1343,7 +1348,6 @@
                 </div>
 
             </div>
-
 
             <div class="stat-card">
 
@@ -1361,7 +1365,6 @@
 
             </div>
 
-
             <div class="stat-card">
 
                 <div class="stat-title">
@@ -1377,7 +1380,6 @@
                 </div>
 
             </div>
-
 
             <div class="stat-card">
 
@@ -1395,7 +1397,6 @@
 
             </div>
 
-
             <div class="stat-card">
 
                 <div class="stat-title">
@@ -1412,11 +1413,8 @@
 
             </div>
 
-
         </div>
 
-
-        <!-- REPORT TABLE -->
 
         <div class="report-table-wrapper">
 
@@ -1441,7 +1439,6 @@
                     </tr>
 
                 </thead>
-
 
                 <tbody id="reportTableBody">
 
@@ -1475,6 +1472,564 @@
     </div>
 
 
+    <!-- =================================================
+         MONTHLY REPORT
+    ================================================= -->
+
+    <div
+        id="monthlyReportSection"
+        class="admin-section hidden">
+
+        <h2>📅 MONTHLY REPORT</h2>
+
+        <p style="color:#777;">
+            Monthly performance based only on completed orders.
+        </p>
+
+
+        <div class="analytics-controls">
+
+            <div class="analytics-control">
+
+                <label>
+                    Select Month
+                </label>
+
+                <input
+                    type="month"
+                    id="monthlyReportMonth">
+
+            </div>
+
+
+            <div class="analytics-control">
+
+                <label>&nbsp;</label>
+
+                <button onclick="loadMonthlyReport()">
+                    LOAD REPORT
+                </button>
+
+            </div>
+
+
+            <div class="analytics-control">
+
+                <label>&nbsp;</label>
+
+                <button onclick="printMonthlyReport()">
+                    🖨 PRINT
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="analytics-stats">
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-title">
+                    TOTAL SALES
+                </div>
+
+                <div
+                    class="analytics-card-value"
+                    id="monthlyTotalSales">
+
+                    ₱0.00
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-title">
+                    TOTAL ORDERS
+                </div>
+
+                <div
+                    class="analytics-card-value"
+                    id="monthlyTotalOrders">
+
+                    0
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-title">
+                    HIGHEST SALES DAY
+                </div>
+
+                <div
+                    class="analytics-card-value"
+                    id="monthlyHighestDay">
+
+                    —
+
+                </div>
+
+                <div
+                    class="analytics-card-small"
+                    id="monthlyHighestDaySales">
+
+                    ₱0.00
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-title">
+                    AVERAGE SALES / DAY
+                </div>
+
+                <div
+                    class="analytics-card-value"
+                    id="monthlyAverageSales">
+
+                    ₱0.00
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-title">
+                    ONLINE ORDERS
+                </div>
+
+                <div
+                    class="analytics-card-value"
+                    id="monthlyOnlineOrders">
+
+                    0
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-title">
+                    MANUAL ORDERS
+                </div>
+
+                <div
+                    class="analytics-card-value"
+                    id="monthlyManualOrders">
+
+                    0
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-title">
+                    CASH SALES
+                </div>
+
+                <div
+                    class="analytics-card-value"
+                    id="monthlyCashSales">
+
+                    ₱0.00
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-title">
+                    GCASH SALES
+                </div>
+
+                <div
+                    class="analytics-card-value"
+                    id="monthlyGcashSales">
+
+                    ₱0.00
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="analytics-highlight" id="monthlySummaryText">
+            Select a month and load the report.
+        </div>
+
+
+        <div class="analytics-panel">
+
+            <h3>
+                📈 DAILY SALES GRAPH
+            </h3>
+
+            <div class="chart-container">
+
+                <canvas id="monthlySalesChart"></canvas>
+
+            </div>
+
+        </div>
+
+
+        <div class="analytics-panel">
+
+            <h3>
+                🏆 BEST SELLERS OF THE MONTH
+            </h3>
+
+            <div class="report-table-wrapper">
+
+                <table class="best-seller-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Rank</th>
+                            <th>Product</th>
+                            <th>Quantity Sold</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="monthlyBestSellerBody">
+
+                        <tr>
+
+                            <td
+                                colspan="3"
+                                class="analytics-empty">
+
+                                Load a monthly report.
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="analytics-buttons">
+
+            <button onclick="exportMonthlyReportExcel()">
+                📥 EXPORT MONTHLY EXCEL
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         YEARLY REPORT
+    ================================================= -->
+
+    <div
+        id="yearlyReportSection"
+        class="admin-section hidden">
+
+        <h2>📆 YEARLY REPORT</h2>
+
+        <p style="color:#777;">
+            Yearly performance based only on completed orders.
+        </p>
+
+
+        <div class="analytics-controls">
+
+            <div class="analytics-control">
+
+                <label>
+                    Select Year
+                </label>
+
+                <input
+                    type="number"
+                    id="yearlyReportYear"
+                    min="2000"
+                    max="2100">
+
+            </div>
+
+
+            <div class="analytics-control">
+
+                <label>&nbsp;</label>
+
+                <button onclick="loadYearlyReport()">
+                    LOAD REPORT
+                </button>
+
+            </div>
+
+
+            <div class="analytics-control">
+
+                <label>&nbsp;</label>
+
+                <button onclick="printYearlyReport()">
+                    🖨 PRINT
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="analytics-stats">
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-title">
+                    TOTAL SALES
+                </div>
+
+                <div
+                    class="analytics-card-value"
+                    id="yearlyTotalSales">
+
+                    ₱0.00
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-title">
+                    TOTAL ORDERS
+                </div>
+
+                <div
+                    class="analytics-card-value"
+                    id="yearlyTotalOrders">
+
+                    0
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-title">
+                    HIGHEST SALES MONTH
+                </div>
+
+                <div
+                    class="analytics-card-value"
+                    id="yearlyHighestMonth">
+
+                    —
+
+                </div>
+
+                <div
+                    class="analytics-card-small"
+                    id="yearlyHighestMonthSales">
+
+                    ₱0.00
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-title">
+                    AVERAGE SALES / MONTH
+                </div>
+
+                <div
+                    class="analytics-card-value"
+                    id="yearlyAverageSales">
+
+                    ₱0.00
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-title">
+                    ONLINE ORDERS
+                </div>
+
+                <div
+                    class="analytics-card-value"
+                    id="yearlyOnlineOrders">
+
+                    0
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-title">
+                    MANUAL ORDERS
+                </div>
+
+                <div
+                    class="analytics-card-value"
+                    id="yearlyManualOrders">
+
+                    0
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-title">
+                    CASH SALES
+                </div>
+
+                <div
+                    class="analytics-card-value"
+                    id="yearlyCashSales">
+
+                    ₱0.00
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-title">
+                    GCASH SALES
+                </div>
+
+                <div
+                    class="analytics-card-value"
+                    id="yearlyGcashSales">
+
+                    ₱0.00
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="analytics-highlight" id="yearlySummaryText">
+            Select a year and load the report.
+        </div>
+
+
+        <div class="analytics-panel">
+
+            <h3>
+                📈 MONTHLY SALES GRAPH
+            </h3>
+
+            <div class="chart-container">
+
+                <canvas id="yearlySalesChart"></canvas>
+
+            </div>
+
+        </div>
+
+
+        <div class="analytics-panel">
+
+            <h3>
+                🏆 BEST SELLERS OF THE YEAR
+            </h3>
+
+            <div class="report-table-wrapper">
+
+                <table class="best-seller-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Rank</th>
+                            <th>Product</th>
+                            <th>Quantity Sold</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="yearlyBestSellerBody">
+
+                        <tr>
+
+                            <td
+                                colspan="3"
+                                class="analytics-empty">
+
+                                Load a yearly report.
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="analytics-buttons">
+
+            <button onclick="exportYearlyReportExcel()">
+                📥 EXPORT YEARLY EXCEL
+            </button>
+
+        </div>
+
+    </div>
+
+
 </div>
 
 
@@ -1488,10 +2043,8 @@
 const SUPABASE_URL =
     "https://qfnjegsbyxxqsdaelqqa.supabase.co";
 
-
 const SUPABASE_KEY =
     "sb_publishable_ttu1AyOaylp3J4x7iTqaNg_1VLOdHoE";
-
 
 const supabaseClient =
     window.supabase.createClient(
@@ -1528,180 +2081,96 @@ let manualOrderItems = [];
 
 
 /* =====================================================
-   MENU DATA FOR MANUAL ORDERS
+   NEW REPORT VARIABLES
+===================================================== */
+
+let currentMonthlyReportOrders = [];
+
+let currentMonthlyReportDate = "";
+
+let currentYearlyReportOrders = [];
+
+let currentYearlyReportYear = "";
+
+
+/* =====================================================
+   MENU DATA
 ===================================================== */
 
 const MANUAL_MENU = {
 
-
     "Iced Coffee": {
 
         "Americano": {
-
             variants: [
-                {
-                    name: "16oz",
-                    price: 70
-                },
-                {
-                    name: "22oz",
-                    price: 80
-                }
+                { name: "16oz", price: 70 },
+                { name: "22oz", price: 80 }
             ],
-
             addons: [
-                {
-                    name: "Extra Espresso",
-                    price: 30
-                }
+                { name: "Extra Espresso", price: 30 }
             ]
-
         },
-
 
         "Vanilla Latte": {
-
             variants: [
-                {
-                    name: "16oz",
-                    price: 75
-                },
-                {
-                    name: "22oz",
-                    price: 89
-                }
+                { name: "16oz", price: 75 },
+                { name: "22oz", price: 89 }
             ],
-
             addons: [
-                {
-                    name: "Extra Espresso",
-                    price: 30
-                }
+                { name: "Extra Espresso", price: 30 }
             ]
-
         },
-
 
         "Spanish Latte": {
-
             variants: [
-                {
-                    name: "16oz",
-                    price: 75
-                },
-                {
-                    name: "22oz",
-                    price: 89
-                }
+                { name: "16oz", price: 75 },
+                { name: "22oz", price: 89 }
             ],
-
             addons: [
-                {
-                    name: "Extra Espresso",
-                    price: 30
-                }
+                { name: "Extra Espresso", price: 30 }
             ]
-
         },
-
 
         "Mocha Latte": {
-
             variants: [
-                {
-                    name: "16oz",
-                    price: 75
-                },
-                {
-                    name: "22oz",
-                    price: 89
-                }
+                { name: "16oz", price: 75 },
+                { name: "22oz", price: 89 }
             ],
-
             addons: [
-                {
-                    name: "Extra Espresso",
-                    price: 30
-                },
-                {
-                    name: "Extra Chocolate",
-                    price: 30
-                }
+                { name: "Extra Espresso", price: 30 },
+                { name: "Extra Chocolate", price: 30 }
             ]
-
         },
-
 
         "Dirty Matcha": {
-
             variants: [
-                {
-                    name: "16oz",
-                    price: 85
-                },
-                {
-                    name: "22oz",
-                    price: 100
-                }
+                { name: "16oz", price: 85 },
+                { name: "22oz", price: 100 }
             ],
-
             addons: [
-                {
-                    name: "Extra Espresso",
-                    price: 30
-                },
-                {
-                    name: "Extra Matcha",
-                    price: 30
-                }
+                { name: "Extra Espresso", price: 30 },
+                { name: "Extra Matcha", price: 30 }
             ]
-
         },
-
 
         "Salted Caramel": {
-
             variants: [
-                {
-                    name: "16oz",
-                    price: 75
-                },
-                {
-                    name: "22oz",
-                    price: 89
-                }
+                { name: "16oz", price: 75 },
+                { name: "22oz", price: 89 }
             ],
-
             addons: [
-                {
-                    name: "Extra Espresso",
-                    price: 30
-                }
+                { name: "Extra Espresso", price: 30 }
             ]
-
         },
 
-
         "Caramel Macchiato": {
-
             variants: [
-                {
-                    name: "16oz",
-                    price: 75
-                },
-                {
-                    name: "22oz",
-                    price: 89
-                }
+                { name: "16oz", price: 75 },
+                { name: "22oz", price: 89 }
             ],
-
             addons: [
-                {
-                    name: "Extra Espresso",
-                    price: 30
-                }
+                { name: "Extra Espresso", price: 30 }
             ]
-
         }
 
     },
@@ -1709,80 +2178,40 @@ const MANUAL_MENU = {
 
     "Hot Coffee": {
 
-
         "Hot Choco": {
-
             variants: [
-                {
-                    name: "8oz",
-                    price: 70
-                }
+                { name: "8oz", price: 70 }
             ],
-
             addons: [
-                {
-                    name: "Extra Chocolate",
-                    price: 30
-                }
+                { name: "Extra Chocolate", price: 30 }
             ]
-
         },
-
 
         "Americano": {
-
             variants: [
-                {
-                    name: "8oz",
-                    price: 70
-                }
+                { name: "8oz", price: 70 }
             ],
-
             addons: [
-                {
-                    name: "Extra Espresso",
-                    price: 30
-                }
+                { name: "Extra Espresso", price: 30 }
             ]
-
         },
-
 
         "Spanish Latte": {
-
             variants: [
-                {
-                    name: "8oz",
-                    price: 80
-                }
+                { name: "8oz", price: 80 }
             ],
-
             addons: [
-                {
-                    name: "Extra Espresso",
-                    price: 30
-                }
+                { name: "Extra Espresso", price: 30 }
             ]
-
         },
 
-
         "Cafe Latte": {
-
             variants: [
-                {
-                    name: "8oz",
-                    price: 80
-                }
+                { name: "8oz", price: 80 }
             ],
-
             addons: [
-                {
-                    name: "Extra Espresso",
-                    price: 30
-                }
+                { name: "Extra Espresso", price: 30 }
             ]
-
         }
 
     },
@@ -1790,84 +2219,36 @@ const MANUAL_MENU = {
 
     "Soda Series": {
 
-
         "Green Apple": {
-
             variants: [
-                {
-                    name: "12oz",
-                    price: 29
-                },
-                {
-                    name: "16oz",
-                    price: 39
-                },
-                {
-                    name: "22oz",
-                    price: 59
-                }
+                { name: "12oz", price: 29 },
+                { name: "16oz", price: 39 },
+                { name: "22oz", price: 59 }
             ]
-
         },
-
 
         "Lychee": {
-
             variants: [
-                {
-                    name: "12oz",
-                    price: 29
-                },
-                {
-                    name: "16oz",
-                    price: 39
-                },
-                {
-                    name: "22oz",
-                    price: 59
-                }
+                { name: "12oz", price: 29 },
+                { name: "16oz", price: 39 },
+                { name: "22oz", price: 59 }
             ]
-
         },
-
 
         "Strawberry": {
-
             variants: [
-                {
-                    name: "12oz",
-                    price: 29
-                },
-                {
-                    name: "16oz",
-                    price: 39
-                },
-                {
-                    name: "22oz",
-                    price: 59
-                }
+                { name: "12oz", price: 29 },
+                { name: "16oz", price: 39 },
+                { name: "22oz", price: 59 }
             ]
-
         },
 
-
         "Blueberry": {
-
             variants: [
-                {
-                    name: "12oz",
-                    price: 29
-                },
-                {
-                    name: "16oz",
-                    price: 39
-                },
-                {
-                    name: "22oz",
-                    price: 59
-                }
+                { name: "12oz", price: 29 },
+                { name: "16oz", price: 39 },
+                { name: "22oz", price: 59 }
             ]
-
         }
 
     },
@@ -1875,98 +2256,45 @@ const MANUAL_MENU = {
 
     "Milk Series": {
 
-
         "Strawberry Milk": {
-
             variants: [
-                {
-                    name: "16oz",
-                    price: 65
-                },
-                {
-                    name: "22oz",
-                    price: 80
-                }
+                { name: "16oz", price: 65 },
+                { name: "22oz", price: 80 }
             ]
-
         },
-
 
         "Blueberry Milk": {
-
             variants: [
-                {
-                    name: "16oz",
-                    price: 65
-                },
-                {
-                    name: "22oz",
-                    price: 80
-                }
+                { name: "16oz", price: 65 },
+                { name: "22oz", price: 80 }
             ]
-
         },
-
 
         "Chocolate Milk": {
-
             variants: [
-                {
-                    name: "16oz",
-                    price: 65
-                },
-                {
-                    name: "22oz",
-                    price: 80
-                }
+                { name: "16oz", price: 65 },
+                { name: "22oz", price: 80 }
             ],
-
             addons: [
-                {
-                    name: "Extra Chocolate",
-                    price: 30
-                }
+                { name: "Extra Chocolate", price: 30 }
             ]
-
         },
-
 
         "Matcha Latte": {
-
             variants: [
-                {
-                    name: "16oz",
-                    price: 80
-                },
-                {
-                    name: "22oz",
-                    price: 95
-                }
+                { name: "16oz", price: 80 },
+                { name: "22oz", price: 95 }
             ],
-
             addons: [
-                {
-                    name: "Extra Matcha",
-                    price: 30
-                }
+                { name: "Extra Matcha", price: 30 }
             ]
-
         },
 
-
         "Cookies and Cream": {
-
             variants: [
-                {
-                    name: "16oz",
-                    price: 65
-                },
-                {
-                    name: "22oz",
-                    price: 80
-                }
+                { name: "16oz", price: 65 },
+                { name: "22oz", price: 80 }
             ]
-
         }
 
     },
@@ -1974,184 +2302,86 @@ const MANUAL_MENU = {
 
     "Snack Detour": {
 
-
         "Nacho's": {
-
             variants: [
-                {
-                    name: "Regular",
-                    price: 75
-                },
-                {
-                    name: "Overload",
-                    price: 125
-                }
+                { name: "Regular", price: 75 },
+                { name: "Overload", price: 125 }
             ]
-
         },
-
 
         "Chicken": {
-
             variants: [
-                {
-                    name: "₱25 Chicken",
-                    price: 25
-                },
-                {
-                    name: "₱30 Chicken",
-                    price: 30
-                },
-                {
-                    name: "₱35 Chicken",
-                    price: 35
-                },
-                {
-                    name: "₱40 Chicken",
-                    price: 40
-                }
+                { name: "₱25 Chicken", price: 25 },
+                { name: "₱30 Chicken", price: 30 },
+                { name: "₱35 Chicken", price: 35 },
+                { name: "₱40 Chicken", price: 40 }
             ]
-
         },
 
-
         "French Fries": {
-
             variants: [
-                {
-                    name: "Regular",
-                    price: 25
-                },
-                {
-                    name: "Large",
-                    price: 40
-                }
+                { name: "Regular", price: 25 },
+                { name: "Large", price: 40 }
             ],
-
             flavors: [
                 "BBQ",
                 "Sour Cream",
                 "Cheese"
             ]
-
         },
-
 
         "Hashbrown": {
-
             variants: [
-                {
-                    name: "1 pc",
-                    price: 25
-                },
-                {
-                    name: "3 pcs",
-                    price: 65
-                }
+                { name: "1 pc", price: 25 },
+                { name: "3 pcs", price: 65 }
             ]
-
         },
-
 
         "Steamed Siomai": {
-
             variants: [
-                {
-                    name: "5 pcs",
-                    price: 25
-                },
-                {
-                    name: "11 pcs",
-                    price: 50
-                }
+                { name: "5 pcs", price: 25 },
+                { name: "11 pcs", price: 50 }
             ]
-
         },
-
 
         "Japanese Siomai": {
-
             variants: [
-                {
-                    name: "1 pc",
-                    price: 10
-                }
+                { name: "1 pc", price: 10 }
             ]
-
         },
-
 
         "Tofu Squares": {
-
             variants: [
-                {
-                    name: "4 pcs",
-                    price: 25
-                },
-                {
-                    name: "11 pcs",
-                    price: 50
-                }
+                { name: "4 pcs", price: 25 },
+                { name: "11 pcs", price: 50 }
             ]
-
         },
-
 
         "Flying Saucer": {
-
             variants: [
-                {
-                    name: "Ham & Cheese",
-                    price: 25
-                },
-                {
-                    name: "Hotdog & Cheese",
-                    price: 25
-                },
-                {
-                    name: "Egg & Cheese",
-                    price: 30
-                },
-                {
-                    name: "Tuna & Cheese",
-                    price: 30
-                }
+                { name: "Ham & Cheese", price: 25 },
+                { name: "Hotdog & Cheese", price: 25 },
+                { name: "Egg & Cheese", price: 30 },
+                { name: "Tuna & Cheese", price: 30 }
             ]
-
         },
-
 
         "Shanghai": {
-
             variants: [
-                {
-                    name: "1 pc",
-                    price: 10
-                },
-                {
-                    name: "11 pcs",
-                    price: 100
-                }
+                { name: "1 pc", price: 10 },
+                { name: "11 pcs", price: 100 }
             ]
-
         },
 
-
         "Donuts": {
-
             variants: [
-                {
-                    name: "1 pc",
-                    price: 10
-                }
+                { name: "1 pc", price: 10 }
             ],
-
             flavors: [
                 "Vanilla",
                 "Caramel",
                 "Chocolate"
             ]
-
         }
 
     },
@@ -2159,224 +2389,77 @@ const MANUAL_MENU = {
 
     "Pit Stop Plates": {
 
-
         "Chicken Rice Meal": {
-
             variants: [
-                {
-                    name: "1 pc Chicken",
-                    price: 50
-                },
-                {
-                    name: "2 pcs Chicken",
-                    price: 80
-                }
+                { name: "1 pc Chicken", price: 50 },
+                { name: "2 pcs Chicken", price: 80 }
             ],
-
             addons: [
-
-                {
-                    name: "Highway Cooler 16oz",
-                    price: 35
-                },
-
-                {
-                    name: "Highway Cooler 22oz",
-                    price: 55
-                },
-
-                {
-                    name: "Extra Egg",
-                    price: 10
-                },
-
-                {
-                    name: "Extra Rice",
-                    price: 15
-                }
-
+                { name: "Highway Cooler 16oz", price: 35 },
+                { name: "Highway Cooler 22oz", price: 55 },
+                { name: "Extra Egg", price: 10 },
+                { name: "Extra Rice", price: 15 }
             ]
-
         },
-
 
         "Shanghai Rice Meal": {
-
             variants: [
-                {
-                    name: "4 pcs Shanghai",
-                    price: 50
-                }
+                { name: "4 pcs Shanghai", price: 50 }
             ],
-
             addons: [
-
-                {
-                    name: "Highway Cooler 16oz",
-                    price: 35
-                },
-
-                {
-                    name: "Highway Cooler 22oz",
-                    price: 55
-                },
-
-                {
-                    name: "Extra Egg",
-                    price: 10
-                },
-
-                {
-                    name: "Extra Rice",
-                    price: 15
-                }
-
+                { name: "Highway Cooler 16oz", price: 35 },
+                { name: "Highway Cooler 22oz", price: 55 },
+                { name: "Extra Egg", price: 10 },
+                { name: "Extra Rice", price: 15 }
             ]
-
         },
-
 
         "Siomai Rice Meal": {
-
             variants: [
-                {
-                    name: "6 pcs Steamed Siomai",
-                    price: 45
-                }
+                { name: "6 pcs Steamed Siomai", price: 45 }
             ],
-
             addons: [
-
-                {
-                    name: "Highway Cooler 16oz",
-                    price: 35
-                },
-
-                {
-                    name: "Highway Cooler 22oz",
-                    price: 55
-                },
-
-                {
-                    name: "Extra Egg",
-                    price: 10
-                },
-
-                {
-                    name: "Extra Rice",
-                    price: 15
-                }
-
+                { name: "Highway Cooler 16oz", price: 35 },
+                { name: "Highway Cooler 22oz", price: 55 },
+                { name: "Extra Egg", price: 10 },
+                { name: "Extra Rice", price: 15 }
             ]
-
         },
-
 
         "Hotdog Rice Meal": {
-
             variants: [
-                {
-                    name: "2 pcs Hotdog",
-                    price: 50
-                }
+                { name: "2 pcs Hotdog", price: 50 }
             ],
-
             addons: [
-
-                {
-                    name: "Highway Cooler 16oz",
-                    price: 35
-                },
-
-                {
-                    name: "Highway Cooler 22oz",
-                    price: 55
-                },
-
-                {
-                    name: "Extra Egg",
-                    price: 10
-                },
-
-                {
-                    name: "Extra Rice",
-                    price: 15
-                }
-
+                { name: "Highway Cooler 16oz", price: 35 },
+                { name: "Highway Cooler 22oz", price: 55 },
+                { name: "Extra Egg", price: 10 },
+                { name: "Extra Rice", price: 15 }
             ]
-
         },
-
 
         "Meatloaf Rice Meal": {
-
             variants: [
-                {
-                    name: "3 pcs Meatloaf",
-                    price: 55
-                }
+                { name: "3 pcs Meatloaf", price: 55 }
             ],
-
             addons: [
-
-                {
-                    name: "Highway Cooler 16oz",
-                    price: 35
-                },
-
-                {
-                    name: "Highway Cooler 22oz",
-                    price: 55
-                },
-
-                {
-                    name: "Extra Egg",
-                    price: 10
-                },
-
-                {
-                    name: "Extra Rice",
-                    price: 15
-                }
-
+                { name: "Highway Cooler 16oz", price: 35 },
+                { name: "Highway Cooler 22oz", price: 55 },
+                { name: "Extra Egg", price: 10 },
+                { name: "Extra Rice", price: 15 }
             ]
-
         },
 
-
         "Skinless Longganisa": {
-
             variants: [
-                {
-                    name: "2 pcs",
-                    price: 55
-                }
+                { name: "2 pcs", price: 55 }
             ],
-
             addons: [
-
-                {
-                    name: "Highway Cooler 16oz",
-                    price: 35
-                },
-
-                {
-                    name: "Highway Cooler 22oz",
-                    price: 55
-                },
-
-                {
-                    name: "Extra Egg",
-                    price: 10
-                },
-
-                {
-                    name: "Extra Rice",
-                    price: 15
-                }
-
+                { name: "Highway Cooler 16oz", price: 35 },
+                { name: "Highway Cooler 22oz", price: 55 },
+                { name: "Extra Egg", price: 10 },
+                { name: "Extra Rice", price: 15 }
             ]
-
         }
 
     }
@@ -2396,13 +2479,10 @@ async function loginAdmin() {
     const password =
         document.getElementById("loginPassword").value;
 
-
     const message =
         document.getElementById("loginMessage");
 
-
     message.textContent = "";
-
 
     if (!email || !password) {
 
@@ -2410,18 +2490,13 @@ async function loginAdmin() {
             "Please enter email and password.";
 
         return;
-
     }
-
 
     const { error } =
         await supabaseClient.auth.signInWithPassword({
-
             email: email,
             password: password
-
         });
-
 
     if (error) {
 
@@ -2429,9 +2504,7 @@ async function loginAdmin() {
             error.message;
 
         return;
-
     }
-
 
     showDashboard();
 
@@ -2448,11 +2521,9 @@ async function showDashboard() {
         .getElementById("loginScreen")
         .classList.add("hidden");
 
-
     document
         .getElementById("dashboard")
         .classList.remove("hidden");
-
 
     await loadShopStatus();
 
@@ -2461,6 +2532,12 @@ async function showDashboard() {
     await loadOrders();
 
     initializeManualOrder();
+
+    setDefaultReportDate();
+
+    setDefaultMonthlyReport();
+
+    setDefaultYearlyReport();
 
     startOrderChecker();
 
@@ -2493,7 +2570,6 @@ async function loadShopStatus() {
             .limit(1)
             .single();
 
-
     if (error) {
 
         document.getElementById("shopStatus")
@@ -2501,17 +2577,13 @@ async function loadShopStatus() {
             "Error loading shop status.";
 
         return;
-
     }
-
 
     const status =
         document.getElementById("shopStatus");
 
-
     const button =
         document.getElementById("toggleShopButton");
-
 
     if (data.shop_open) {
 
@@ -2537,7 +2609,6 @@ async function loadShopStatus() {
 
     }
 
-
     window.shopSettingsId = data.id;
 
 }
@@ -2554,9 +2625,7 @@ async function toggleShop() {
         alert("Shop settings not loaded.");
 
         return;
-
     }
-
 
     const { data, error } =
         await supabaseClient
@@ -2565,15 +2634,12 @@ async function toggleShop() {
             .eq("id", window.shopSettingsId)
             .single();
 
-
     if (error) {
 
         alert(error.message);
 
         return;
-
     }
-
 
     const { error: updateError } =
         await supabaseClient
@@ -2584,15 +2650,12 @@ async function toggleShop() {
             })
             .eq("id", window.shopSettingsId);
 
-
     if (updateError) {
 
         alert(updateError.message);
 
         return;
-
     }
-
 
     await loadShopStatus();
 
@@ -2612,7 +2675,6 @@ async function loadMenu() {
                 "id, product_name, category, available"
             );
 
-
     if (error) {
 
         document.getElementById("menuList")
@@ -2622,12 +2684,9 @@ async function loadMenu() {
             "</div>";
 
         return;
-
     }
 
-
     menuItems = data || [];
-
 
     menuItems.sort(function(a, b) {
 
@@ -2636,7 +2695,6 @@ async function loadMenu() {
         );
 
     });
-
 
     renderMenu();
 
@@ -2652,7 +2710,6 @@ function renderMenu() {
     const container =
         document.getElementById("menuList");
 
-
     if (!menuItems.length) {
 
         container.innerHTML =
@@ -2661,72 +2718,54 @@ function renderMenu() {
             "</div>";
 
         return;
-
     }
-
 
     container.innerHTML = "";
 
-
     menuItems.forEach(function(item) {
-
 
         const row =
             document.createElement("div");
 
-
         row.className =
             "menu-item-row";
-
 
         const info =
             document.createElement("div");
 
-
         const name =
             document.createElement("div");
-
 
         name.className =
             "menu-item-name";
 
-
         name.textContent =
             item.product_name;
-
 
         const category =
             document.createElement("div");
 
-
         category.className =
             "menu-item-category";
-
 
         category.textContent =
             item.category;
 
-
         info.appendChild(name);
-
         info.appendChild(category);
-
 
         const button =
             document.createElement("button");
-
 
         button.className =
             item.available
                 ? "available-button"
                 : "sold-button";
 
-
         button.textContent =
             item.available
                 ? "AVAILABLE"
                 : "SOLD OUT";
-
 
         button.onclick =
             function() {
@@ -2738,11 +2777,8 @@ function renderMenu() {
 
             };
 
-
         row.appendChild(info);
-
         row.appendChild(button);
-
 
         container.appendChild(row);
 
@@ -2770,15 +2806,12 @@ async function toggleMenuItem(id, currentStatus) {
             })
             .eq("id", id);
 
-
     if (error) {
 
         alert(error.message);
 
         return;
-
     }
-
 
     await loadMenu();
 
@@ -2802,7 +2835,6 @@ async function loadOrders() {
                 }
             );
 
-
     if (error) {
 
         document.getElementById("ordersList")
@@ -2812,13 +2844,10 @@ async function loadOrders() {
             "</div>";
 
         return;
-
     }
-
 
     allOrders =
         data || [];
-
 
     checkForNewOrders(allOrders);
 
@@ -2842,7 +2871,6 @@ function checkForNewOrders(orders) {
             })
         );
 
-
     if (!firstOrdersLoaded) {
 
         knownOrderIds =
@@ -2852,20 +2880,16 @@ function checkForNewOrders(orders) {
             true;
 
         return;
-
     }
-
 
     orders.forEach(function(order) {
 
         const id =
             String(order.id);
 
-
         const isManual =
             String(order.order_number || "")
                 .startsWith("MANUAL-");
-
 
         if (
             !knownOrderIds.has(id) &&
@@ -2879,10 +2903,8 @@ function checkForNewOrders(orders) {
 
     });
 
-
     knownOrderIds =
         currentIds;
-
 
     if (newOrderIds.size > 0) {
 
@@ -2904,22 +2926,20 @@ function showNewOrderAlert() {
             "newOrderBanner"
         );
 
-
     const count =
         newOrderIds.size;
-
 
     document.getElementById(
         "newOrderBannerText"
     ).textContent =
         count +
-        (count === 1
-            ? " new order has arrived."
-            : " new orders have arrived.");
-
+        (
+            count === 1
+                ? " new order has arrived."
+                : " new orders have arrived."
+        );
 
     banner.classList.remove("hidden");
-
 
     startRingAlert();
 
@@ -2935,12 +2955,9 @@ function startRingAlert() {
     if (ringInterval) {
 
         return;
-
     }
 
-
     playAlertSound();
-
 
     ringInterval =
         setInterval(
@@ -2991,41 +3008,33 @@ function playAlertSound() {
 
         }
 
-
         const oscillator =
             audioContext.createOscillator();
-
 
         const gain =
             audioContext.createGain();
 
-
         oscillator.frequency.value =
             880;
 
-
         oscillator.type =
             "sine";
-
 
         gain.gain.setValueAtTime(
             0.25,
             audioContext.currentTime
         );
 
-
         gain.gain.exponentialRampToValueAtTime(
             0.001,
             audioContext.currentTime + 0.7
         );
-
 
         oscillator.connect(gain);
 
         gain.connect(
             audioContext.destination
         );
-
 
         oscillator.start();
 
@@ -3081,7 +3090,6 @@ function renderActiveOrders() {
     const container =
         document.getElementById("ordersList");
 
-
     const activeOrders =
         allOrders.filter(
             function(order) {
@@ -3094,7 +3102,6 @@ function renderActiveOrders() {
             }
         );
 
-
     document.getElementById(
         "orderCount"
     ).textContent =
@@ -3105,7 +3112,6 @@ function renderActiveOrders() {
                 : " orders"
         );
 
-
     if (!activeOrders.length) {
 
         container.innerHTML =
@@ -3114,12 +3120,9 @@ function renderActiveOrders() {
             "</div>";
 
         return;
-
     }
 
-
     container.innerHTML = "";
-
 
     const onlineOrders =
         activeOrders.filter(function(order) {
@@ -3128,7 +3131,6 @@ function renderActiveOrders() {
                 .startsWith("MANUAL-");
 
         });
-
 
     const manualOrders =
         activeOrders.filter(function(order) {
@@ -3146,16 +3148,15 @@ function renderActiveOrders() {
     ) {
 
         if (!orders.length) {
+
             return;
         }
-
 
         const group =
             document.createElement("div");
 
         group.className =
             "active-orders-group";
-
 
         const groupTitle =
             document.createElement("div");
@@ -3169,7 +3170,6 @@ function renderActiveOrders() {
 
         group.appendChild(groupTitle);
 
-
         orders.forEach(function(order) {
 
             const card =
@@ -3177,7 +3177,6 @@ function renderActiveOrders() {
 
             card.className =
                 "order-card";
-
 
             if (
                 newOrderIds.has(
@@ -3191,37 +3190,29 @@ function renderActiveOrders() {
 
             }
 
-
             const source =
                 isManual
                     ? "Manual"
                     : "Online";
-
 
             const sourceClass =
                 isManual
                     ? "source-manual"
                     : "source-online";
 
-
             const date =
                 new Date(order.created_at);
-
 
             const formattedDate =
                 date.toLocaleString();
 
-
             let html = "";
-
 
             html +=
                 "<div class='order-top'>";
 
-
             html +=
                 "<div>";
-
 
             html +=
                 "<div class='order-number'>" +
@@ -3230,7 +3221,6 @@ function renderActiveOrders() {
                 ) +
                 "</div>";
 
-
             html +=
                 "<span class='order-source " +
                 sourceClass +
@@ -3238,10 +3228,8 @@ function renderActiveOrders() {
                 source +
                 "</span>";
 
-
             html +=
                 "</div>";
-
 
             html +=
                 "<div>" +
@@ -3250,14 +3238,11 @@ function renderActiveOrders() {
                 ) +
                 "</div>";
 
-
             html +=
                 "</div>";
 
-
             html +=
                 "<div class='order-info'>";
-
 
             html +=
                 "<strong>Customer:</strong> " +
@@ -3267,7 +3252,6 @@ function renderActiveOrders() {
                 ) +
                 "<br>";
 
-
             html +=
                 "<strong>Type:</strong> " +
                 escapeHtml(
@@ -3276,14 +3260,12 @@ function renderActiveOrders() {
                 ) +
                 "<br>";
 
-
             html +=
                 "<strong>Payment:</strong> " +
                 escapeHtml(
                     order.payment_method ||
                     "N/A"
                 );
-
 
             if (order.phone) {
 
@@ -3295,7 +3277,6 @@ function renderActiveOrders() {
 
             }
 
-
             if (order.delivery_address) {
 
                 html +=
@@ -3306,10 +3287,8 @@ function renderActiveOrders() {
 
             }
 
-
             html +=
                 "</div>";
-
 
             html +=
                 "<div class='order-items'>" +
@@ -3318,7 +3297,6 @@ function renderActiveOrders() {
                     ""
                 ) +
                 "</div>";
-
 
             if (order.order_notes) {
 
@@ -3332,7 +3310,6 @@ function renderActiveOrders() {
 
             }
 
-
             html +=
                 "<div class='order-total'>" +
                 "Total: " +
@@ -3340,7 +3317,6 @@ function renderActiveOrders() {
                     order.grand_total
                 ) +
                 "</div>";
-
 
             html +=
                 "<div class='order-info'>" +
@@ -3350,10 +3326,8 @@ function renderActiveOrders() {
                 ) +
                 "</div>";
 
-
             html +=
                 "<div class='order-actions'>";
-
 
             if (order.status === "New") {
 
@@ -3367,7 +3341,6 @@ function renderActiveOrders() {
 
             }
 
-
             if (order.status === "Preparing") {
 
                 html +=
@@ -3379,7 +3352,6 @@ function renderActiveOrders() {
                     "</button>";
 
             }
-
 
             if (order.status === "Ready") {
 
@@ -3393,7 +3365,6 @@ function renderActiveOrders() {
 
             }
 
-
             html +=
                 "<button class='cancel-button' " +
                 "onclick=\"updateOrderStatus('" +
@@ -3402,19 +3373,15 @@ function renderActiveOrders() {
                 "CANCEL" +
                 "</button>";
 
-
             html +=
                 "</div>";
-
 
             card.innerHTML =
                 html;
 
-
             group.appendChild(card);
 
         });
-
 
         container.appendChild(group);
 
@@ -3426,7 +3393,6 @@ function renderActiveOrders() {
         "🟢 ONLINE ORDERS",
         false
     );
-
 
     renderOrderGroup(
         manualOrders,
@@ -3454,20 +3420,16 @@ async function updateOrderStatus(
             })
             .eq("id", id);
 
-
     if (error) {
 
         alert(error.message);
 
         return;
-
     }
-
 
     newOrderIds.delete(
         String(id)
     );
-
 
     if (newOrderIds.size === 0) {
 
@@ -3480,7 +3442,6 @@ async function updateOrderStatus(
         stopRingAlert();
 
     }
-
 
     await loadOrders();
 
@@ -3500,7 +3461,6 @@ function startOrderChecker() {
         );
 
     }
-
 
     orderCheckInterval =
         setInterval(
@@ -3522,12 +3482,10 @@ function initializeManualOrder() {
             "manualCategory"
         );
 
-
     category.innerHTML =
         "<option value=''>" +
         "Select Category" +
         "</option>";
-
 
     Object.keys(MANUAL_MENU)
         .forEach(function(categoryName) {
@@ -3537,21 +3495,17 @@ function initializeManualOrder() {
                     "option"
                 );
 
-
             option.value =
                 categoryName;
 
-
             option.textContent =
                 categoryName;
-
 
             category.appendChild(
                 option
             );
 
         });
-
 
     resetManualOrder();
 
@@ -3569,56 +3523,45 @@ function manualCategoryChanged() {
             "manualCategory"
         ).value;
 
-
     const itemSelect =
         document.getElementById(
             "manualItem"
         );
-
 
     const variantSelect =
         document.getElementById(
             "manualVariant"
         );
 
-
     itemSelect.innerHTML =
         "<option value=''>" +
         "Select Menu Item" +
         "</option>";
-
 
     variantSelect.innerHTML =
         "<option value=''>" +
         "Select Size / Variant" +
         "</option>";
 
-
     itemSelect.disabled =
         true;
-
 
     variantSelect.disabled =
         true;
 
-
     hideManualExtras();
-
 
     if (!categoryName) {
 
         updateManualTotal();
 
         return;
-
     }
-
 
     const items =
         MANUAL_MENU[
             categoryName
         ];
-
 
     Object.keys(items)
         .forEach(function(itemName) {
@@ -3628,14 +3571,11 @@ function manualCategoryChanged() {
                     "option"
                 );
 
-
             option.value =
                 itemName;
 
-
             option.textContent =
                 itemName;
-
 
             itemSelect.appendChild(
                 option
@@ -3643,10 +3583,8 @@ function manualCategoryChanged() {
 
         });
 
-
     itemSelect.disabled =
         false;
-
 
     updateManualTotal();
 
@@ -3664,31 +3602,25 @@ function manualItemChanged() {
             "manualCategory"
         ).value;
 
-
     const itemName =
         document.getElementById(
             "manualItem"
         ).value;
-
 
     const variantSelect =
         document.getElementById(
             "manualVariant"
         );
 
-
     variantSelect.innerHTML =
         "<option value=''>" +
         "Select Size / Variant" +
         "</option>";
 
-
     variantSelect.disabled =
         true;
 
-
     hideManualExtras();
-
 
     if (
         !categoryName ||
@@ -3698,9 +3630,7 @@ function manualItemChanged() {
         updateManualTotal();
 
         return;
-
     }
-
 
     const item =
         MANUAL_MENU[
@@ -3708,7 +3638,6 @@ function manualItemChanged() {
         ][
             itemName
         ];
-
 
     item.variants.forEach(
         function(variant, index) {
@@ -3718,10 +3647,8 @@ function manualItemChanged() {
                     "option"
                 );
 
-
             option.value =
                 index;
-
 
             option.textContent =
                 variant.name +
@@ -3730,7 +3657,6 @@ function manualItemChanged() {
                     variant.price
                 );
 
-
             variantSelect.appendChild(
                 option
             );
@@ -3738,15 +3664,12 @@ function manualItemChanged() {
         }
     );
 
-
     variantSelect.disabled =
         false;
-
 
     showManualExtras(
         item
     );
-
 
     updateManualTotal();
 
@@ -3775,42 +3698,31 @@ function showManualExtras(item) {
             "manualAddonsField"
         );
 
-
     const addonList =
         document.getElementById(
             "manualAddonsList"
         );
-
 
     const flavorField =
         document.getElementById(
             "manualFlavorField"
         );
 
-
     const flavorSelect =
         document.getElementById(
             "manualFlavor"
         );
 
-
     addonList.innerHTML =
         "";
-
 
     flavorSelect.innerHTML =
         "<option value=''>" +
         "Select Flavor" +
         "</option>";
 
-
     let hasExtras =
         false;
-
-
-    /* =========================
-       ADDONS
-    ========================= */
 
     if (
         item.addons &&
@@ -3820,53 +3732,43 @@ function showManualExtras(item) {
         hasExtras =
             true;
 
-
         item.addons.forEach(
-            function(addon, index) {
+            function(addon) {
 
                 const wrapper =
                     document.createElement(
                         "label"
                     );
 
-
                 wrapper.className =
                     "addon-option";
-
 
                 const checkbox =
                     document.createElement(
                         "input"
                     );
 
-
                 checkbox.type =
                     "checkbox";
-
 
                 checkbox.className =
                     "manual-addon-checkbox";
 
-
                 checkbox.dataset.name =
                     addon.name;
 
-
                 checkbox.dataset.price =
                     addon.price;
-
 
                 checkbox.addEventListener(
                     "change",
                     updateManualTotal
                 );
 
-
                 const text =
                     document.createElement(
                         "span"
                     );
-
 
                 text.textContent =
                     addon.name +
@@ -3875,16 +3777,13 @@ function showManualExtras(item) {
                         addon.price
                     );
 
-
                 wrapper.appendChild(
                     checkbox
                 );
 
-
                 wrapper.appendChild(
                     text
                 );
-
 
                 addonList.appendChild(
                     wrapper
@@ -3895,11 +3794,6 @@ function showManualExtras(item) {
 
     }
 
-
-    /* =========================
-       FLAVORS
-    ========================= */
-
     if (
         item.flavors &&
         item.flavors.length > 0
@@ -3908,11 +3802,9 @@ function showManualExtras(item) {
         hasExtras =
             true;
 
-
         flavorField.classList.remove(
             "hidden"
         );
-
 
         item.flavors.forEach(
             function(flavor) {
@@ -3922,14 +3814,11 @@ function showManualExtras(item) {
                         "option"
                     );
 
-
                 option.value =
                     flavor;
 
-
                 option.textContent =
                     flavor;
-
 
                 flavorSelect.appendChild(
                     option
@@ -3945,7 +3834,6 @@ function showManualExtras(item) {
         );
 
     }
-
 
     if (hasExtras) {
 
@@ -3978,7 +3866,6 @@ function hideManualExtras() {
             "hidden"
         );
 
-
     document
         .getElementById(
             "manualFlavorField"
@@ -3987,14 +3874,12 @@ function hideManualExtras() {
             "hidden"
         );
 
-
     document
         .getElementById(
             "manualAddonsList"
         )
         .innerHTML =
         "";
-
 
     document
         .getElementById(
@@ -4019,18 +3904,15 @@ function getManualOrderData() {
             "manualCategory"
         ).value;
 
-
     const itemName =
         document.getElementById(
             "manualItem"
         ).value;
 
-
     const variantIndex =
         document.getElementById(
             "manualVariant"
         ).value;
-
 
     const quantity =
         Math.max(
@@ -4042,7 +3924,6 @@ function getManualOrderData() {
             ) || 1
         );
 
-
     if (
         !categoryName ||
         !itemName ||
@@ -4050,9 +3931,7 @@ function getManualOrderData() {
     ) {
 
         return null;
-
     }
-
 
     const item =
         MANUAL_MENU[
@@ -4061,29 +3940,23 @@ function getManualOrderData() {
             itemName
         ];
 
-
     const variant =
         item.variants[
             Number(variantIndex)
         ];
 
-
     if (!variant) {
 
         return null;
-
     }
-
 
     let unitPrice =
         Number(
             variant.price
         );
 
-
     const selectedAddons =
         [];
-
 
     document
         .querySelectorAll(
@@ -4094,16 +3967,13 @@ function getManualOrderData() {
             const addonName =
                 checkbox.dataset.name;
 
-
             const addonPrice =
                 Number(
                     checkbox.dataset.price
                 );
 
-
             unitPrice +=
                 addonPrice;
-
 
             selectedAddons.push({
                 name: addonName,
@@ -4112,17 +3982,14 @@ function getManualOrderData() {
 
         });
 
-
     const flavor =
         document.getElementById(
             "manualFlavor"
         ).value;
 
-
     const total =
         unitPrice *
         quantity;
-
 
     return {
 
@@ -4169,20 +4036,23 @@ function updateManualTotal() {
     const currentItem =
         getManualOrderData();
 
-
     let total =
         manualOrderItems.reduce(
             function(sum, item) {
-                return sum + Number(item.total || 0);
+                return sum +
+                    Number(
+                        item.total || 0
+                    );
             },
             0
         );
 
-
     if (currentItem) {
-        total += currentItem.total;
-    }
 
+        total +=
+            currentItem.total;
+
+    }
 
     document
         .getElementById("manualTotal")
@@ -4193,14 +4063,13 @@ function updateManualTotal() {
 
 
 /* =====================================================
-   ADD CURRENT PRODUCT TO MANUAL ORDER
+   ADD CURRENT PRODUCT
 ===================================================== */
 
 function addManualItem() {
 
     const data =
         getManualOrderData();
-
 
     if (!data) {
 
@@ -4209,9 +4078,7 @@ function addManualItem() {
         );
 
         return;
-
     }
-
 
     let itemDescription =
         data.quantity +
@@ -4220,7 +4087,6 @@ function addManualItem() {
         " — " +
         data.variantName;
 
-
     if (data.flavor) {
 
         itemDescription +=
@@ -4228,7 +4094,6 @@ function addManualItem() {
             data.flavor;
 
     }
-
 
     if (
         data.addons &&
@@ -4239,37 +4104,39 @@ function addManualItem() {
             " — Add-ons: " +
             data.addons
                 .map(function(addon) {
+
                     return (
                         addon.name +
                         " (+" +
                         formatMoney(addon.price) +
                         ")"
                     );
+
                 })
                 .join(", ");
 
     }
-
 
     manualOrderItems.push({
         description: itemDescription,
         total: data.total
     });
 
-
     renderManualCart();
 
-
-    // Clear only the product selection so another product can be added.
-    document.getElementById("manualCategory").value = "";
-
+    document.getElementById(
+        "manualCategory"
+    ).value = "";
 
     const itemSelect =
-        document.getElementById("manualItem");
+        document.getElementById(
+            "manualItem"
+        );
 
     const variantSelect =
-        document.getElementById("manualVariant");
-
+        document.getElementById(
+            "manualVariant"
+        );
 
     itemSelect.innerHTML =
         "<option value=''>Select Menu Item</option>";
@@ -4277,12 +4144,14 @@ function addManualItem() {
     variantSelect.innerHTML =
         "<option value=''>Select Size / Variant</option>";
 
+    itemSelect.disabled =
+        true;
 
-    itemSelect.disabled = true;
-    variantSelect.disabled = true;
-
+    variantSelect.disabled =
+        true;
 
     hideManualExtras();
+
     updateManualTotal();
 
 }
@@ -4295,8 +4164,9 @@ function addManualItem() {
 function renderManualCart() {
 
     const container =
-        document.getElementById("manualCartItems");
-
+        document.getElementById(
+            "manualCartItems"
+        );
 
     if (!manualOrderItems.length) {
 
@@ -4306,53 +4176,79 @@ function renderManualCart() {
             "</div>";
 
         updateManualTotal();
-        return;
 
+        return;
     }
 
+    container.innerHTML =
+        "";
 
-    container.innerHTML = "";
+    manualOrderItems.forEach(
+        function(item, index) {
 
+            const row =
+                document.createElement(
+                    "div"
+                );
 
-    manualOrderItems.forEach(function(item, index) {
+            row.className =
+                "manual-cart-item";
 
-        const row =
-            document.createElement("div");
+            const details =
+                document.createElement(
+                    "div"
+                );
 
-        row.className =
-            "manual-cart-item";
+            details.className =
+                "manual-cart-item-details";
 
+            details.innerHTML =
+                "<strong>" +
+                escapeHtml(
+                    item.description
+                ) +
+                "</strong><br>" +
+                formatMoney(
+                    item.total
+                );
 
-        const details =
-            document.createElement("div");
+            const removeButton =
+                document.createElement(
+                    "button"
+                );
 
-        details.className =
-            "manual-cart-item-details";
+            removeButton.type =
+                "button";
 
-        details.innerHTML =
-            "<strong>" +
-            escapeHtml(item.description) +
-            "</strong><br>" +
-            formatMoney(item.total);
+            removeButton.className =
+                "manual-cart-remove";
 
+            removeButton.textContent =
+                "REMOVE";
 
-        const removeButton =
-            document.createElement("button");
+            removeButton.onclick =
+                function() {
 
-        removeButton.type = "button";
-        removeButton.className = "manual-cart-remove";
-        removeButton.textContent = "REMOVE";
-        removeButton.onclick = function() {
-            removeManualItem(index);
-        };
+                    removeManualItem(
+                        index
+                    );
 
+                };
 
-        row.appendChild(details);
-        row.appendChild(removeButton);
-        container.appendChild(row);
+            row.appendChild(
+                details
+            );
 
-    });
+            row.appendChild(
+                removeButton
+            );
 
+            container.appendChild(
+                row
+            );
+
+        }
+    );
 
     updateManualTotal();
 
@@ -4360,12 +4256,15 @@ function renderManualCart() {
 
 
 /* =====================================================
-   REMOVE PRODUCT FROM MANUAL CART
+   REMOVE MANUAL ITEM
 ===================================================== */
 
 function removeManualItem(index) {
 
-    manualOrderItems.splice(index, 1);
+    manualOrderItems.splice(
+        index,
+        1
+    );
 
     renderManualCart();
 
@@ -4373,16 +4272,13 @@ function removeManualItem(index) {
 
 
 /* =====================================================
-   PLACE COMPLETE MANUAL ORDER
+   PLACE MANUAL ORDER
 ===================================================== */
 
 async function addManualOrder() {
 
-    // If the user selected a product but has not added it yet,
-    // automatically add it so they don't accidentally lose it.
     const currentItem =
         getManualOrderData();
-
 
     if (currentItem) {
 
@@ -4393,11 +4289,12 @@ async function addManualOrder() {
             );
 
         if (addCurrent) {
+
             addManualItem();
+
         }
 
     }
-
 
     if (!manualOrderItems.length) {
 
@@ -4406,49 +4303,61 @@ async function addManualOrder() {
         );
 
         return;
-
     }
-
 
     const customerName =
         document
-            .getElementById("manualCustomerName")
+            .getElementById(
+                "manualCustomerName"
+            )
             .value
             .trim();
 
-
     const orderType =
         document
-            .getElementById("manualOrderType")
+            .getElementById(
+                "manualOrderType"
+            )
             .value;
-
 
     const paymentMethod =
         document
-            .getElementById("manualPayment")
+            .getElementById(
+                "manualPayment"
+            )
             .value;
 
-
     const orderNumber =
-        "MANUAL-" + Date.now();
-
+        "MANUAL-" +
+        Date.now();
 
     const grandTotal =
         manualOrderItems.reduce(
             function(sum, item) {
-                return sum + Number(item.total || 0);
+
+                return sum +
+                    Number(
+                        item.total || 0
+                    );
+
             },
             0
         );
 
-
     const itemDescription =
         manualOrderItems
-            .map(function(item, index) {
-                return (index + 1) + ". " + item.description;
-            })
-            .join("\n");
+            .map(
+                function(item, index) {
 
+                    return (
+                        index + 1
+                    ) +
+                    ". " +
+                    item.description;
+
+                }
+            )
+            .join("\n");
 
     const orderData = {
 
@@ -4456,7 +4365,8 @@ async function addManualOrder() {
             orderNumber,
 
         customer_name:
-            customerName || "Walk-in Customer",
+            customerName ||
+            "Walk-in Customer",
 
         phone:
             "",
@@ -4496,24 +4406,29 @@ async function addManualOrder() {
 
     };
 
-
     const button =
-        document.getElementById("addManualOrderButton");
+        document.getElementById(
+            "addManualOrderButton"
+        );
 
+    button.disabled =
+        true;
 
-    button.disabled = true;
-    button.textContent = "PLACING ORDER...";
-
+    button.textContent =
+        "PLACING ORDER...";
 
     const { error } =
         await supabaseClient
             .from("orders")
-            .insert([orderData]);
+            .insert([
+                orderData
+            ]);
 
+    button.disabled =
+        false;
 
-    button.disabled = false;
-    button.textContent = "✅ PLACE MANUAL ORDER";
-
+    button.textContent =
+        "✅ PLACE MANUAL ORDER";
 
     if (error) {
 
@@ -4525,19 +4440,21 @@ async function addManualOrder() {
         );
 
         return;
-
     }
-
 
     alert(
         "✓ Manual order added successfully!\n\n" +
-        "Order: " + orderNumber +
+        "Order: " +
+        orderNumber +
         "\n" +
-        "Products: " + manualOrderItems.length +
+        "Products: " +
+        manualOrderItems.length +
         "\n" +
-        "Total: " + formatMoney(grandTotal)
+        "Total: " +
+        formatMoney(
+            grandTotal
+        )
     );
-
 
     resetManualOrder();
 
@@ -4554,38 +4471,49 @@ function resetManualOrder() {
 
     manualOrderItems = [];
 
-
     document
-        .getElementById("manualCustomerName")
+        .getElementById(
+            "manualCustomerName"
+        )
         .value = "";
 
+    document
+        .getElementById(
+            "manualOrderType"
+        )
+        .value =
+        "Walk-in";
 
     document
-        .getElementById("manualOrderType")
-        .value = "Walk-in";
-
-
-    document
-        .getElementById("manualPayment")
-        .value = "Cash";
-
+        .getElementById(
+            "manualPayment"
+        )
+        .value =
+        "Cash";
 
     document
-        .getElementById("manualQuantity")
-        .value = "1";
-
+        .getElementById(
+            "manualQuantity"
+        )
+        .value =
+        "1";
 
     document
-        .getElementById("manualCategory")
-        .value = "";
-
+        .getElementById(
+            "manualCategory"
+        )
+        .value =
+        "";
 
     const item =
-        document.getElementById("manualItem");
+        document.getElementById(
+            "manualItem"
+        );
 
     const variant =
-        document.getElementById("manualVariant");
-
+        document.getElementById(
+            "manualVariant"
+        );
 
     item.innerHTML =
         "<option value=''>Select Menu Item</option>";
@@ -4593,18 +4521,20 @@ function resetManualOrder() {
     variant.innerHTML =
         "<option value=''>Select Size / Variant</option>";
 
+    item.disabled =
+        true;
 
-    item.disabled = true;
-    variant.disabled = true;
-
+    variant.disabled =
+        true;
 
     hideManualExtras();
 
-
     document
-        .getElementById("manualTotal")
-        .textContent = "₱0.00";
-
+        .getElementById(
+            "manualTotal"
+        )
+        .textContent =
+        "₱0.00";
 
     renderManualCart();
 
@@ -4613,6 +4543,7 @@ function resetManualOrder() {
 
 /* =====================================================
    DAILY REPORT
+   EXISTING DAILY REPORT LOGIC
 ===================================================== */
 
 function setDefaultReportDate() {
@@ -4620,10 +4551,8 @@ function setDefaultReportDate() {
     const today =
         new Date();
 
-
     const year =
         today.getFullYear();
-
 
     const month =
         String(
@@ -4633,7 +4562,6 @@ function setDefaultReportDate() {
             "0"
         );
 
-
     const day =
         String(
             today.getDate()
@@ -4641,7 +4569,6 @@ function setDefaultReportDate() {
             2,
             "0"
         );
-
 
     document
         .getElementById(
@@ -4668,18 +4595,14 @@ function getLocalDayRange(
     const parts =
         dateString.split("-");
 
-
     const year =
         Number(parts[0]);
-
 
     const month =
         Number(parts[1]) - 1;
 
-
     const day =
         Number(parts[2]);
-
 
     const start =
         new Date(
@@ -4692,7 +4615,6 @@ function getLocalDayRange(
             0
         );
 
-
     const end =
         new Date(
             year,
@@ -4703,7 +4625,6 @@ function getLocalDayRange(
             0,
             0
         );
-
 
     return {
 
@@ -4731,7 +4652,6 @@ async function loadDailyReport() {
             )
             .value;
 
-
     if (!dateString) {
 
         alert(
@@ -4739,19 +4659,15 @@ async function loadDailyReport() {
         );
 
         return;
-
     }
-
 
     currentReportDate =
         dateString;
-
 
     const range =
         getLocalDayRange(
             dateString
         );
-
 
     const { data, error } =
         await supabaseClient
@@ -4772,7 +4688,6 @@ async function loadDailyReport() {
                 }
             );
 
-
     if (error) {
 
         alert(
@@ -4780,9 +4695,7 @@ async function loadDailyReport() {
         );
 
         return;
-
     }
-
 
     currentReportOrders =
         (data || []).filter(
@@ -4795,7 +4708,6 @@ async function loadDailyReport() {
 
             }
         );
-
 
     renderDailyReport();
 
@@ -4811,26 +4723,20 @@ function renderDailyReport() {
     const orders =
         currentReportOrders;
 
-
     let totalSales =
         0;
-
 
     let onlineOrders =
         0;
 
-
     let manualOrders =
         0;
-
 
     let cashSales =
         0;
 
-
     let gcashSales =
         0;
-
 
     orders.forEach(
         function(order) {
@@ -4840,10 +4746,8 @@ function renderDailyReport() {
                     order.grand_total
                 ) || 0;
 
-
             totalSales +=
                 total;
-
 
             const isManual =
                 String(
@@ -4852,7 +4756,6 @@ function renderDailyReport() {
                 ).startsWith(
                     "MANUAL-"
                 );
-
 
             if (isManual) {
 
@@ -4864,13 +4767,11 @@ function renderDailyReport() {
 
             }
 
-
             const payment =
                 String(
                     order.payment_method ||
                     ""
                 ).toLowerCase();
-
 
             if (
                 payment.includes(
@@ -4891,7 +4792,6 @@ function renderDailyReport() {
         }
     );
 
-
     document
         .getElementById(
             "reportTotalSales"
@@ -4901,14 +4801,12 @@ function renderDailyReport() {
             totalSales
         );
 
-
     document
         .getElementById(
             "reportCompletedOrders"
         )
         .textContent =
         orders.length;
-
 
     document
         .getElementById(
@@ -4917,14 +4815,12 @@ function renderDailyReport() {
         .textContent =
         onlineOrders;
 
-
     document
         .getElementById(
             "reportManualOrders"
         )
         .textContent =
         manualOrders;
-
 
     document
         .getElementById(
@@ -4935,7 +4831,6 @@ function renderDailyReport() {
             cashSales
         );
 
-
     document
         .getElementById(
             "reportGcashSales"
@@ -4944,7 +4839,6 @@ function renderDailyReport() {
         formatMoney(
             gcashSales
         );
-
 
     renderReportTable();
 
@@ -4962,10 +4856,8 @@ function renderReportTable() {
             "reportTableBody"
         );
 
-
     tbody.innerHTML =
         "";
-
 
     if (
         currentReportOrders.length === 0
@@ -4980,9 +4872,7 @@ function renderReportTable() {
             "</tr>";
 
         return;
-
     }
-
 
     currentReportOrders.forEach(
         function(order) {
@@ -4992,20 +4882,16 @@ function renderReportTable() {
                     "tr"
                 );
 
-
             const date =
                 new Date(
                     order.created_at
                 );
 
-
             const dateText =
                 date.toLocaleDateString();
 
-
             const timeText =
                 date.toLocaleTimeString();
-
 
             const isManual =
                 String(
@@ -5015,12 +4901,10 @@ function renderReportTable() {
                     "MANUAL-"
                 );
 
-
             const source =
                 isManual
                     ? "Manual"
                     : "Online";
-
 
             const cells = [
 
@@ -5054,7 +4938,6 @@ function renderReportTable() {
 
             ];
 
-
             cells.forEach(
                 function(value) {
 
@@ -5063,10 +4946,8 @@ function renderReportTable() {
                             "td"
                         );
 
-
                     cell.textContent =
                         value;
-
 
                     row.appendChild(
                         cell
@@ -5075,16 +4956,18 @@ function renderReportTable() {
                 }
             );
 
-
             const actionCell =
-                document.createElement("td");
+                document.createElement(
+                    "td"
+                );
 
             actionCell.className =
                 "report-action-cell";
 
-
             const deleteButton =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
 
             deleteButton.className =
                 "delete-report-button";
@@ -5101,7 +4984,6 @@ function renderReportTable() {
 
                 };
 
-
             actionCell.appendChild(
                 deleteButton
             );
@@ -5109,7 +4991,6 @@ function renderReportTable() {
             row.appendChild(
                 actionCell
             );
-
 
             tbody.appendChild(
                 row
@@ -5137,7 +5018,6 @@ async function deleteReportOrder(id) {
             }
         );
 
-
     if (!order) {
 
         alert(
@@ -5145,9 +5025,7 @@ async function deleteReportOrder(id) {
         );
 
         return;
-
     }
-
 
     const confirmed =
         confirm(
@@ -5164,18 +5042,16 @@ async function deleteReportOrder(id) {
             "This will permanently remove the order from the reports."
         );
 
-
     if (!confirmed) {
+
         return;
     }
-
 
     const { error } =
         await supabaseClient
             .from("orders")
             .delete()
             .eq("id", id);
-
 
     if (error) {
 
@@ -5187,9 +5063,7 @@ async function deleteReportOrder(id) {
         );
 
         return;
-
     }
-
 
     currentReportOrders =
         currentReportOrders.filter(
@@ -5201,11 +5075,9 @@ async function deleteReportOrder(id) {
             }
         );
 
-
     renderDailyReport();
 
     await loadOrders();
-
 
     alert(
         "✓ Order deleted successfully."
@@ -5215,7 +5087,7 @@ async function deleteReportOrder(id) {
 
 
 /* =====================================================
-   EXPORT EXCEL
+   DAILY EXCEL
 ===================================================== */
 
 function exportReportExcel() {
@@ -5230,9 +5102,7 @@ function exportReportExcel() {
         );
 
         return;
-
     }
-
 
     if (
         currentReportOrders.length === 0
@@ -5243,9 +5113,7 @@ function exportReportExcel() {
         );
 
         return;
-
     }
-
 
     const rows =
         currentReportOrders.map(
@@ -5256,7 +5124,6 @@ function exportReportExcel() {
                         order.created_at
                     );
 
-
                 const isManual =
                     String(
                         order.order_number ||
@@ -5265,6 +5132,1718 @@ function exportReportExcel() {
                         "MANUAL-"
                     );
 
+                return {
+
+                    Date:
+                        date.toLocaleDateString(),
+
+                    Time:
+                        date.toLocaleTimeString(),
+
+                    "Order #":
+                        order.order_number ||
+                        "",
+
+                    Source:
+                        isManual
+                            ? "Manual"
+                            : "Online",
+
+                    Customer:
+                        order.customer_name ||
+                        "",
+
+                    Type:
+                        order.order_type ||
+                        "",
+
+                    Payment:
+                        order.payment_method ||
+                        "",
+
+                    Items:
+                        order.ordered_items ||
+                        "",
+
+                    Total:
+                        Number(
+                            order.grand_total
+                        ) || 0,
+
+                    Status:
+                        order.status ||
+                        ""
+
+                };
+
+            }
+        );
+
+    const worksheet =
+        XLSX.utils.json_to_sheet(
+            rows
+        );
+
+    const workbook =
+        XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Daily Report"
+    );
+
+    const filename =
+        "HIGHWAY_CAFE_REPORT_" +
+        currentReportDate +
+        ".xlsx";
+
+    XLSX.writeFile(
+        workbook,
+        filename
+    );
+
+}
+
+
+/* =====================================================
+   DAILY PRINT
+===================================================== */
+
+function printReport() {
+
+    if (
+        currentReportOrders.length === 0
+    ) {
+
+        alert(
+            "There is no report to print."
+        );
+
+        return;
+    }
+
+    window.print();
+
+}
+
+
+/* =====================================================
+   MONTHLY REPORT DEFAULT
+===================================================== */
+
+function setDefaultMonthlyReport() {
+
+    const today =
+        new Date();
+
+    const year =
+        today.getFullYear();
+
+    const month =
+        String(
+            today.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+    const value =
+        year +
+        "-" +
+        month;
+
+    const input =
+        document.getElementById(
+            "monthlyReportMonth"
+        );
+
+    if (input) {
+
+        input.value =
+            value;
+
+    }
+
+    currentMonthlyReportDate =
+        value;
+
+}
+
+
+/* =====================================================
+   YEARLY REPORT DEFAULT
+===================================================== */
+
+function setDefaultYearlyReport() {
+
+    const year =
+        new Date().getFullYear();
+
+    const input =
+        document.getElementById(
+            "yearlyReportYear"
+        );
+
+    if (input) {
+
+        input.value =
+            year;
+
+    }
+
+    currentYearlyReportYear =
+        String(year);
+
+}
+
+
+/* =====================================================
+   LOCAL MONTH RANGE
+===================================================== */
+
+function getLocalMonthRange(
+    year,
+    month
+) {
+
+    const start =
+        new Date(
+            year,
+            month,
+            1,
+            0,
+            0,
+            0,
+            0
+        );
+
+    const end =
+        new Date(
+            year,
+            month + 1,
+            1,
+            0,
+            0,
+            0,
+            0
+        );
+
+    return {
+
+        start:
+            start.toISOString(),
+
+        end:
+            end.toISOString()
+
+    };
+
+}
+
+
+/* =====================================================
+   LOCAL YEAR RANGE
+===================================================== */
+
+function getLocalYearRange(
+    year
+) {
+
+    const start =
+        new Date(
+            year,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+        );
+
+    const end =
+        new Date(
+            year + 1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+        );
+
+    return {
+
+        start:
+            start.toISOString(),
+
+        end:
+            end.toISOString()
+
+    };
+
+}
+
+
+/* =====================================================
+   BEST SELLER PARSER
+===================================================== */
+
+function parseOrderedItems(
+    orderedItems
+) {
+
+    const results = [];
+
+    if (!orderedItems) {
+
+        return results;
+
+    }
+
+    const lines =
+        String(
+            orderedItems
+        )
+        .split(/\r?\n/)
+        .map(
+            function(line) {
+
+                return line.trim();
+
+            }
+        )
+        .filter(
+            function(line) {
+
+                return line.length > 0;
+
+            }
+        );
+
+    lines.forEach(function(line) {
+
+        let text =
+            line;
+
+        text =
+            text.replace(
+                /^\d+\.\s*/,
+                ""
+            )
+            .trim();
+
+        let quantity =
+            1;
+
+        let match =
+            text.match(
+                /^(\d+)\s*x\s+(.+?)(?=\s+[—–-]\s+|$)/i
+            );
+
+        if (match) {
+
+            quantity =
+                Number(match[1]) || 1;
+
+            text =
+                match[2].trim();
+
+        } else {
+
+            match =
+                text.match(
+                    /^(\d+)\s*x\s+(.+)$/i
+                );
+
+            if (match) {
+
+                quantity =
+                    Number(match[1]) || 1;
+
+                text =
+                    match[2].trim();
+
+            }
+
+        }
+
+
+        /*
+         * Remove variant/add-on information.
+         */
+
+        text =
+            text.split(
+                /\s+[—–-]\s+/
+            )[0]
+            .trim();
+
+
+        /*
+         * Support formats such as:
+         * Quantity: 2
+         * Qty: 2
+         */
+
+        const qtyMatch =
+            line.match(
+                /(?:quantity|qty)\s*[:=]\s*(\d+)/i
+            );
+
+        if (qtyMatch) {
+
+            quantity =
+                Number(
+                    qtyMatch[1]
+                ) || quantity;
+
+        }
+
+
+        /*
+         * If the line does not have a normal
+         * "2 x Product" format, try to clean
+         * common quantity text.
+         */
+
+        text =
+            text.replace(
+                /^(?:quantity|qty)\s*[:=]\s*\d+\s*/i,
+                ""
+            )
+            .trim();
+
+        if (!text) {
+
+            return;
+
+        }
+
+        results.push({
+
+            name:
+                text,
+
+            quantity:
+                quantity
+
+        });
+
+    });
+
+    return results;
+
+}
+
+
+/* =====================================================
+   BUILD BEST SELLER RANKING
+===================================================== */
+
+function buildBestSellerRanking(
+    orders
+) {
+
+    const totals = {};
+
+    orders.forEach(function(order) {
+
+        const items =
+            parseOrderedItems(
+                order.ordered_items
+            );
+
+        items.forEach(function(item) {
+
+            const key =
+                item.name
+                    .trim()
+                    .toLowerCase();
+
+            if (!key) {
+
+                return;
+
+            }
+
+            if (!totals[key]) {
+
+                totals[key] = {
+
+                    name:
+                        item.name.trim(),
+
+                    quantity:
+                        0
+
+                };
+
+            }
+
+            totals[key].quantity +=
+                Number(
+                    item.quantity
+                ) || 1;
+
+        });
+
+    });
+
+    return Object.values(
+        totals
+    )
+    .sort(
+        function(a, b) {
+
+            return (
+                b.quantity -
+                a.quantity
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOAD MONTHLY REPORT
+===================================================== */
+
+async function loadMonthlyReport() {
+
+    const value =
+        document
+            .getElementById(
+                "monthlyReportMonth"
+            )
+            .value;
+
+    if (!value) {
+
+        alert(
+            "Please select a month."
+        );
+
+        return;
+    }
+
+    const parts =
+        value.split("-");
+
+    const year =
+        Number(parts[0]);
+
+    const month =
+        Number(parts[1]) - 1;
+
+    currentMonthlyReportDate =
+        value;
+
+    const range =
+        getLocalMonthRange(
+            year,
+            month
+        );
+
+    const { data, error } =
+        await supabaseClient
+            .from("orders")
+            .select("*")
+            .gte(
+                "created_at",
+                range.start
+            )
+            .lt(
+                "created_at",
+                range.end
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
+
+    if (error) {
+
+        alert(
+            error.message
+        );
+
+        return;
+    }
+
+    currentMonthlyReportOrders =
+        (data || []).filter(
+            function(order) {
+
+                return (
+                    order.status ===
+                    "Completed"
+                );
+
+            }
+        );
+
+    renderMonthlyReport(
+        year,
+        month
+    );
+
+}
+
+
+/* =====================================================
+   RENDER MONTHLY REPORT
+===================================================== */
+
+function renderMonthlyReport(
+    year,
+    month
+) {
+
+    const orders =
+        currentMonthlyReportOrders;
+
+    let totalSales =
+        0;
+
+    let onlineOrders =
+        0;
+
+    let manualOrders =
+        0;
+
+    let cashSales =
+        0;
+
+    let gcashSales =
+        0;
+
+    orders.forEach(function(order) {
+
+        const total =
+            Number(
+                order.grand_total
+            ) || 0;
+
+        totalSales +=
+            total;
+
+        const isManual =
+            String(
+                order.order_number ||
+                ""
+            ).startsWith(
+                "MANUAL-"
+            );
+
+        if (isManual) {
+
+            manualOrders++;
+
+        } else {
+
+            onlineOrders++;
+
+        }
+
+        const payment =
+            String(
+                order.payment_method ||
+                ""
+            ).toLowerCase();
+
+        if (
+            payment.includes(
+                "gcash"
+            )
+        ) {
+
+            gcashSales +=
+                total;
+
+        } else {
+
+            cashSales +=
+                total;
+
+        }
+
+    });
+
+
+    const daysInMonth =
+        new Date(
+            year,
+            month + 1,
+            0
+        ).getDate();
+
+
+    const dailySales =
+        Array(
+            daysInMonth
+        ).fill(0);
+
+
+    orders.forEach(function(order) {
+
+        const date =
+            new Date(
+                order.created_at
+            );
+
+        const day =
+            date.getDate();
+
+        dailySales[
+            day - 1
+        ] +=
+            Number(
+                order.grand_total
+            ) || 0;
+
+    });
+
+
+    let highestDay =
+        0;
+
+    let highestSales =
+        0;
+
+    dailySales.forEach(
+        function(value, index) {
+
+            if (
+                value >
+                highestSales
+            ) {
+
+                highestSales =
+                    value;
+
+                highestDay =
+                    index + 1;
+
+            }
+
+        }
+    );
+
+
+    const averageSales =
+        daysInMonth > 0
+            ? totalSales /
+              daysInMonth
+            : 0;
+
+
+    document.getElementById(
+        "monthlyTotalSales"
+    ).textContent =
+        formatMoney(
+            totalSales
+        );
+
+    document.getElementById(
+        "monthlyTotalOrders"
+    ).textContent =
+        orders.length;
+
+    document.getElementById(
+        "monthlyHighestDay"
+    ).textContent =
+        highestDay
+            ? monthName(
+                month
+            ) +
+              " " +
+              highestDay
+            : "—";
+
+    document.getElementById(
+        "monthlyHighestDaySales"
+    ).textContent =
+        formatMoney(
+            highestSales
+        );
+
+    document.getElementById(
+        "monthlyAverageSales"
+    ).textContent =
+        formatMoney(
+            averageSales
+        );
+
+    document.getElementById(
+        "monthlyOnlineOrders"
+    ).textContent =
+        onlineOrders;
+
+    document.getElementById(
+        "monthlyManualOrders"
+    ).textContent =
+        manualOrders;
+
+    document.getElementById(
+        "monthlyCashSales"
+    ).textContent =
+        formatMoney(
+            cashSales
+        );
+
+    document.getElementById(
+        "monthlyGcashSales"
+    ).textContent =
+        formatMoney(
+            gcashSales
+        );
+
+
+    document.getElementById(
+        "monthlySummaryText"
+    ).textContent =
+        "For " +
+        monthName(month) +
+        " " +
+        year +
+        ", Highway Cafe recorded " +
+        orders.length +
+        " completed order" +
+        (
+            orders.length === 1
+                ? ""
+                : "s"
+        ) +
+        " with total completed sales of " +
+        formatMoney(totalSales) +
+        ".";
+
+
+    renderBestSellerTable(
+        "monthlyBestSellerBody",
+        buildBestSellerRanking(
+            orders
+        )
+    );
+
+
+    drawBarChart(
+        "monthlySalesChart",
+        dailySales,
+        dailySales.map(
+            function(value, index) {
+
+                return String(
+                    index + 1
+                );
+
+            }
+        ),
+        "Daily Sales"
+    );
+
+}
+
+
+/* =====================================================
+   LOAD YEARLY REPORT
+===================================================== */
+
+async function loadYearlyReport() {
+
+    const yearValue =
+        document
+            .getElementById(
+                "yearlyReportYear"
+            )
+            .value;
+
+    const year =
+        Number(
+            yearValue
+        );
+
+    if (
+        !year ||
+        year < 2000 ||
+        year > 2100
+    ) {
+
+        alert(
+            "Please enter a valid year."
+        );
+
+        return;
+    }
+
+    currentYearlyReportYear =
+        String(year);
+
+    const range =
+        getLocalYearRange(
+            year
+        );
+
+    const { data, error } =
+        await supabaseClient
+            .from("orders")
+            .select("*")
+            .gte(
+                "created_at",
+                range.start
+            )
+            .lt(
+                "created_at",
+                range.end
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
+
+    if (error) {
+
+        alert(
+            error.message
+        );
+
+        return;
+    }
+
+    currentYearlyReportOrders =
+        (data || []).filter(
+            function(order) {
+
+                return (
+                    order.status ===
+                    "Completed"
+                );
+
+            }
+        );
+
+    renderYearlyReport(
+        year
+    );
+
+}
+
+
+/* =====================================================
+   RENDER YEARLY REPORT
+===================================================== */
+
+function renderYearlyReport(
+    year
+) {
+
+    const orders =
+        currentYearlyReportOrders;
+
+    let totalSales =
+        0;
+
+    let onlineOrders =
+        0;
+
+    let manualOrders =
+        0;
+
+    let cashSales =
+        0;
+
+    let gcashSales =
+        0;
+
+    const monthlySales =
+        Array(12).fill(0);
+
+
+    orders.forEach(function(order) {
+
+        const total =
+            Number(
+                order.grand_total
+            ) || 0;
+
+        totalSales +=
+            total;
+
+        const date =
+            new Date(
+                order.created_at
+            );
+
+        monthlySales[
+            date.getMonth()
+        ] +=
+            total;
+
+        const isManual =
+            String(
+                order.order_number ||
+                ""
+            ).startsWith(
+                "MANUAL-"
+            );
+
+        if (isManual) {
+
+            manualOrders++;
+
+        } else {
+
+            onlineOrders++;
+
+        }
+
+        const payment =
+            String(
+                order.payment_method ||
+                ""
+            ).toLowerCase();
+
+        if (
+            payment.includes(
+                "gcash"
+            )
+        ) {
+
+            gcashSales +=
+                total;
+
+        } else {
+
+            cashSales +=
+                total;
+
+        }
+
+    });
+
+
+    let highestMonth =
+        0;
+
+    let highestMonthSales =
+        0;
+
+    monthlySales.forEach(
+        function(value, index) {
+
+            if (
+                value >
+                highestMonthSales
+            ) {
+
+                highestMonthSales =
+                    value;
+
+                highestMonth =
+                    index;
+
+            }
+
+        }
+    );
+
+
+    const averageMonthlySales =
+        totalSales /
+        12;
+
+
+    document.getElementById(
+        "yearlyTotalSales"
+    ).textContent =
+        formatMoney(
+            totalSales
+        );
+
+    document.getElementById(
+        "yearlyTotalOrders"
+    ).textContent =
+        orders.length;
+
+    document.getElementById(
+        "yearlyHighestMonth"
+    ).textContent =
+        highestMonthSales > 0
+            ? monthName(
+                highestMonth
+            )
+            : "—";
+
+    document.getElementById(
+        "yearlyHighestMonthSales"
+    ).textContent =
+        formatMoney(
+            highestMonthSales
+        );
+
+    document.getElementById(
+        "yearlyAverageSales"
+    ).textContent =
+        formatMoney(
+            averageMonthlySales
+        );
+
+    document.getElementById(
+        "yearlyOnlineOrders"
+    ).textContent =
+        onlineOrders;
+
+    document.getElementById(
+        "yearlyManualOrders"
+    ).textContent =
+        manualOrders;
+
+    document.getElementById(
+        "yearlyCashSales"
+    ).textContent =
+        formatMoney(
+            cashSales
+        );
+
+    document.getElementById(
+        "yearlyGcashSales"
+    ).textContent =
+        formatMoney(
+            gcashSales
+        );
+
+
+    document.getElementById(
+        "yearlySummaryText"
+    ).textContent =
+        "For " +
+        year +
+        ", Highway Cafe recorded " +
+        orders.length +
+        " completed order" +
+        (
+            orders.length === 1
+                ? ""
+                : "s"
+        ) +
+        " with total completed sales of " +
+        formatMoney(totalSales) +
+        ".";
+
+
+    renderBestSellerTable(
+        "yearlyBestSellerBody",
+        buildBestSellerRanking(
+            orders
+        )
+    );
+
+
+    drawBarChart(
+        "yearlySalesChart",
+        monthlySales,
+        [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+        ],
+        "Monthly Sales"
+    );
+
+}
+
+
+/* =====================================================
+   MONTH NAME
+===================================================== */
+
+function monthName(
+    monthIndex
+) {
+
+    return [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ][monthIndex];
+
+}
+
+
+/* =====================================================
+   BEST SELLER TABLE
+===================================================== */
+
+function renderBestSellerTable(
+    elementId,
+    ranking
+) {
+
+    const tbody =
+        document.getElementById(
+            elementId
+        );
+
+    tbody.innerHTML =
+        "";
+
+    if (!ranking.length) {
+
+        tbody.innerHTML =
+            "<tr>" +
+            "<td colspan='3' " +
+            "class='analytics-empty'>" +
+            "No completed item sales found." +
+            "</td>" +
+            "</tr>";
+
+        return;
+    }
+
+    ranking.forEach(
+        function(item, index) {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+            const rank =
+                document.createElement(
+                    "td"
+                );
+
+            rank.className =
+                "rank-number";
+
+            rank.textContent =
+                "#" +
+                (index + 1);
+
+            const name =
+                document.createElement(
+                    "td"
+                );
+
+            name.textContent =
+                item.name;
+
+            const quantity =
+                document.createElement(
+                    "td"
+                );
+
+            quantity.textContent =
+                item.quantity;
+
+            row.appendChild(
+                rank
+            );
+
+            row.appendChild(
+                name
+            );
+
+            row.appendChild(
+                quantity
+            );
+
+            tbody.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   DRAW BAR CHART
+===================================================== */
+
+function drawBarChart(
+    canvasId,
+    values,
+    labels,
+    title
+) {
+
+    const canvas =
+        document.getElementById(
+            canvasId
+        );
+
+    if (!canvas) {
+
+        return;
+    }
+
+    const containerWidth =
+        canvas.parentElement.clientWidth || 800;
+
+    const width =
+        Math.max(
+            700,
+            containerWidth
+        );
+
+    const height =
+        330;
+
+    const ratio =
+        window.devicePixelRatio || 1;
+
+    canvas.width =
+        width * ratio;
+
+    canvas.height =
+        height * ratio;
+
+    canvas.style.width =
+        width + "px";
+
+    canvas.style.height =
+        height + "px";
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+    ctx.scale(
+        ratio,
+        ratio
+    );
+
+    ctx.clearRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    const paddingLeft =
+        60;
+
+    const paddingRight =
+        20;
+
+    const paddingTop =
+        30;
+
+    const paddingBottom =
+        55;
+
+    const chartWidth =
+        width -
+        paddingLeft -
+        paddingRight;
+
+    const chartHeight =
+        height -
+        paddingTop -
+        paddingBottom;
+
+
+    const maxValue =
+        Math.max(
+            ...values,
+            0
+        );
+
+    const scaleMax =
+        maxValue > 0
+            ? Math.ceil(
+                maxValue / 100
+            ) * 100
+            : 100;
+
+
+    ctx.font =
+        "bold 15px Arial";
+
+    ctx.fillStyle =
+        "#4b2e1f";
+
+    ctx.fillText(
+        title,
+        paddingLeft,
+        18
+    );
+
+
+    ctx.strokeStyle =
+        "#dddddd";
+
+    ctx.fillStyle =
+        "#777";
+
+    ctx.font =
+        "11px Arial";
+
+
+    const gridLines =
+        5;
+
+
+    for (
+        let i = 0;
+        i <= gridLines;
+        i++
+    ) {
+
+        const y =
+            paddingTop +
+            chartHeight -
+            (
+                i /
+                gridLines
+            ) *
+            chartHeight;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            paddingLeft,
+            y
+        );
+
+        ctx.lineTo(
+            width -
+            paddingRight,
+            y
+        );
+
+        ctx.stroke();
+
+        const amount =
+            scaleMax *
+            (
+                i /
+                gridLines
+            );
+
+        ctx.fillText(
+            "₱" +
+            Math.round(
+                amount
+            ).toLocaleString(),
+            5,
+            y + 4
+        );
+
+    }
+
+
+    const count =
+        values.length;
+
+    const slotWidth =
+        chartWidth /
+        Math.max(
+            count,
+            1
+        );
+
+    const barWidth =
+        Math.max(
+            4,
+            slotWidth * 0.65
+        );
+
+
+    values.forEach(
+        function(value, index) {
+
+            const barHeight =
+                maxValue > 0
+                    ? (
+                        value /
+                        scaleMax
+                    ) *
+                    chartHeight
+                    : 0;
+
+            const x =
+                paddingLeft +
+                index *
+                slotWidth +
+                (
+                    slotWidth -
+                    barWidth
+                ) /
+                2;
+
+            const y =
+                paddingTop +
+                chartHeight -
+                barHeight;
+
+
+            ctx.fillStyle =
+                "#4b2e1f";
+
+            ctx.fillRect(
+                x,
+                y,
+                barWidth,
+                barHeight
+            );
+
+
+            ctx.save();
+
+            ctx.translate(
+                x +
+                barWidth / 2,
+                height -
+                20
+            );
+
+            ctx.rotate(
+                -Math.PI / 4
+            );
+
+            ctx.fillStyle =
+                "#555";
+
+            ctx.font =
+                "11px Arial";
+
+            ctx.textAlign =
+                "right";
+
+            ctx.fillText(
+                labels[index],
+                0,
+                0
+            );
+
+            ctx.restore();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   MONTHLY EXCEL
+===================================================== */
+
+function exportMonthlyReportExcel() {
+
+    if (
+        typeof XLSX ===
+        "undefined"
+    ) {
+
+        alert(
+            "Excel export library could not load."
+        );
+
+        return;
+    }
+
+    if (
+        !currentMonthlyReportDate
+    ) {
+
+        alert(
+            "Please load a monthly report first."
+        );
+
+        return;
+    }
+
+    if (
+        currentMonthlyReportOrders.length === 0
+    ) {
+
+        alert(
+            "There are no completed orders to export."
+        );
+
+        return;
+    }
+
+
+    const parts =
+        currentMonthlyReportDate
+            .split("-");
+
+    const year =
+        Number(parts[0]);
+
+    const month =
+        Number(parts[1]) - 1;
+
+
+    let totalSales =
+        0;
+
+    currentMonthlyReportOrders.forEach(
+        function(order) {
+
+            totalSales +=
+                Number(
+                    order.grand_total
+                ) || 0;
+
+        }
+    );
+
+
+    const ranking =
+        buildBestSellerRanking(
+            currentMonthlyReportOrders
+        );
+
+
+    const dailySales =
+        {};
+
+    currentMonthlyReportOrders.forEach(
+        function(order) {
+
+            const date =
+                new Date(
+                    order.created_at
+                );
+
+            const day =
+                date.getDate();
+
+            dailySales[day] =
+                (
+                    dailySales[day] ||
+                    0
+                ) +
+                (
+                    Number(
+                        order.grand_total
+                    ) || 0
+                );
+
+        }
+    );
+
+
+    const summaryRows = [
+
+        {
+            Report:
+                "Monthly Report",
+
+            Period:
+                monthName(month) +
+                " " +
+                year,
+
+            "Total Sales":
+                totalSales,
+
+            "Completed Orders":
+                currentMonthlyReportOrders.length
+
+        }
+
+    ];
+
+
+    const bestSellerRows =
+        ranking.map(
+            function(item, index) {
+
+                return {
+
+                    Rank:
+                        index + 1,
+
+                    Product:
+                        item.name,
+
+                    "Quantity Sold":
+                        item.quantity
+
+                };
+
+            }
+        );
+
+
+    const dailyRows =
+        Object.keys(
+            dailySales
+        )
+        .sort(
+            function(a, b) {
+
+                return Number(a) -
+                    Number(b);
+
+            }
+        )
+        .map(
+            function(day) {
+
+                return {
+
+                    Day:
+                        Number(day),
+
+                    Sales:
+                        dailySales[day]
+
+                };
+
+            }
+        );
+
+
+    const orderRows =
+        currentMonthlyReportOrders.map(
+            function(order) {
+
+                const date =
+                    new Date(
+                        order.created_at
+                    );
+
+                const isManual =
+                    String(
+                        order.order_number ||
+                        ""
+                    ).startsWith(
+                        "MANUAL-"
+                    );
 
                 return {
 
@@ -5314,9 +6893,263 @@ function exportReportExcel() {
         );
 
 
-    const worksheet =
+    const workbook =
+        XLSX.utils.book_new();
+
+
+    XLSX.utils.book_append_sheet(
+        workbook,
         XLSX.utils.json_to_sheet(
-            rows
+            summaryRows
+        ),
+        "Summary"
+    );
+
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        XLSX.utils.json_to_sheet(
+            dailyRows
+        ),
+        "Daily Sales"
+    );
+
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        XLSX.utils.json_to_sheet(
+            bestSellerRows
+        ),
+        "Best Sellers"
+    );
+
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        XLSX.utils.json_to_sheet(
+            orderRows
+        ),
+        "Completed Orders"
+    );
+
+
+    XLSX.writeFile(
+        workbook,
+        "HIGHWAY_CAFE_MONTHLY_" +
+        currentMonthlyReportDate +
+        ".xlsx"
+    );
+
+}
+
+
+/* =====================================================
+   YEARLY EXCEL
+===================================================== */
+
+function exportYearlyReportExcel() {
+
+    if (
+        typeof XLSX ===
+        "undefined"
+    ) {
+
+        alert(
+            "Excel export library could not load."
+        );
+
+        return;
+    }
+
+    if (
+        !currentYearlyReportYear
+    ) {
+
+        alert(
+            "Please load a yearly report first."
+        );
+
+        return;
+    }
+
+    if (
+        currentYearlyReportOrders.length === 0
+    ) {
+
+        alert(
+            "There are no completed orders to export."
+        );
+
+        return;
+    }
+
+
+    const year =
+        Number(
+            currentYearlyReportYear
+        );
+
+
+    let totalSales =
+        0;
+
+    const monthlySales =
+        Array(12).fill(0);
+
+
+    currentYearlyReportOrders.forEach(
+        function(order) {
+
+            const total =
+                Number(
+                    order.grand_total
+                ) || 0;
+
+            totalSales +=
+                total;
+
+            const date =
+                new Date(
+                    order.created_at
+                );
+
+            monthlySales[
+                date.getMonth()
+            ] +=
+                total;
+
+        }
+    );
+
+
+    const monthlyRows =
+        monthlySales.map(
+            function(value, index) {
+
+                return {
+
+                    Month:
+                        monthName(index),
+
+                    Sales:
+                        value
+
+                };
+
+            }
+        );
+
+
+    const ranking =
+        buildBestSellerRanking(
+            currentYearlyReportOrders
+        );
+
+
+    const bestSellerRows =
+        ranking.map(
+            function(item, index) {
+
+                return {
+
+                    Rank:
+                        index + 1,
+
+                    Product:
+                        item.name,
+
+                    "Quantity Sold":
+                        item.quantity
+
+                };
+
+            }
+        );
+
+
+    const summaryRows = [
+
+        {
+
+            Report:
+                "Yearly Report",
+
+            Year:
+                year,
+
+            "Total Sales":
+                totalSales,
+
+            "Completed Orders":
+                currentYearlyReportOrders.length
+
+        }
+
+    ];
+
+
+    const orderRows =
+        currentYearlyReportOrders.map(
+            function(order) {
+
+                const date =
+                    new Date(
+                        order.created_at
+                    );
+
+                const isManual =
+                    String(
+                        order.order_number ||
+                        ""
+                    ).startsWith(
+                        "MANUAL-"
+                    );
+
+                return {
+
+                    Date:
+                        date.toLocaleDateString(),
+
+                    Time:
+                        date.toLocaleTimeString(),
+
+                    "Order #":
+                        order.order_number ||
+                        "",
+
+                    Source:
+                        isManual
+                            ? "Manual"
+                            : "Online",
+
+                    Customer:
+                        order.customer_name ||
+                        "",
+
+                    Type:
+                        order.order_type ||
+                        "",
+
+                    Payment:
+                        order.payment_method ||
+                        "",
+
+                    Items:
+                        order.ordered_items ||
+                        "",
+
+                    Total:
+                        Number(
+                            order.grand_total
+                        ) || 0,
+
+                    Status:
+                        order.status ||
+                        ""
+
+                };
+
+            }
         );
 
 
@@ -5326,45 +7159,459 @@ function exportReportExcel() {
 
     XLSX.utils.book_append_sheet(
         workbook,
-        worksheet,
-        "Daily Report"
+        XLSX.utils.json_to_sheet(
+            summaryRows
+        ),
+        "Summary"
     );
 
 
-    const filename =
-        "HIGHWAY_CAFE_REPORT_" +
-        currentReportDate +
-        ".xlsx";
+    XLSX.utils.book_append_sheet(
+        workbook,
+        XLSX.utils.json_to_sheet(
+            monthlyRows
+        ),
+        "Monthly Sales"
+    );
+
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        XLSX.utils.json_to_sheet(
+            bestSellerRows
+        ),
+        "Best Sellers"
+    );
+
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        XLSX.utils.json_to_sheet(
+            orderRows
+        ),
+        "Completed Orders"
+    );
 
 
     XLSX.writeFile(
         workbook,
-        filename
+        "HIGHWAY_CAFE_YEARLY_" +
+        currentYearlyReportYear +
+        ".xlsx"
     );
 
 }
 
 
 /* =====================================================
-   PRINT REPORT
+   MONTHLY PRINT
 ===================================================== */
 
-function printReport() {
+function printMonthlyReport() {
 
     if (
-        currentReportOrders.length === 0
+        !currentMonthlyReportDate
     ) {
 
         alert(
-            "There is no report to print."
+            "Please load a monthly report first."
         );
 
         return;
-
     }
 
+    const orders =
+        currentMonthlyReportOrders;
 
-    window.print();
+    if (!orders.length) {
+
+        alert(
+            "There is no completed monthly report to print."
+        );
+
+        return;
+    }
+
+    const parts =
+        currentMonthlyReportDate.split("-");
+
+    const year =
+        Number(parts[0]);
+
+    const month =
+        Number(parts[1]) - 1;
+
+    const ranking =
+        buildBestSellerRanking(
+            orders
+        );
+
+    let totalSales =
+        0;
+
+    orders.forEach(
+        function(order) {
+
+            totalSales +=
+                Number(
+                    order.grand_total
+                ) || 0;
+
+        }
+    );
+
+    const dailySales =
+        Array(
+            new Date(
+                year,
+                month + 1,
+                0
+            ).getDate()
+        ).fill(0);
+
+    orders.forEach(
+        function(order) {
+
+            const date =
+                new Date(
+                    order.created_at
+                );
+
+            dailySales[
+                date.getDate() - 1
+            ] +=
+                Number(
+                    order.grand_total
+                ) || 0;
+
+        }
+    );
+
+    let html = "";
+
+    html +=
+        "<!DOCTYPE html><html><head><title>Highway Cafe Monthly Report</title>";
+
+    html +=
+        "<style>";
+
+    html +=
+        "body{font-family:Arial;padding:30px;color:#3e2a20}";
+
+    html +=
+        "h1,h2{color:#4b2e1f}";
+
+    html +=
+        "table{width:100%;border-collapse:collapse;margin-top:20px}";
+
+    html +=
+        "th,td{border:1px solid #ddd;padding:8px;text-align:left}";
+
+    html +=
+        "th{background:#4b2e1f;color:white}";
+
+    html +=
+        ".summary{padding:15px;background:#f8f3ee;border-radius:10px}";
+
+    html +=
+        "</style></head><body>";
+
+    html +=
+        "<h1>HIGHWAY CAFE</h1>";
+
+    html +=
+        "<h2>Monthly Report — " +
+        monthName(month) +
+        " " +
+        year +
+        "</h2>";
+
+    html +=
+        "<div class='summary'>" +
+        "<strong>Total Sales:</strong> " +
+        formatMoney(totalSales) +
+        "<br><strong>Completed Orders:</strong> " +
+        orders.length +
+        "</div>";
+
+    html +=
+        "<h2>Best Sellers</h2>";
+
+    html +=
+        "<table><tr><th>Rank</th><th>Product</th><th>Quantity Sold</th></tr>";
+
+    ranking.forEach(
+        function(item, index) {
+
+            html +=
+                "<tr><td>" +
+                (index + 1) +
+                "</td><td>" +
+                escapeHtml(item.name) +
+                "</td><td>" +
+                item.quantity +
+                "</td></tr>";
+
+        }
+    );
+
+    html +=
+        "</table>";
+
+    html +=
+        "<h2>Daily Sales</h2>";
+
+    html +=
+        "<table><tr><th>Day</th><th>Sales</th></tr>";
+
+    dailySales.forEach(
+        function(value, index) {
+
+            html +=
+                "<tr><td>" +
+                (index + 1) +
+                "</td><td>" +
+                formatMoney(value) +
+                "</td></tr>";
+
+        }
+    );
+
+    html +=
+        "</table>";
+
+    html +=
+        "</body></html>";
+
+    const printWindow =
+        window.open(
+            "",
+            "_blank"
+        );
+
+    if (!printWindow) {
+
+        alert(
+            "Please allow pop-ups to print the report."
+        );
+
+        return;
+    }
+
+    printWindow.document.write(
+        html
+    );
+
+    printWindow.document.close();
+
+    printWindow.focus();
+
+    setTimeout(
+        function() {
+
+            printWindow.print();
+
+        },
+        300
+    );
+
+}
+
+
+/* =====================================================
+   YEARLY PRINT
+===================================================== */
+
+function printYearlyReport() {
+
+    if (
+        !currentYearlyReportYear
+    ) {
+
+        alert(
+            "Please load a yearly report first."
+        );
+
+        return;
+    }
+
+    const orders =
+        currentYearlyReportOrders;
+
+    if (!orders.length) {
+
+        alert(
+            "There is no completed yearly report to print."
+        );
+
+        return;
+    }
+
+    const year =
+        Number(
+            currentYearlyReportYear
+        );
+
+    const ranking =
+        buildBestSellerRanking(
+            orders
+        );
+
+    let totalSales =
+        0;
+
+    const monthlySales =
+        Array(12).fill(0);
+
+    orders.forEach(
+        function(order) {
+
+            const total =
+                Number(
+                    order.grand_total
+                ) || 0;
+
+            totalSales +=
+                total;
+
+            const date =
+                new Date(
+                    order.created_at
+                );
+
+            monthlySales[
+                date.getMonth()
+            ] +=
+                total;
+
+        }
+    );
+
+    let html = "";
+
+    html +=
+        "<!DOCTYPE html><html><head><title>Highway Cafe Yearly Report</title>";
+
+    html +=
+        "<style>";
+
+    html +=
+        "body{font-family:Arial;padding:30px;color:#3e2a20}";
+
+    html +=
+        "h1,h2{color:#4b2e1f}";
+
+    html +=
+        "table{width:100%;border-collapse:collapse;margin-top:20px}";
+
+    html +=
+        "th,td{border:1px solid #ddd;padding:8px;text-align:left}";
+
+    html +=
+        "th{background:#4b2e1f;color:white}";
+
+    html +=
+        ".summary{padding:15px;background:#f8f3ee;border-radius:10px}";
+
+    html +=
+        "</style></head><body>";
+
+    html +=
+        "<h1>HIGHWAY CAFE</h1>";
+
+    html +=
+        "<h2>Yearly Report — " +
+        year +
+        "</h2>";
+
+    html +=
+        "<div class='summary'>" +
+        "<strong>Total Sales:</strong> " +
+        formatMoney(totalSales) +
+        "<br><strong>Completed Orders:</strong> " +
+        orders.length +
+        "</div>";
+
+    html +=
+        "<h2>Monthly Sales</h2>";
+
+    html +=
+        "<table><tr><th>Month</th><th>Sales</th></tr>";
+
+    monthlySales.forEach(
+        function(value, index) {
+
+            html +=
+                "<tr><td>" +
+                monthName(index) +
+                "</td><td>" +
+                formatMoney(value) +
+                "</td></tr>";
+
+        }
+    );
+
+    html +=
+        "</table>";
+
+    html +=
+        "<h2>Best Sellers of the Year</h2>";
+
+    html +=
+        "<table><tr><th>Rank</th><th>Product</th><th>Quantity Sold</th></tr>";
+
+    ranking.forEach(
+        function(item, index) {
+
+            html +=
+                "<tr><td>" +
+                (index + 1) +
+                "</td><td>" +
+                escapeHtml(item.name) +
+                "</td><td>" +
+                item.quantity +
+                "</td></tr>";
+
+        }
+    );
+
+    html +=
+        "</table>";
+
+    html +=
+        "</body></html>";
+
+    const printWindow =
+        window.open(
+            "",
+            "_blank"
+        );
+
+    if (!printWindow) {
+
+        alert(
+            "Please allow pop-ups to print the report."
+        );
+
+        return;
+    }
+
+    printWindow.document.write(
+        html
+    );
+
+    printWindow.document.close();
+
+    printWindow.focus();
+
+    setTimeout(
+        function() {
+
+            printWindow.print();
+
+        },
+        300
+    );
 
 }
 
@@ -5385,31 +7632,45 @@ function showSection(
 
         "menuSection",
 
-        "reportsSection"
+        "reportsSection",
+
+        "monthlyReportSection",
+
+        "yearlyReportSection"
 
     ];
-
 
     sections.forEach(
         function(id) {
 
-            document
-                .getElementById(id)
-                .classList.add(
+            const element =
+                document.getElementById(
+                    id
+                );
+
+            if (element) {
+
+                element.classList.add(
                     "hidden"
                 );
+
+            }
 
         }
     );
 
-
-    document
-        .getElementById(
+    const selected =
+        document.getElementById(
             sectionId
-        )
-        .classList.remove(
+        );
+
+    if (selected) {
+
+        selected.classList.remove(
             "hidden"
         );
+
+    }
 
 
     if (
@@ -5422,6 +7683,38 @@ function showSection(
         ) {
 
             setDefaultReportDate();
+
+        }
+
+    }
+
+
+    if (
+        sectionId ===
+        "monthlyReportSection"
+    ) {
+
+        if (
+            !currentMonthlyReportDate
+        ) {
+
+            setDefaultMonthlyReport();
+
+        }
+
+    }
+
+
+    if (
+        sectionId ===
+        "yearlyReportSection"
+    ) {
+
+        if (
+            !currentYearlyReportYear
+        ) {
+
+            setDefaultYearlyReport();
 
         }
 
@@ -5506,7 +7799,6 @@ async function checkSession() {
             .auth
             .getSession();
 
-
     if (
         data &&
         data.session
@@ -5557,8 +7849,50 @@ supabaseClient
 
 setDefaultReportDate();
 
+setDefaultMonthlyReport();
+
+setDefaultYearlyReport();
+
 checkSession();
 
+
+/* =====================================================
+   REDRAW CHARTS ON RESIZE
+===================================================== */
+
+window.addEventListener(
+    "resize",
+    function() {
+
+        if (
+            currentMonthlyReportOrders.length
+        ) {
+
+            const value =
+                currentMonthlyReportDate
+                    .split("-");
+
+            renderMonthlyReport(
+                Number(value[0]),
+                Number(value[1]) - 1
+            );
+
+        }
+
+        if (
+            currentYearlyReportOrders.length
+        ) {
+
+            renderYearlyReport(
+                Number(
+                    currentYearlyReportYear
+                )
+            );
+
+        }
+
+    }
+);
 
 </script>
 
