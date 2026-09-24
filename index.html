@@ -481,21 +481,6 @@
 
                 </button>
 
-
-                <!-- ==============================
-                     TUBE ICE
-                =============================== -->
-
-                <button
-                    type="button"
-                    class="menu-item"
-                    onclick="openSnack('Tube Ice','Snack Detour','choice',[{ name: '1 pc', price: 15 }])">
-
-                    <strong>Tube Ice</strong>
-                    <span>₱15 / pc</span>
-
-                </button>
-
             </div>
 
         </section>
@@ -1127,18 +1112,26 @@
                         <h4>GCash Payment</h4>
 
                         <p>
-                            Send your payment to the Highway Cafe GCash account.
+                            Scan the QR code below to pay using GCash.
                         </p>
 
-                        <p>
-                            <strong>GCash Number:</strong>
-                            <span id="gcashNumber">
-                                YOUR-GCASH-NUMBER
-                            </span>
-                        </p>
+                        <div style="text-align: center; margin: 15px 0;">
+
+                            <img
+                                src="gcash-qr.png"
+                                alt="Highway Cafe GCash QR Code"
+                                style="
+                                    width: 250px;
+                                    max-width: 100%;
+                                    height: auto;
+                                    display: block;
+                                    margin: 0 auto;
+                                ">
+
+                        </div>
 
                         <p>
-                            After payment, enter your reference number below.
+                            After payment, enter your GCash reference number below.
                         </p>
 
                     </div>
@@ -1151,7 +1144,7 @@
                     <input
                         type="text"
                         id="paymentReference"
-                        placeholder="Enter reference number">
+                        placeholder="Enter GCash reference number">
 
                 </div>
 
@@ -1254,108 +1247,66 @@
     </div>
 
 
-    <!-- =====================================================
-         FORM SUBMIT
-         HIGHWAY CAFE ORDER EMAIL
-    ====================================================== -->
+<!-- =====================================================
+     FORM SUBMIT
+     HIGHWAY CAFE ORDER EMAIL
+====================================================== -->
 
-    <form
-        id="orderEmailForm"
-        action="https://formsubmit.co/highwaycafe14@gmail.com"
-        method="POST"
-        target="formSubmitFrame"
-        style="display: none;">
+<form
+    id="orderEmailForm"
+    action="https://formsubmit.co/highwaycafe14@gmail.com"
+    method="POST"
+    target="formSubmitFrame"
+    style="display: none;">
 
-        <input
-            type="hidden"
-            name="_subject"
-            id="emailSubject">
+    <input type="hidden" name="_subject" id="emailSubject">
 
-        <input
-            type="hidden"
-            name="_template"
-            value="table">
+    <input type="hidden" name="_template" value="table">
 
-        <input
-            type="hidden"
-            name="_captcha"
-            value="false">
+    <input type="hidden" name="_captcha" value="false">
 
-        <input
-            type="hidden"
-            name="Order Number"
-            id="emailOrderNumber">
+    <input type="hidden" name="Order Number" id="emailOrderNumber">
 
-        <input
-            type="hidden"
-            name="Customer Name"
-            id="emailCustomerName">
+    <input type="hidden" name="Customer Name" id="emailCustomerName">
 
-        <input
-            type="hidden"
-            name="Phone Number"
-            id="emailCustomerPhone">
+    <input type="hidden" name="Phone Number" id="emailCustomerPhone">
 
-        <input
-            type="hidden"
-            name="Order Type"
-            id="emailOrderType">
+    <input type="hidden" name="Order Type" id="emailOrderType">
 
-        <input
-            type="hidden"
-            name="Delivery Address"
-            id="emailDeliveryAddress">
+    <input type="hidden" name="Delivery Address" id="emailDeliveryAddress">
 
-        <input
-            type="hidden"
-            name="Pickup Time"
-            id="emailPickupTime">
+    <input type="hidden" name="Pickup Time" id="emailPickupTime">
 
-        <input
-            type="hidden"
-            name="Payment Method"
-            id="emailPaymentMethod">
+    <input type="hidden" name="Payment Method" id="emailPaymentMethod">
 
-        <input
-            type="hidden"
-            name="GCash Reference"
-            id="emailPaymentReference">
+    <input type="hidden" name="GCash Reference" id="emailPaymentReference">
 
-        <input
-            type="hidden"
-            name="Ordered Items"
-            id="emailItems">
+    <input type="hidden" name="Ordered Items" id="emailItems">
 
-        <input
-            type="hidden"
-            name="Order Notes"
-            id="emailNotes">
+    <input type="hidden" name="Order Notes" id="emailNotes">
 
-        <input
-            type="hidden"
-            name="Grand Total"
-            id="emailTotal">
+    <input type="hidden" name="Grand Total" id="emailTotal">
 
-    </form>
+</form>
 
 
-    <!-- Hidden frame so the customer stays on the website -->
+<!-- Hidden frame so the customer stays on the website -->
 
-    <iframe
-        name="formSubmitFrame"
-        id="formSubmitFrame"
-        style="display:none;">
-    </iframe>
+<iframe
+    name="formSubmitFrame"
+    id="formSubmitFrame"
+    style="display:none;">
+</iframe>
 
 
-    <!-- =====================================================
-         JAVASCRIPT
-    ====================================================== -->
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
 
-    <script
-        src="script.js"
-        defer>
-    </script>
+<script
+    src="script.js"
+    defer>
+</script>
 
 </body>
 </html>
