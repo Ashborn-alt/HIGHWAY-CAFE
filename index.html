@@ -5,45 +5,12 @@
     <meta charset="UTF-8">
 
     <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+          content="width=device-width, initial-scale=1.0">
 
-    <title>HIGHWAY CAFE | Online Ordering</title>
+    <title>HIGHWAY CAFE</title>
 
-    <!-- FACEBOOK / MESSENGER LINK PREVIEW -->
-
-    <meta property="og:title"
-        content="HIGHWAY CAFE | Online Ordering">
-
-    <meta property="og:description"
-        content="BREWED COFFEE • FRESH SNACKS">
-
-    <meta property="og:type"
-        content="website">
-
-    <meta property="og:url"
-        content="https://ashborn-alt.github.io/HIGHWAY-CAFE/">
-
-    <meta property="og:image"
-        content="https://ashborn-alt.github.io/HIGHWAY-CAFE/highway-cafe-preview.jpg">
-
-    <meta property="og:image:alt"
-        content="HIGHWAY CAFE">
-
-    <!-- X / TWITTER PREVIEW -->
-
-    <meta name="twitter:card"
-        content="summary_large_image">
-
-    <meta name="twitter:title"
-        content="HIGHWAY CAFE | Online Ordering">
-
-    <meta name="twitter:description"
-        content="BREWED COFFEE • FRESH SNACKS">
-
-    <meta name="twitter:image"
-        content="https://ashborn-alt.github.io/HIGHWAY-CAFE/highway-cafe-preview.jpg">
-
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+          href="style.css">
 </head>
 
 <body>
@@ -56,13 +23,11 @@
 
         <h1>HIGHWAY CAFE</h1>
 
-        <p>
-            BREWED COFFEE
-            &nbsp;&nbsp;&nbsp;
-            FRESH SNACKS
-        </p>
+        <p>BREWED COFFEE &nbsp;&nbsp; FRESH SNACKS</p>
 
-        <button type="button" onclick="startOrder()">
+        <button
+            type="button"
+            onclick="startOrder()">
             Order Now
         </button>
 
@@ -73,7 +38,7 @@
          SIDE CART
     ====================================================== -->
 
-    <div id="sideCart">
+    <aside id="sideCart">
 
         <div class="cart-header">
 
@@ -85,35 +50,39 @@
 
         </div>
 
+
         <div id="sideCartItems">
-            Your cart is empty.
+
+            <p>Your cart is empty.</p>
+
         </div>
+
 
         <div class="cart-total">
 
-            <strong>Total:</strong>
-
+            Total:
             ₱<span id="sideCartTotal">0</span>
 
         </div>
 
+
         <button
             type="button"
             id="checkoutButton"
-            onclick="openCheckout()"
-        >
-            Checkout
+            onclick="openCheckout()">
+
+            Proceed to Checkout
+
         </button>
 
-    </div>
+    </aside>
 
 
     <!-- =====================================================
          MENU
     ====================================================== -->
 
-    <main id="menu" style="display:none;">
-
+    <main id="menu">
 
         <!-- =================================================
              HIGHWAY BREWS
@@ -125,62 +94,83 @@
 
             <h3>Iced Coffee</h3>
 
+
             <div class="menu-grid">
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Americano','Iced Coffee',70,80,['espresso'])"
-                >
-                    Americano
+                    onclick="openDrink('americano')">
+
+                    <strong>Americano</strong>
+                    <span>₱70 / ₱80</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Vanilla Latte','Iced Coffee',75,89,['espresso'])"
-                >
-                    Vanilla Latte
+                    onclick="openDrink('vanillaLatte')">
+
+                    <strong>Vanilla Latte</strong>
+                    <span>₱75 / ₱89</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Spanish Latte','Iced Coffee',75,89,['espresso'])"
-                >
-                    Spanish Latte
+                    onclick="openDrink('spanishLatte')">
+
+                    <strong>Spanish Latte</strong>
+                    <span>₱75 / ₱89</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Mocha Latte','Iced Coffee',75,89,['espresso','chocolate'])"
-                >
-                    Mocha Latte
+                    onclick="openDrink('mochaLatte')">
+
+                    <strong>Mocha Latte</strong>
+                    <span>₱75 / ₱89</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Dirty Matcha','Iced Coffee',85,100,['espresso','matcha'])"
-                >
-                    Dirty Matcha
+                    onclick="openDrink('dirtyMatcha')">
+
+                    <strong>Dirty Matcha</strong>
+                    <span>₱85 / ₱100</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Salted Caramel','Iced Coffee',75,89,['espresso'])"
-                >
-                    Salted Caramel
+                    onclick="openDrink('saltedCaramel')">
+
+                    <strong>Salted Caramel</strong>
+                    <span>₱75 / ₱89</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Caramel Macchiato','Iced Coffee',75,89,['espresso'])"
-                >
-                    Caramel Macchiato
+                    onclick="openDrink('caramelMacchiato')">
+
+                    <strong>Caramel Macchiato</strong>
+                    <span>₱75 / ₱89</span>
+
                 </button>
 
             </div>
@@ -198,38 +188,50 @@
 
             <h3>Hot Coffee</h3>
 
+
             <div class="menu-grid">
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Hot Choco','Hot Coffee',0,0,['chocolate'],0,70)"
-                >
-                    Hot Choco
+                    onclick="openDrink('hotChoco')">
+
+                    <strong>Hot Choco</strong>
+                    <span>₱70</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Americano','Hot Coffee',0,0,['espresso'],0,70)"
-                >
-                    Americano
+                    onclick="openDrink('hotAmericano')">
+
+                    <strong>Americano</strong>
+                    <span>₱70</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Spanish Latte','Hot Coffee',0,0,['espresso'],0,80)"
-                >
-                    Spanish Latte
+                    onclick="openDrink('hotSpanishLatte')">
+
+                    <strong>Spanish Latte</strong>
+                    <span>₱80</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Cafe Latte','Hot Coffee',0,0,['espresso'],0,80)"
-                >
-                    Cafe Latte
+                    onclick="openDrink('cafeLatte')">
+
+                    <strong>Cafe Latte</strong>
+                    <span>₱80</span>
+
                 </button>
 
             </div>
@@ -247,38 +249,50 @@
 
             <h3>Soda Series</h3>
 
+
             <div class="menu-grid">
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Green Apple','Soda Series',39,59,[])"
-                >
-                    Green Apple
+                    onclick="openDrink('greenApple')">
+
+                    <strong>Green Apple</strong>
+                    <span>₱29 / ₱39 / ₱59</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Lychee','Soda Series',39,59,[])"
-                >
-                    Lychee
+                    onclick="openDrink('lychee')">
+
+                    <strong>Lychee</strong>
+                    <span>₱29 / ₱39 / ₱59</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Strawberry','Soda Series',39,59,[])"
-                >
-                    Strawberry
+                    onclick="openDrink('strawberrySoda')">
+
+                    <strong>Strawberry</strong>
+                    <span>₱29 / ₱39 / ₱59</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Blueberry','Soda Series',39,59,[])"
-                >
-                    Blueberry
+                    onclick="openDrink('blueberrySoda')">
+
+                    <strong>Blueberry</strong>
+                    <span>₱29 / ₱39 / ₱59</span>
+
                 </button>
 
             </div>
@@ -296,46 +310,61 @@
 
             <h3>Milk Series</h3>
 
+
             <div class="menu-grid">
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Strawberry Milk','Milk Series',65,80,[])"
-                >
-                    Strawberry Milk
+                    onclick="openDrink('strawberryMilk')">
+
+                    <strong>Strawberry Milk</strong>
+                    <span>₱65 / ₱80</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Blueberry Milk','Milk Series',65,80,[])"
-                >
-                    Blueberry Milk
+                    onclick="openDrink('blueberryMilk')">
+
+                    <strong>Blueberry Milk</strong>
+                    <span>₱65 / ₱80</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Chocolate Milk','Milk Series',65,80,['chocolate'])"
-                >
-                    Chocolate Milk
+                    onclick="openDrink('chocolateMilk')">
+
+                    <strong>Chocolate Milk</strong>
+                    <span>₱65 / ₱80</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Matcha Latte','Milk Series',80,95,['matcha'])"
-                >
-                    Matcha Latte
+                    onclick="openDrink('matchaLatte')">
+
+                    <strong>Matcha Latte</strong>
+                    <span>₱80 / ₱95</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openProduct('Cookies and Cream','Milk Series',65,80,[])"
-                >
-                    Cookies and Cream
+                    onclick="openDrink('cookiesCream')">
+
+                    <strong>Cookies and Cream</strong>
+                    <span>₱65 / ₱80</span>
+
                 </button>
 
             </div>
@@ -351,78 +380,120 @@
 
             <h2>SNACK DETOUR</h2>
 
+
             <div class="menu-grid">
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openSnack('Nacho’s','Snack Detour',[['Regular',75],['Overload',125]])"
-                >
-                    Nacho's
+                    onclick="openSnackByKey('nachos')">
+
+                    <strong>Nacho's</strong>
+                    <span>₱75 / ₱125</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openSnack('French Fries','Snack Detour',[['Regular',25],['Large',40]],['BBQ','Sour Cream','Cheese'])"
-                >
-                    French Fries
+                    onclick="openSnackByKey('fries')">
+
+                    <strong>French Fries</strong>
+                    <span>₱25 / ₱40</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openSnack('Hashbrown','Snack Detour',[['1 pc',25],['3 pcs',65]])"
-                >
-                    Hashbrown
+                    onclick="openSnackByKey('hashbrown')">
+
+                    <strong>Hashbrown</strong>
+                    <span>₱25 / ₱65</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openSnack('Steamed Siomai','Snack Detour',[['5 pcs',25],['11 pcs',50]])"
-                >
-                    Steamed Siomai
+                    onclick="openSnackByKey('steamedSiomai')">
+
+                    <strong>Steamed Siomai</strong>
+                    <span>₱25 / ₱50</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openSnack('Japanese Siomai','Snack Detour',[['1 pc',10]])"
-                >
-                    Japanese Siomai
+                    onclick="openSnackByKey('japaneseSiomai')">
+
+                    <strong>Japanese Siomai</strong>
+                    <span>₱10 / pc</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openSnack('Tofu Squares','Snack Detour',[['4 pcs',25],['11 pcs',50]])"
-                >
-                    Tofu Squares
+                    onclick="openSnackByKey('tofu')">
+
+                    <strong>Tofu Squares</strong>
+                    <span>₱25 / ₱50</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openSnack('Flying Saucer','Snack Detour',[['Ham & Cheese',25],['Hotdog & Cheese',25],['Egg & Cheese',30],['Tuna & Cheese',30]])"
-                >
-                    Flying Saucer
+                    onclick="openSnackByKey('flyingSaucer')">
+
+                    <strong>Flying Saucer</strong>
+                    <span>₱25 / ₱30</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openSnack('Shanghai','Snack Detour',[['1 pc',10],['11 pcs',100]])"
-                >
-                    Shanghai
+                    onclick="openSnackByKey('shanghai')">
+
+                    <strong>Shanghai</strong>
+                    <span>₱10 / ₱100</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openSnack('Donuts','Snack Detour',[['1 pc',10]],['Vanilla','Caramel','Chocolate'])"
-                >
-                    Donuts
+                    onclick="openSnackByKey('donuts')">
+
+                    <strong>Donuts</strong>
+                    <span>₱10 / pc</span>
+
+                </button>
+
+
+                <!-- ==============================
+                     TUBE ICE
+                =============================== -->
+
+                <button
+                    type="button"
+                    class="menu-item"
+                    onclick="openSnack('Tube Ice','Snack Detour','choice',[{ name: '1 pc', price: 15 }])">
+
+                    <strong>Tube Ice</strong>
+                    <span>₱15 / pc</span>
+
                 </button>
 
             </div>
@@ -438,54 +509,74 @@
 
             <h2>PIT STOP PLATES</h2>
 
+            <h3>Meals</h3>
+
+
             <div class="menu-grid">
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openMeal('Chicken Rice Meal',[['1 pc Chicken',50],['2 pcs Chicken',80]])"
-                >
-                    Chicken Rice Meal
+                    onclick="openMealByKey('chickenMeal')">
+
+                    <strong>Chicken Rice Meal</strong>
+                    <span>₱50 / ₱80</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openMeal('Shanghai Rice Meal',[['4 pcs Shanghai',50]])"
-                >
-                    Shanghai Rice Meal
+                    onclick="openMealByKey('shanghaiMeal')">
+
+                    <strong>Shanghai Rice Meal</strong>
+                    <span>₱50</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openMeal('Siomai Rice Meal',[['6 pcs Steamed Siomai',45]])"
-                >
-                    Siomai Rice Meal
+                    onclick="openMealByKey('siomaiMeal')">
+
+                    <strong>Siomai Rice Meal</strong>
+                    <span>₱45</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openMeal('Hotdog Rice Meal',[['2 pcs Hotdog',50]])"
-                >
-                    Hotdog Rice Meal
+                    onclick="openMealByKey('hotdogMeal')">
+
+                    <strong>Hotdog Rice Meal</strong>
+                    <span>₱50</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openMeal('Meatloaf Rice Meal',[['3 pcs Meatloaf',55]])"
-                >
-                    Meatloaf Rice Meal
+                    onclick="openMealByKey('meatloafMeal')">
+
+                    <strong>Meatloaf Rice Meal</strong>
+                    <span>₱55</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="menu-item"
-                    onclick="openMeal('Skinless Longganisa',[['2 pcs Longganisa',55]])"
-                >
-                    Skinless Longganisa
+                    onclick="openMealByKey('longganisaMeal')">
+
+                    <strong>Skinless Longganisa</strong>
+                    <span>₱55</span>
+
                 </button>
 
             </div>
@@ -496,64 +587,70 @@
 
 
     <!-- =====================================================
-         PRODUCT POPUP
+         PRODUCT / SNACK / MEAL POPUP
     ====================================================== -->
 
-    <div
-        id="productOverlay"
-        class="overlay"
-        style="display:none;"
-    >
+    <div id="productOverlay"
+         class="overlay">
 
-        <div
-            id="productPopup"
-            class="popup"
-        >
+        <!-- PRODUCT POPUP -->
+
+        <div id="productPopup"
+             class="popup">
 
             <button
                 type="button"
                 class="close-button"
-                onclick="closeProduct()"
-            >
-                ✕
+                onclick="closeProduct()">
+
+                ×
+
             </button>
 
-            <h2 id="selectedProduct"></h2>
 
-            <p id="selectedCategory"></p>
+            <h2 id="selectedProduct">
+                Product
+            </h2>
+
+            <p id="selectedCategory">
+                Category
+            </p>
 
 
             <h3 id="sizeTitle">
                 Choose Size
             </h3>
 
-            <div
-                id="sizeButtons"
-                class="option-row"
-            >
+
+            <div class="option-row">
 
                 <button
                     type="button"
                     id="size12Button"
-                    onclick="selectSize(12)"
-                >
+                    onclick="selectSize(12)">
+
                     12oz
+
                 </button>
+
 
                 <button
                     type="button"
                     id="size16Button"
-                    onclick="selectSize(16)"
-                >
+                    onclick="selectSize(16)">
+
                     16oz
+
                 </button>
+
 
                 <button
                     type="button"
                     id="size22Button"
-                    onclick="selectSize(22)"
-                >
+                    onclick="selectSize(22)">
+
                     22oz
+
                 </button>
 
             </div>
@@ -561,606 +658,310 @@
 
             <h3>Add-ons</h3>
 
-            <div
-                id="espressoOption"
-                class="addon-option"
-                style="display:none;"
-            >
+
+            <div id="espressoOption"
+                 class="addon-option">
 
                 <button
                     type="button"
                     id="espressoButton"
-                    onclick="toggleAddon('espresso')"
-                >
+                    onclick="toggleEspresso()">
+
                     Extra Espresso +₱30
+
                 </button>
 
             </div>
 
 
-            <div
-                id="matchaOption"
-                class="addon-option"
-                style="display:none;"
-            >
+            <div id="matchaOption"
+                 class="addon-option">
 
                 <button
                     type="button"
                     id="matchaButton"
-                    onclick="toggleAddon('matcha')"
-                >
+                    onclick="toggleMatcha()">
+
                     Extra Matcha +₱30
+
                 </button>
 
             </div>
 
 
-            <div
-                id="chocolateOption"
-                class="addon-option"
-                style="display:none;"
-            >
+            <div id="chocolateOption"
+                 class="addon-option">
 
                 <button
                     type="button"
                     id="chocolateButton"
-                    onclick="toggleAddon('chocolate')"
-                >
+                    onclick="toggleChocolate()">
+
                     Extra Chocolate +₱30
+
                 </button>
 
             </div>
 
 
-            <h3>
-                Price:
-                ₱<span id="selectedProductPrice">0</span>
-            </h3>
+            <h3>Quantity</h3>
 
 
-            <label for="quantity">
-                Quantity
-            </label>
+            <div class="quantity-control">
 
-            <input
-                type="number"
-                id="quantity"
-                min="1"
-                value="1"
-            >
+                <button
+                    type="button"
+                    onclick="changeQuantity(-1)">
 
-            <br><br>
+                    −
 
-            <button
-                type="button"
-                class="primary-button"
-                id="addToCartButton"
-            >
-                Add to Cart
-            </button>
-
-        </div>
-
-    </div>
+                </button>
 
 
-    <!-- =====================================================
-         SNACK POPUP
-    ====================================================== -->
-
-    <div
-        id="snackOverlay"
-        class="overlay"
-        style="display:none;"
-    >
-
-        <div
-            id="snackPopupContent"
-            class="popup"
-        >
-
-            <button
-                type="button"
-                class="close-button"
-                onclick="closeSnack()"
-            >
-                ✕
-            </button>
-
-            <h2 id="selectedSnack"></h2>
-
-            <p id="selectedSnackCategory"></p>
+                <span id="quantity">
+                    1
+                </span>
 
 
-            <h3>Choose Option</h3>
+                <button
+                    type="button"
+                    onclick="changeQuantity(1)">
 
-            <div
-                id="snackChoiceButtons"
-                class="option-row"
-            ></div>
+                    +
 
-
-            <div
-                id="snackFlavors"
-                style="display:none;"
-            >
-
-                <h3>
-                    Choose Flavor
-                </h3>
-
-                <div
-                    id="snackFlavorButtons"
-                    class="option-row"
-                ></div>
+                </button>
 
             </div>
 
 
-            <label for="snackQuantity">
-                Quantity
-            </label>
-
-            <input
-                type="number"
-                id="snackQuantity"
-                min="1"
-                value="1"
-            >
-
-            <br><br>
-
             <button
                 type="button"
                 class="primary-button"
-                onclick="addSnackToCart()"
-            >
+                onclick="addSelectedProduct()">
+
                 Add to Cart
+
             </button>
 
         </div>
 
-    </div>
 
+        <!-- SNACK POPUP -->
 
-    <!-- =====================================================
-         MEAL POPUP
-    ====================================================== -->
-
-    <div
-        id="mealOverlay"
-        class="overlay"
-        style="display:none;"
-    >
-
-        <div
-            id="mealPopupContent"
-            class="popup"
-        >
+        <div id="snackPopupContent"
+             class="popup">
 
             <button
                 type="button"
                 class="close-button"
-                onclick="closeMeal()"
-            >
-                ✕
+                onclick="closeSnack()">
+
+                ×
+
             </button>
 
-            <h2 id="selectedMeal"></h2>
 
-
-            <h3>Choose Option</h3>
-
-            <div
-                id="mealChoiceButtons"
-                class="option-row"
-            ></div>
-
-
-            <div id="mealCooler">
-
-                <h3>
-                    Add Highway Cooler
-                </h3>
-
-                <div class="option-row">
-
-                    <button
-                        type="button"
-                        id="coolerNoneButton"
-                        onclick="selectMealCooler('none')"
-                    >
-                        None
-                    </button>
-
-                    <button
-                        type="button"
-                        id="cooler16Button"
-                        onclick="selectMealCooler('16oz')"
-                    >
-                        16oz +₱35
-                    </button>
-
-                    <button
-                        type="button"
-                        id="cooler22Button"
-                        onclick="selectMealCooler('22oz')"
-                    >
-                        22oz +₱55
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div>
-
-                <h3>
-                    Extras
-                </h3>
-
-                <div class="option-row">
-
-                    <button
-                        type="button"
-                        id="extraEggButton"
-                        onclick="toggleMealExtra('egg')"
-                    >
-                        Extra Egg +₱10
-                    </button>
-
-                    <button
-                        type="button"
-                        id="extraRiceButton"
-                        onclick="toggleMealExtra('rice')"
-                    >
-                        Extra Rice +₱15
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <br>
-
-            <label for="mealQuantity">
-                Quantity
-            </label>
-
-            <input
-                type="number"
-                id="mealQuantity"
-                min="1"
-                value="1"
-            >
-
-            <br><br>
-
-            <button
-                type="button"
-                class="primary-button"
-                onclick="addMealToCart()"
-            >
-                Add to Cart
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         CHECKOUT
-    ====================================================== -->
-
-    <div
-        id="checkoutOverlay"
-        class="overlay"
-        style="display:none;"
-    >
-
-        <div
-            id="checkoutPopup"
-            class="popup checkout-popup"
-        >
-
-            <button
-                type="button"
-                class="close-button"
-                onclick="closeCheckout()"
-            >
-                ✕
-            </button>
-
-            <h2>
-                Checkout
+            <h2 id="selectedSnack">
+                Snack
             </h2>
 
 
-            <!-- CUSTOMER INFORMATION -->
-
-            <div class="form-section">
-
-                <h3>
-                    Customer Information
-                </h3>
-
-                <label for="customerName">
-                    Name
-                </label>
-
-                <input
-                    type="text"
-                    id="customerName"
-                    placeholder="Enter your name"
-                >
+            <p id="selectedSnackCategory">
+                Snack Detour
+            </p>
 
 
-                <label for="customerPhone">
-                    Phone Number
-                </label>
+            <h3>Choose Option</h3>
 
-                <input
-                    type="tel"
-                    id="customerPhone"
-                    placeholder="09XXXXXXXXX"
-                >
 
+            <div id="snackChoiceButtons"
+                 class="option-column">
             </div>
 
 
-            <!-- ORDER TYPE -->
+            <div id="snackFlavors">
 
-            <div class="form-section">
+                <h3>Choose Flavor</h3>
 
-                <h3>
-                    Order Type
-                </h3>
-
-                <div class="option-row">
-
-                    <button
-                        type="button"
-                        id="pickupButton"
-                        onclick="selectOrderType('pickup')"
-                    >
-                        🏪 Pickup
-                    </button>
-
-                    <button
-                        type="button"
-                        id="deliveryButton"
-                        onclick="selectOrderType('delivery')"
-                    >
-                        🛵 Delivery +₱20
-                    </button>
-
-                </div>
-
-
-                <div
-                    id="deliveryDetails"
-                    style="display:none;"
-                >
-
-                    <label for="deliveryAddress">
-                        Delivery Address
-                    </label>
-
-                    <textarea
-                        id="deliveryAddress"
-                        placeholder="Enter your complete delivery address"
-                    ></textarea>
-
-                    <p>
-                        <strong>
-                            Delivery Fee: ₱20
-                        </strong>
-                    </p>
-
-                </div>
-
-
-                <div
-                    id="pickupDetails"
-                    style="display:none;"
-                >
-
-                    <label for="pickupTime">
-                        Preferred Pickup Time
-                    </label>
-
-                    <input
-                        type="time"
-                        id="pickupTime"
-                    >
-
+                <div id="snackFlavorButtons"
+                     class="option-column">
                 </div>
 
             </div>
 
 
-            <!-- ORDER NOTES -->
-
-            <div class="form-section">
-
-                <h3>
-                    Order Notes
-                </h3>
-
-                <textarea
-                    id="orderNotes"
-                    placeholder="Optional notes or special requests"
-                ></textarea>
-
-            </div>
+            <h3>Quantity</h3>
 
 
-            <!-- PAYMENT -->
+            <div class="quantity-control">
 
-            <div class="form-section">
+                <button
+                    type="button"
+                    onclick="changeSnackQuantity(-1)">
 
-                <h3>
-                    Payment Method
-                </h3>
+                    −
 
-                <div class="option-row">
-
-                    <button
-                        type="button"
-                        id="cashButton"
-                        onclick="selectPaymentMethod('cash')"
-                    >
-                        💵 Cash
-                    </button>
-
-                    <button
-                        type="button"
-                        id="gcashButton"
-                        onclick="selectPaymentMethod('gcash')"
-                    >
-                        📱 GCash
-                    </button>
-
-                </div>
+                </button>
 
 
-                <div
-                    id="gcashDetails"
-                    style="display:none;"
-                >
-
-                    <div class="gcash-payment-box">
-
-                        <h3>
-                            GCash Payment
-                        </h3>
-
-                        <p class="gcash-number">
-                            GCash:
-                            <strong>
-                                09176352106
-                            </strong>
-                        </p>
+                <span id="snackQuantity">
+                    1
+                </span>
 
 
-                        <div class="gcash-qr">
-                            <img
-                                src="gcash-qr.png"
-                                alt="Highway Cafe GCash QR Code"
-                                    >
-                        </div>
+                <button
+                    type="button"
+                    onclick="changeSnackQuantity(1)">
 
+                    +
 
-                        <p class="gcash-instruction">
-                            Scan the QR code above to pay.
-                        </p>
-
-
-                        <label for="paymentReference">
-                            GCash Reference Number
-                        </label>
-
-                        <input
-                            type="text"
-                            id="paymentReference"
-                            placeholder="Enter your GCash reference number"
-                        >
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- ORDER SUMMARY -->
-
-            <div class="form-section">
-
-                <h3>
-                    Order Summary
-                </h3>
-
-                <div id="checkoutSummary">
-                    Your cart is empty.
-                </div>
-
-            </div>
-
-
-            <div class="checkout-total">
-
-                <strong>
-                    Total:
-                </strong>
-
-                ₱<span id="checkoutTotal">0</span>
+                </button>
 
             </div>
 
 
             <button
                 type="button"
-                id="placeOrderButton"
                 class="primary-button"
-                onclick="placeOrder()"
-            >
-                Place Order
+                onclick="addSnackToCart()">
+
+                Add to Cart
+
             </button>
 
         </div>
 
-    </div>
+
+        <!-- MEAL POPUP -->
+
+        <div id="mealPopupContent"
+             class="popup">
+
+            <button
+                type="button"
+                class="close-button"
+                onclick="closeMeal()">
+
+                ×
+
+            </button>
 
 
-    <!-- =====================================================
-         ORDER CONFIRMATION
-    ====================================================== -->
+            <h2 id="selectedMeal">
+                Meal
+            </h2>
 
-    <div
-        id="orderConfirmationPopup"
-        class="overlay"
-        style="display:none;"
-    >
 
-        <div class="popup confirmation-popup">
+            <h3>Choose Meal</h3>
 
-            <h1>
-                ✅ Order Confirmed!
-            </h1>
 
-            <p>
-                Thank you for ordering from
-                <strong>HIGHWAY CAFE</strong>!
-            </p>
+            <div id="mealChoiceButtons"
+                 class="option-column">
+            </div>
 
-            <h3>
-                Order Number:
-            </h3>
 
-            <p id="confirmationOrderNumber">
-                —
-            </p>
+            <h3>Highway Cooler</h3>
 
-            <div
-                id="confirmationOrderSummary"
-                class="confirmation-summary"
-            ></div>
 
-            <h3>
-                Total:
-                ₱<span id="confirmationTotal">0</span>
-            </h3>
+            <div id="mealCooler"
+                 class="option-column">
+
+                <button
+                    type="button"
+                    id="coolerNoneButton"
+                    onclick="selectMealCooler('None', 0)">
+
+                    No Cooler
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="cooler16Button"
+                    onclick="selectMealCooler('Highway Cooler 16oz', 35)">
+
+                    16oz +₱35
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="cooler22Button"
+                    onclick="selectMealCooler('Highway Cooler 22oz', 55)">
+
+                    22oz +₱55
+
+                </button>
+
+            </div>
+
+
+            <h3>Extras</h3>
+
+
+            <div class="option-column">
+
+                <button
+                    type="button"
+                    id="extraEggButton"
+                    onclick="toggleExtraEgg()">
+
+                    Extra Egg +₱10
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="extraRiceButton"
+                    onclick="toggleExtraRice()">
+
+                    Extra Rice +₱15
+
+                </button>
+
+            </div>
+
+
+            <h3>Quantity</h3>
+
+
+            <div class="quantity-control">
+
+                <button
+                    type="button"
+                    onclick="changeMealQuantity(-1)">
+
+                    −
+
+                </button>
+
+
+                <span id="mealQuantity">
+                    1
+                </span>
+
+
+                <button
+                    type="button"
+                    onclick="changeMealQuantity(1)">
+
+                    +
+
+                </button>
+
+            </div>
+
 
             <button
                 type="button"
                 class="primary-button"
-                onclick="finishOrder()"
-            >
-                Done
+                onclick="addMealToCart()">
+
+                Add to Cart
+
             </button>
 
         </div>
@@ -1178,11 +979,383 @@
 
 
     <!-- =====================================================
+         CHECKOUT
+    ====================================================== -->
+
+    <div id="checkoutOverlay"
+         class="overlay">
+
+        <div id="checkoutPopup"
+             class="popup checkout-popup">
+
+            <button
+                type="button"
+                class="close-button"
+                onclick="closeCheckout()">
+
+                ×
+
+            </button>
+
+
+            <h2>Checkout</h2>
+
+
+            <!-- CUSTOMER -->
+
+            <div class="form-section">
+
+                <h3>Customer Information</h3>
+
+
+                <label>
+                    Name
+                </label>
+
+                <input
+                    type="text"
+                    id="customerName"
+                    placeholder="Enter your name">
+
+
+                <label>
+                    Phone Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="customerPhone"
+                    placeholder="09XXXXXXXXX">
+
+            </div>
+
+
+            <!-- ORDER TYPE -->
+
+            <div class="form-section">
+
+                <h3>Order Type</h3>
+
+
+                <div class="option-row">
+
+                    <button
+                        type="button"
+                        id="deliveryButton"
+                        onclick="selectOrderType('delivery')">
+
+                        🚗 Delivery
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="pickupButton"
+                        onclick="selectOrderType('pickup')">
+
+                        🏪 Pickup
+
+                    </button>
+
+                </div>
+
+
+                <div id="deliveryDetails">
+
+                    <label>
+                        Delivery Address
+                    </label>
+
+                    <textarea
+                        id="deliveryAddress"
+                        placeholder="Enter complete delivery address"></textarea>
+
+                </div>
+
+
+                <div id="pickupDetails">
+
+                    <label>
+                        Preferred Pickup Time
+                    </label>
+
+                    <input
+                        type="time"
+                        id="pickupTime">
+
+                </div>
+
+            </div>
+
+
+            <!-- PAYMENT -->
+
+            <div class="form-section">
+
+                <h3>Payment Method</h3>
+
+
+                <div class="option-row">
+
+                    <button
+                        type="button"
+                        id="cashButton"
+                        onclick="selectPaymentMethod('cash')">
+
+                        💵 Cash
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="gcashButton"
+                        onclick="selectPaymentMethod('gcash')">
+
+                        📱 GCash / Online
+
+                    </button>
+
+                </div>
+
+
+                <div id="gcashDetails">
+
+                    <div class="gcash-box">
+
+                        <h4>GCash Payment</h4>
+
+                        <p>
+                            Send your payment to the Highway Cafe GCash account.
+                        </p>
+
+                        <p>
+                            <strong>GCash Number:</strong>
+                            <span id="gcashNumber">
+                                YOUR-GCASH-NUMBER
+                            </span>
+                        </p>
+
+                        <p>
+                            After payment, enter your reference number below.
+                        </p>
+
+                    </div>
+
+
+                    <label>
+                        GCash Reference Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="paymentReference"
+                        placeholder="Enter reference number">
+
+                </div>
+
+            </div>
+
+
+            <!-- NOTES -->
+
+            <div class="form-section">
+
+                <h3>Order Notes</h3>
+
+                <textarea
+                    id="orderNotes"
+                    placeholder="Optional notes or special instructions"></textarea>
+
+            </div>
+
+
+            <!-- SUMMARY -->
+
+            <div class="form-section">
+
+                <h3>Order Summary</h3>
+
+                <div id="checkoutSummary">
+                </div>
+
+
+                <div class="checkout-total">
+
+                    TOTAL:
+                    ₱<span id="checkoutTotal">0</span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="placeOrderButton"
+                class="primary-button"
+                onclick="placeOrder()">
+
+                Place Order
+
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             CONFIRMATION
+        ================================================== -->
+
+        <div id="orderConfirmationPopup"
+             class="popup confirmation-popup">
+
+            <h2>🎉 Order Received!</h2>
+
+
+            <p>
+                Your order number is:
+            </p>
+
+
+            <h1 id="confirmationOrderNumber">
+                HC-000000
+            </h1>
+
+
+            <div class="confirmation-summary">
+
+                <pre id="confirmationOrderSummary"></pre>
+
+            </div>
+
+
+            <h2>
+                Total:
+                <span id="confirmationTotal">
+                    ₱0
+                </span>
+            </h2>
+
+
+            <button
+                type="button"
+                id="finishOrderButton"
+                class="primary-button"
+                onclick="finishOrder()">
+
+                Finish Order
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORM SUBMIT
+         HIGHWAY CAFE ORDER EMAIL
+    ====================================================== -->
+
+    <form
+        id="orderEmailForm"
+        action="https://formsubmit.co/highwaycafe14@gmail.com"
+        method="POST"
+        target="formSubmitFrame"
+        style="display: none;">
+
+        <input
+            type="hidden"
+            name="_subject"
+            id="emailSubject">
+
+        <input
+            type="hidden"
+            name="_template"
+            value="table">
+
+        <input
+            type="hidden"
+            name="_captcha"
+            value="false">
+
+        <input
+            type="hidden"
+            name="Order Number"
+            id="emailOrderNumber">
+
+        <input
+            type="hidden"
+            name="Customer Name"
+            id="emailCustomerName">
+
+        <input
+            type="hidden"
+            name="Phone Number"
+            id="emailCustomerPhone">
+
+        <input
+            type="hidden"
+            name="Order Type"
+            id="emailOrderType">
+
+        <input
+            type="hidden"
+            name="Delivery Address"
+            id="emailDeliveryAddress">
+
+        <input
+            type="hidden"
+            name="Pickup Time"
+            id="emailPickupTime">
+
+        <input
+            type="hidden"
+            name="Payment Method"
+            id="emailPaymentMethod">
+
+        <input
+            type="hidden"
+            name="GCash Reference"
+            id="emailPaymentReference">
+
+        <input
+            type="hidden"
+            name="Ordered Items"
+            id="emailItems">
+
+        <input
+            type="hidden"
+            name="Order Notes"
+            id="emailNotes">
+
+        <input
+            type="hidden"
+            name="Grand Total"
+            id="emailTotal">
+
+    </form>
+
+
+    <!-- Hidden frame so the customer stays on the website -->
+
+    <iframe
+        name="formSubmitFrame"
+        id="formSubmitFrame"
+        style="display:none;">
+    </iframe>
+
+
+    <!-- =====================================================
          JAVASCRIPT
     ====================================================== -->
 
-    <script src="script.js"></script>
+    <script
+        src="script.js"
+        defer>
+    </script>
 
 </body>
-
 </html>
