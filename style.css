@@ -1,8 +1,6 @@
 /* =====================================================
    HIGHWAY CAFE
-   COMPLETE ORDERING SYSTEM CSS
-   + CAFE BACKGROUND
-   + MODERN GLOW DESIGN
+   PREMIUM CAFE MENU DESIGN
 ===================================================== */
 
 * {
@@ -13,6 +11,7 @@ html {
     scroll-behavior: smooth;
 }
 
+
 /* =====================================================
    BODY
 ===================================================== */
@@ -21,17 +20,10 @@ body {
     margin: 0;
     padding: 20px;
 
-    /*
-       CAFE BACKGROUND
-
-       The first layer creates the warm dark tint.
-       The second layer is your actual cafe image.
-    */
-
     background-image:
         linear-gradient(
-            rgba(35, 18, 10, 0.58),
-            rgba(35, 18, 10, 0.58)
+            rgba(28, 14, 8, 0.58),
+            rgba(28, 14, 8, 0.58)
         ),
         url("cafe-background.png");
 
@@ -53,7 +45,7 @@ body {
 
 
 /* =====================================================
-   SOFT CAFE LIGHT EFFECT
+   BACKGROUND LIGHTING
 ===================================================== */
 
 body::before {
@@ -67,14 +59,19 @@ body::before {
 
     background:
         radial-gradient(
-            circle at 50% 15%,
-            rgba(255, 190, 110, 0.13),
+            circle at 50% 10%,
+            rgba(255, 196, 120, 0.15),
             transparent 35%
         ),
         radial-gradient(
-            circle at 50% 70%,
-            rgba(255, 150, 70, 0.06),
-            transparent 45%
+            circle at 20% 50%,
+            rgba(255, 150, 70, 0.05),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 80% 70%,
+            rgba(255, 180, 100, 0.05),
+            transparent 35%
         );
 
     z-index: -1;
@@ -92,67 +89,32 @@ header {
 
     padding: 55px 25px;
 
-    /*
-       Glass / dark cafe panel
-    */
-
     background:
         linear-gradient(
             135deg,
-            rgba(45, 25, 15, 0.52),
-            rgba(20, 12, 8, 0.34)
+            rgba(45, 25, 15, 0.55),
+            rgba(18, 10, 6, 0.38)
         );
 
-    border: 1px solid rgba(255, 210, 150, 0.20);
+    border:
+        1px solid rgba(255, 211, 157, 0.22);
 
     border-radius: 28px;
 
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 
     box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.42),
+        0 20px 60px rgba(0, 0, 0, 0.45),
         inset 0 1px 0 rgba(255, 255, 255, 0.08);
-
-    position: relative;
-
-    overflow: hidden;
-}
-
-
-/* subtle light inside header */
-
-header::before {
-    content: "";
-
-    position: absolute;
-
-    width: 400px;
-    height: 400px;
-
-    left: 50%;
-    top: -250px;
-
-    transform: translateX(-50%);
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255, 190, 110, 0.18),
-            transparent 70%
-        );
-
-    pointer-events: none;
 }
 
 
 /* =====================================================
-   HIGHWAY CAFE TITLE
+   TITLE
 ===================================================== */
 
 header h1 {
-    position: relative;
-
     margin: 0;
 
     color: #fff3dc;
@@ -164,9 +126,9 @@ header h1 {
     font-weight: 800;
 
     text-shadow:
-        0 3px 7px rgba(0, 0, 0, 0.85),
-        0 0 12px rgba(255, 205, 145, 0.42),
-        0 0 30px rgba(255, 166, 70, 0.28);
+        0 3px 8px rgba(0, 0, 0, 0.9),
+        0 0 15px rgba(255, 203, 145, 0.40),
+        0 0 35px rgba(255, 165, 70, 0.25);
 }
 
 
@@ -175,8 +137,6 @@ header h1 {
 ===================================================== */
 
 header p {
-    position: relative;
-
     margin: 18px 0 35px;
 
     color: #ffe9c9;
@@ -188,19 +148,16 @@ header p {
     font-weight: bold;
 
     text-shadow:
-        0 2px 6px rgba(0, 0, 0, 0.9),
-        0 0 8px rgba(255, 190, 110, 0.18);
+        0 2px 6px rgba(0, 0, 0, 0.9);
 }
 
 
 /* =====================================================
-   GLOWING ORDER NOW BUTTON
+   ORDER NOW BUTTON
 ===================================================== */
 
 header button {
     position: relative;
-
-    z-index: 2;
 
     padding: 17px 52px;
 
@@ -221,207 +178,186 @@ header button {
 
     font-weight: bold;
 
-    letter-spacing: 0.7px;
-
     cursor: pointer;
 
     box-shadow:
-        0 0 0 2px rgba(255, 205, 145, 0.10),
-        0 0 12px rgba(255, 178, 95, 0.48),
-        0 0 28px rgba(220, 125, 48, 0.38),
+        0 0 10px rgba(255, 180, 95, 0.50),
+        0 0 30px rgba(210, 120, 45, 0.35),
         0 8px 25px rgba(0, 0, 0, 0.45);
 
     transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease,
-        background 0.25s ease;
+        0.25s ease;
 }
-
-
-/* outer glow ring */
-
-header button::before {
-    content: "";
-
-    position: absolute;
-
-    inset: -7px;
-
-    border-radius: 60px;
-
-    border: 1px solid rgba(255, 205, 145, 0.42);
-
-    pointer-events: none;
-
-    animation: cafeGlow 2.2s ease-in-out infinite;
-}
-
-
-/* inner light */
-
-header button::after {
-    content: "";
-
-    position: absolute;
-
-    left: 18%;
-
-    right: 18%;
-
-    top: 0;
-
-    height: 1px;
-
-    background:
-        rgba(255, 236, 205, 0.65);
-
-    box-shadow:
-        0 0 10px rgba(255, 210, 150, 0.55);
-
-    pointer-events: none;
-}
-
-
-/* =====================================================
-   BUTTON HOVER
-===================================================== */
 
 header button:hover {
-    background:
-        linear-gradient(
-            135deg,
-            #96552b,
-            #552512
-        );
-
     transform:
         translateY(-4px)
         scale(1.04);
 
     box-shadow:
-        0 0 0 3px rgba(255, 215, 155, 0.14),
-        0 0 18px rgba(255, 195, 120, 0.82),
-        0 0 40px rgba(220, 130, 55, 0.65),
+        0 0 18px rgba(255, 200, 130, 0.80),
+        0 0 45px rgba(215, 125, 50, 0.60),
         0 12px 30px rgba(0, 0, 0, 0.50);
 }
-
-
-/* =====================================================
-   BUTTON PRESS
-===================================================== */
 
 header button:active {
     transform:
         translateY(0)
         scale(0.97);
-
-    box-shadow:
-        0 0 12px rgba(255, 185, 100, 0.55),
-        0 5px 15px rgba(0, 0, 0, 0.40);
 }
 
 
 /* =====================================================
-   BUTTON GLOW ANIMATION
-===================================================== */
-
-@keyframes cafeGlow {
-
-    0%,
-    100% {
-        opacity: 0.30;
-
-        box-shadow:
-            0 0 8px rgba(255, 185, 100, 0.20);
-    }
-
-    50% {
-        opacity: 0.95;
-
-        box-shadow:
-            0 0 18px rgba(255, 190, 110, 0.70),
-            0 0 32px rgba(220, 130, 55, 0.42);
-    }
-}
-
-
-/* =====================================================
-   MENU
+   MENU CONTAINER
 ===================================================== */
 
 #menu {
-    max-width: 1100px;
+    max-width: 1150px;
 
     margin: 0 auto;
 
-    padding-bottom: 70px;
+    padding-bottom: 80px;
 }
 
 
 /* =====================================================
-   MENU SECTIONS
+   MENU CATEGORY CARD
 ===================================================== */
 
 #menu section {
+    position: relative;
+
     margin: 0 auto 55px;
 
-    padding: 30px 25px 35px;
+    padding: 38px 32px 42px;
 
     background:
         linear-gradient(
-            135deg,
-            rgba(38, 22, 14, 0.70),
-            rgba(24, 14, 9, 0.58)
+            145deg,
+            rgba(39, 22, 13, 0.76),
+            rgba(20, 11, 7, 0.64)
         );
 
     border:
-        1px solid rgba(255, 211, 157, 0.16);
+        1px solid rgba(255, 210, 150, 0.18);
 
-    border-radius: 22px;
+    border-radius: 26px;
 
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
 
     box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.30),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        0 20px 55px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+    overflow: hidden;
 }
 
 
 /* =====================================================
-   MENU HEADINGS
+   CATEGORY AMBIENT GLOW
 ===================================================== */
 
-#menu h2 {
-    margin-top: 0;
+#menu section::before {
+    content: "";
 
-    margin-bottom: 10px;
+    position: absolute;
 
-    color: #ffe8c5;
+    width: 500px;
+    height: 180px;
 
-    font-size: 30px;
+    left: 50%;
+    top: -120px;
 
-    letter-spacing: 3px;
+    transform:
+        translateX(-50%);
 
-    text-shadow:
-        0 2px 5px rgba(0, 0, 0, 0.85),
-        0 0 15px rgba(255, 184, 95, 0.20);
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(255, 183, 96, 0.15),
+            transparent 70%
+        );
+
+    pointer-events: none;
 }
 
 
-#menu h3 {
-    margin-top: 8px;
+/* =====================================================
+   CATEGORY HEADING
+===================================================== */
 
-    margin-bottom: 22px;
+#menu section h2 {
+    position: relative;
 
-    color: #e8c9a3;
+    margin: 0;
 
-    font-size: 18px;
+    color: #fff0d5;
 
-    letter-spacing: 2px;
+    font-size: 30px;
+
+    font-weight: 800;
+
+    letter-spacing: 4px;
 
     text-shadow:
-        0 2px 5px rgba(0, 0, 0, 0.7);
+        0 2px 7px rgba(0, 0, 0, 0.9),
+        0 0 18px rgba(255, 185, 100, 0.25);
+}
+
+
+/* =====================================================
+   CATEGORY HEADING LINE
+===================================================== */
+
+#menu section h2::after {
+    content: "";
+
+    display: block;
+
+    width: 70px;
+
+    height: 3px;
+
+    margin: 14px auto 15px;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #d99a5c,
+            transparent
+        );
+
+    box-shadow:
+        0 0 10px rgba(255, 184, 100, 0.45);
+}
+
+
+/* =====================================================
+   SUBCATEGORY
+===================================================== */
+
+#menu section h3 {
+    position: relative;
+
+    margin:
+        0 0 28px;
+
+    color: #dcb995;
+
+    font-size: 16px;
+
+    letter-spacing: 3px;
+
+    font-weight: normal;
+
+    text-transform: uppercase;
+
+    text-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.8);
 }
 
 
@@ -435,90 +371,165 @@ header button:active {
     grid-template-columns:
         repeat(3, 1fr);
 
-    gap: 15px;
+    gap: 18px;
 
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
 
 /* =====================================================
-   MENU ITEMS
+   PREMIUM MENU ITEM
 ===================================================== */
 
 .menu-item {
-    min-height: 95px;
+    position: relative;
 
-    padding: 20px;
+    min-height: 105px;
+
+    padding: 24px 18px;
 
     border:
-        1px solid rgba(235, 190, 135, 0.42);
+        1px solid rgba(236, 193, 145, 0.32);
 
-    border-radius: 14px;
+    border-radius: 18px;
 
     background:
         linear-gradient(
             145deg,
-            rgba(84, 48, 29, 0.82),
-            rgba(42, 22, 13, 0.82)
+            rgba(89, 51, 30, 0.88),
+            rgba(39, 20, 12, 0.88)
         );
 
-    color: #fff0d7;
+    color: #fff1dc;
 
-    font-size: 16px;
+    font-size: 17px;
 
     font-weight: bold;
 
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
 
     cursor: pointer;
 
+    overflow: hidden;
+
     box-shadow:
-        0 7px 18px rgba(0, 0, 0, 0.30),
+        0 10px 25px rgba(0, 0, 0, 0.30),
         inset 0 1px 0 rgba(255, 255, 255, 0.07);
 
     transition:
-        transform 0.20s ease,
-        box-shadow 0.20s ease,
-        border-color 0.20s ease,
-        background 0.20s ease;
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
 
     -webkit-tap-highlight-color: transparent;
 }
 
 
 /* =====================================================
-   MENU ITEM HOVER
+   MENU CARD SHINE
 ===================================================== */
 
-.menu-item:hover {
-    transform:
-        translateY(-4px);
+.menu-item::before {
+    content: "";
 
-    border-color:
-        rgba(255, 203, 145, 0.85);
+    position: absolute;
+
+    top: 0;
+    left: -120%;
+
+    width: 70%;
+
+    height: 100%;
 
     background:
         linear-gradient(
-            145deg,
-            rgba(113, 62, 34, 0.92),
-            rgba(55, 27, 15, 0.92)
+            90deg,
+            transparent,
+            rgba(255, 235, 205, 0.12),
+            transparent
         );
 
-    box-shadow:
-        0 0 12px rgba(255, 183, 100, 0.35),
-        0 0 25px rgba(214, 126, 51, 0.22),
-        0 12px 25px rgba(0, 0, 0, 0.40);
+    transform:
+        skewX(-20deg);
+
+    transition:
+        left 0.6s ease;
+
+    pointer-events: none;
 }
 
 
 /* =====================================================
-   MENU ITEM PRESS
+   MENU CARD TOP LIGHT
+===================================================== */
+
+.menu-item::after {
+    content: "";
+
+    position: absolute;
+
+    left: 20%;
+    right: 20%;
+
+    top: 0;
+
+    height: 1px;
+
+    background:
+        rgba(255, 227, 190, 0.55);
+
+    box-shadow:
+        0 0 10px rgba(255, 200, 130, 0.35);
+
+    pointer-events: none;
+}
+
+
+/* =====================================================
+   MENU CARD HOVER
+===================================================== */
+
+.menu-item:hover {
+    transform:
+        translateY(-7px)
+        scale(1.015);
+
+    border-color:
+        rgba(255, 204, 145, 0.80);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(116, 65, 36, 0.95),
+            rgba(55, 27, 15, 0.95)
+        );
+
+    box-shadow:
+        0 0 15px rgba(255, 190, 110, 0.30),
+        0 0 32px rgba(213, 124, 51, 0.25),
+        0 15px 35px rgba(0, 0, 0, 0.45);
+}
+
+
+/* shine animation */
+
+.menu-item:hover::before {
+    left: 140%;
+}
+
+
+/* =====================================================
+   MENU CARD PRESS
 ===================================================== */
 
 .menu-item:active {
     transform:
-        translateY(0)
+        translateY(-1px)
         scale(0.98);
+
+    box-shadow:
+        0 0 12px rgba(255, 185, 100, 0.25);
 }
 
 
@@ -550,7 +561,7 @@ header button:active {
     border-radius: 14px;
 
     box-shadow:
-        0 12px 35px rgba(0, 0, 0, 0.28);
+        0 12px 35px rgba(0, 0, 0, 0.30);
 
     z-index: 1000;
 
@@ -664,8 +675,7 @@ header button:active {
 
     min-height: 46px;
 
-    transition:
-        0.2s ease;
+    transition: 0.2s ease;
 }
 
 #checkoutButton:hover {
@@ -694,7 +704,7 @@ header button:active {
     padding: 20px;
 
     background-color:
-        rgba(0, 0, 0, 0.68);
+        rgba(0, 0, 0, 0.70);
 
     z-index: 2000;
 
@@ -734,7 +744,7 @@ header button:active {
         1px solid #e2cdbb;
 
     box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.42);
+        0 20px 60px rgba(0, 0, 0, 0.45);
 
     text-align: center;
 
@@ -924,8 +934,7 @@ input[type="number"]:focus {
 
     margin-top: 10px;
 
-    transition:
-        0.2s ease;
+    transition: 0.2s ease;
 
     box-shadow:
         0 5px 15px rgba(0, 0, 0, 0.20);
@@ -1085,7 +1094,7 @@ input[type="number"]:focus {
 
 
 /* =====================================================
-   CHECKOUT SELECTED BUTTON
+   CHECKOUT SELECTED
 ===================================================== */
 
 .selected-checkout {
@@ -1340,7 +1349,7 @@ input[type="number"]:focus {
     }
 
 
-    /* Cart becomes part of page */
+    /* CART */
 
     #sideCart {
         position: relative;
@@ -1364,32 +1373,38 @@ input[type="number"]:focus {
     }
 
 
-    /* Two menu columns */
+    /* TWO MENU COLUMNS */
 
     .menu-grid {
         grid-template-columns:
             repeat(2, 1fr);
 
-        gap: 12px;
+        gap: 14px;
     }
 
     .menu-item {
-        min-height: 85px;
+        min-height: 90px;
 
-        padding: 15px;
+        padding: 18px;
 
         font-size: 16px;
     }
 
+    #menu section {
+        padding:
+            30px 20px 35px;
+    }
 
-    #menu h2 {
+    #menu section h2 {
         font-size: 25px;
     }
 
-    #menu h3 {
-        font-size: 18px;
+    #menu section h3 {
+        font-size: 15px;
     }
 
+
+    /* POPUP */
 
     .popup {
         width: 100%;
@@ -1416,9 +1431,7 @@ input[type="number"]:focus {
     }
 
 
-    /* -----------------------------
-       HEADER
-    ----------------------------- */
+    /* HEADER */
 
     header {
         margin: 10px auto 25px;
@@ -1451,40 +1464,42 @@ input[type="number"]:focus {
     }
 
 
-    /* -----------------------------
-       MENU
-    ----------------------------- */
+    /* MENU */
 
     #menu {
         padding-bottom: 50px;
     }
 
     #menu section {
-        margin-bottom: 40px;
+        margin-bottom: 35px;
 
         padding:
-            25px 14px 28px;
+            27px 13px 30px;
 
-        border-radius: 18px;
+        border-radius: 20px;
     }
 
-    #menu h2 {
-        font-size: 23px;
+    #menu section h2 {
+        font-size: 21px;
 
-        padding-bottom: 8px;
+        letter-spacing: 2px;
     }
 
-    #menu h3 {
-        font-size: 17px;
+    #menu section h3 {
+        font-size: 14px;
+
+        letter-spacing: 2px;
+
+        margin-bottom: 22px;
     }
 
 
-    /* One item per row */
+    /* ONE CARD PER ROW */
 
     .menu-grid {
         grid-template-columns: 1fr;
 
-        gap: 10px;
+        gap: 12px;
 
         margin-top: 15px;
     }
@@ -1492,19 +1507,17 @@ input[type="number"]:focus {
     .menu-item {
         width: 100%;
 
-        min-height: 64px;
+        min-height: 68px;
 
-        padding: 14px;
+        padding: 16px;
 
         font-size: 16px;
 
-        border-radius: 10px;
+        border-radius: 13px;
     }
 
 
-    /* -----------------------------
-       CART
-    ----------------------------- */
+    /* CART */
 
     #sideCart {
         padding: 14px;
@@ -1543,9 +1556,7 @@ input[type="number"]:focus {
     }
 
 
-    /* -----------------------------
-       POPUP
-    ----------------------------- */
+    /* POPUP */
 
     .overlay {
         padding: 8px;
@@ -1581,9 +1592,7 @@ input[type="number"]:focus {
     }
 
 
-    /* -----------------------------
-       CLOSE BUTTON
-    ----------------------------- */
+    /* CLOSE */
 
     .close-button {
         top: 8px;
@@ -1596,9 +1605,7 @@ input[type="number"]:focus {
     }
 
 
-    /* -----------------------------
-       OPTIONS
-    ----------------------------- */
+    /* OPTIONS */
 
     .option-row {
         flex-direction: column;
@@ -1617,9 +1624,7 @@ input[type="number"]:focus {
     }
 
 
-    /* -----------------------------
-       QUANTITY
-    ----------------------------- */
+    /* QUANTITY */
 
     input[type="number"] {
         width: 110px;
@@ -1630,9 +1635,7 @@ input[type="number"]:focus {
     }
 
 
-    /* -----------------------------
-       CHECKOUT
-    ----------------------------- */
+    /* CHECKOUT */
 
     .checkout-popup {
         text-align: left;
@@ -1656,9 +1659,7 @@ input[type="number"]:focus {
     }
 
 
-    /* -----------------------------
-       CHECKOUT SUMMARY
-    ----------------------------- */
+    /* CHECKOUT SUMMARY */
 
     .checkout-item {
         gap: 10px;
@@ -1675,9 +1676,7 @@ input[type="number"]:focus {
     }
 
 
-    /* -----------------------------
-       GCASH
-    ----------------------------- */
+    /* GCASH */
 
     .gcash-payment-box {
         padding: 14px;
@@ -1712,9 +1711,7 @@ input[type="number"]:focus {
     }
 
 
-    /* -----------------------------
-       CONFIRMATION
-    ----------------------------- */
+    /* CONFIRMATION */
 
     .confirmation-popup {
         width: 100%;
@@ -1737,9 +1734,7 @@ input[type="number"]:focus {
     }
 
 
-    /* -----------------------------
-       ORDER NOTICE
-    ----------------------------- */
+    /* NOTICE */
 
     #orderNotice {
         bottom: 15px;
@@ -1785,3 +1780,4 @@ input[type="number"]:focus {
         font-size: 22px;
     }
 }
+
