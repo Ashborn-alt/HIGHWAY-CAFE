@@ -5,6 +5,9 @@
    + MENU AVAILABILITY
    + ONLINE ORDERS
    + IMPROVED ORDER CONFIRMATION
+   + DRINK KEY SYSTEM
+   + SNACK KEY SYSTEM
+   + MEAL KEY SYSTEM
 ===================================================== */
 
 
@@ -516,6 +519,7 @@ function applyCustomerAvailabilityButtonsOnly() {
             "button[onclick]"
         );
 
+
     buttons.forEach(
         function(button) {
 
@@ -528,11 +532,13 @@ function applyCustomerAvailabilityButtonsOnly() {
                 return;
             }
 
+
             let productName = null;
             let category = null;
 
+
             /* -----------------------------------------
-               PRODUCT
+               DIRECT PRODUCT
             ----------------------------------------- */
 
             let match =
@@ -551,10 +557,10 @@ function applyCustomerAvailabilityButtonsOnly() {
 
 
             /* -----------------------------------------
-               SNACK
+               DIRECT SNACK
             ----------------------------------------- */
 
-            if (!match) {
+            if (!productName) {
 
                 match =
                     onclick.match(
@@ -573,10 +579,10 @@ function applyCustomerAvailabilityButtonsOnly() {
 
 
             /* -----------------------------------------
-               MEAL
+               DIRECT MEAL
             ----------------------------------------- */
 
-            if (!match) {
+            if (!productName) {
 
                 match =
                     onclick.match(
@@ -593,6 +599,17 @@ function applyCustomerAvailabilityButtonsOnly() {
                 }
             }
 
+
+            /*
+               Key-based buttons such as:
+
+               openDrink()
+               openSnackByKey()
+               openMealByKey()
+
+               are checked when opened by their
+               respective functions.
+            */
 
             if (
                 !productName ||
@@ -616,7 +633,10 @@ function applyCustomerAvailabilityButtonsOnly() {
             }
 
 
-            if (shopIsOpen && available) {
+            if (
+                shopIsOpen &&
+                available
+            ) {
 
                 button.disabled =
                     false;
@@ -806,6 +826,222 @@ function startOrder() {
 
 
 /* =====================================================
+   DRINK KEY SYSTEM
+===================================================== */
+
+function openDrink(key) {
+
+    const drinks = {
+
+        /* ---------------------------------------------
+           ICED COFFEE
+        --------------------------------------------- */
+
+        americano: {
+            name: "Americano",
+            category: "Iced Coffee",
+            p16: 70,
+            p22: 80,
+            addons: ["espresso"]
+        },
+
+        vanillaLatte: {
+            name: "Vanilla Latte",
+            category: "Iced Coffee",
+            p16: 75,
+            p22: 89,
+            addons: ["espresso"]
+        },
+
+        spanishLatte: {
+            name: "Spanish Latte",
+            category: "Iced Coffee",
+            p16: 75,
+            p22: 89,
+            addons: ["espresso"]
+        },
+
+        mochaLatte: {
+            name: "Mocha Latte",
+            category: "Iced Coffee",
+            p16: 75,
+            p22: 89,
+            addons: ["espresso", "chocolate"]
+        },
+
+        dirtyMatcha: {
+            name: "Dirty Matcha",
+            category: "Iced Coffee",
+            p16: 85,
+            p22: 100,
+            addons: ["espresso", "matcha"]
+        },
+
+        saltedCaramel: {
+            name: "Salted Caramel",
+            category: "Iced Coffee",
+            p16: 75,
+            p22: 89,
+            addons: ["espresso"]
+        },
+
+        caramelMacchiato: {
+            name: "Caramel Macchiato",
+            category: "Iced Coffee",
+            p16: 75,
+            p22: 89,
+            addons: ["espresso"]
+        },
+
+
+        /* ---------------------------------------------
+           HOT COFFEE
+        --------------------------------------------- */
+
+        hotChoco: {
+            name: "Hot Choco",
+            category: "Hot Coffee",
+            p8: 70,
+            addons: ["chocolate"]
+        },
+
+        hotAmericano: {
+            name: "Americano",
+            category: "Hot Coffee",
+            p8: 70,
+            addons: ["espresso"]
+        },
+
+        hotSpanishLatte: {
+            name: "Spanish Latte",
+            category: "Hot Coffee",
+            p8: 80,
+            addons: ["espresso"]
+        },
+
+        cafeLatte: {
+            name: "Cafe Latte",
+            category: "Hot Coffee",
+            p8: 80,
+            addons: ["espresso"]
+        },
+
+
+        /* ---------------------------------------------
+           SODA SERIES
+        --------------------------------------------- */
+
+        greenApple: {
+            name: "Green Apple",
+            category: "Soda Series",
+            p12: 29,
+            p16: 39,
+            p22: 59,
+            addons: []
+        },
+
+        lychee: {
+            name: "Lychee",
+            category: "Soda Series",
+            p12: 29,
+            p16: 39,
+            p22: 59,
+            addons: []
+        },
+
+        strawberrySoda: {
+            name: "Strawberry",
+            category: "Soda Series",
+            p12: 29,
+            p16: 39,
+            p22: 59,
+            addons: []
+        },
+
+        blueberrySoda: {
+            name: "Blueberry",
+            category: "Soda Series",
+            p12: 29,
+            p16: 39,
+            p22: 59,
+            addons: []
+        },
+
+
+        /* ---------------------------------------------
+           MILK SERIES
+        --------------------------------------------- */
+
+        strawberryMilk: {
+            name: "Strawberry Milk",
+            category: "Milk Series",
+            p16: 65,
+            p22: 80,
+            addons: []
+        },
+
+        blueberryMilk: {
+            name: "Blueberry Milk",
+            category: "Milk Series",
+            p16: 65,
+            p22: 80,
+            addons: []
+        },
+
+        chocolateMilk: {
+            name: "Chocolate Milk",
+            category: "Milk Series",
+            p16: 65,
+            p22: 80,
+            addons: ["chocolate"]
+        },
+
+        matchaLatte: {
+            name: "Matcha Latte",
+            category: "Milk Series",
+            p16: 80,
+            p22: 95,
+            addons: ["matcha"]
+        },
+
+        cookiesCream: {
+            name: "Cookies and Cream",
+            category: "Milk Series",
+            p16: 65,
+            p22: 80,
+            addons: []
+        }
+    };
+
+
+    const drink =
+        drinks[key];
+
+
+    if (!drink) {
+
+        console.error(
+            "Unknown drink key:",
+            key
+        );
+
+        return;
+    }
+
+
+    openProduct(
+        drink.name,
+        drink.category,
+        drink.p16 || 0,
+        drink.p22 || 0,
+        drink.addons || [],
+        drink.p12 || 0,
+        drink.p8 || 0
+    );
+}
+
+
+/* =====================================================
    PRODUCT POPUP
 ===================================================== */
 
@@ -827,6 +1063,7 @@ function openProduct(
 
         return;
     }
+
 
     if (
         !isMenuItemAvailable(
@@ -867,13 +1104,8 @@ function openProduct(
     /*
        HOT BREWS PROTECTION
 
-       Some older menu buttons may send the
-       8oz price as the third argument (p16)
-       instead of the final p8 argument.
-
-       If that happens, use the supplied
-       p16 value as the 8oz price instead
-       of showing ₱0.
+       If an older button sends the 8oz price
+       as p16, use it as the 8oz price.
     */
 
     if (
@@ -907,11 +1139,6 @@ function openProduct(
 
         selectedSize =
             12;
-
-        /*
-           If HTML does not provide the 12oz price,
-           use the Highway Cooler base price.
-        */
 
         if (price12 === 0) {
             price12 = 29;
@@ -1844,14 +2071,90 @@ function showOrderNotice() {
 
 /* =====================================================
    SNACK
+   Supports BOTH:
+
+   openSnack(name, category, choices, flavors)
+
+   AND
+
+   openSnack(name, category, type, choices, flavors)
 ===================================================== */
 
 function openSnack(
     snackName,
     category,
-    choices,
+    typeOrChoices,
+    choicesOrFlavors,
     flavors = []
 ) {
+
+    /*
+       Determine which argument format is being used.
+
+       Old format:
+       openSnack(
+           name,
+           category,
+           choices,
+           flavors
+       )
+
+       New format:
+       openSnack(
+           name,
+           category,
+           type,
+           choices,
+           flavors
+       )
+    */
+
+    let choices = [];
+    let actualFlavors = [];
+
+
+    if (
+        Array.isArray(typeOrChoices)
+    ) {
+
+        /*
+           Old format.
+        */
+
+        choices =
+            typeOrChoices;
+
+        actualFlavors =
+            Array.isArray(
+                choicesOrFlavors
+            )
+                ? choicesOrFlavors
+                : [];
+
+    }
+
+    else {
+
+        /*
+           New format.
+           typeOrChoices is the type string.
+        */
+
+        choices =
+            Array.isArray(
+                choicesOrFlavors
+            )
+                ? choicesOrFlavors
+                : [];
+
+        actualFlavors =
+            Array.isArray(
+                flavors
+            )
+                ? flavors
+                : [];
+    }
+
 
     if (!shopIsOpen) {
 
@@ -1943,9 +2246,7 @@ function openSnack(
 
 
     snackFlavors =
-        Array.isArray(flavors)
-            ? flavors
-            : [];
+        actualFlavors;
 
 
     const snackDisplay =
@@ -2101,6 +2402,16 @@ function openSnack(
     }
 
 
+    /*
+       Automatically select single-option snacks.
+
+       This is important for:
+       - Japanese Siomai
+       - Tube Ice
+       - Donuts
+       - other one-choice snacks
+    */
+
     if (
         snackChoices.length === 1
     ) {
@@ -2112,6 +2423,131 @@ function openSnack(
     showPopup(
         "snackOverlay",
         "snackPopupContent"
+    );
+}
+
+
+/* =====================================================
+   SNACK KEY SYSTEM
+===================================================== */
+
+function openSnackByKey(key) {
+
+    const snacks = {
+
+        nachos: {
+            name: "Nacho's",
+            category: "Snack Detour",
+            choices: [
+                ["Regular", 75],
+                ["Overload", 125]
+            ]
+        },
+
+        fries: {
+            name: "French Fries",
+            category: "Snack Detour",
+            choices: [
+                ["Regular", 25],
+                ["Large", 40]
+            ],
+            flavors: [
+                "BBQ",
+                "Sour Cream",
+                "Cheese"
+            ]
+        },
+
+        hashbrown: {
+            name: "Hashbrown",
+            category: "Snack Detour",
+            choices: [
+                ["1 pc", 25],
+                ["3 pcs", 65]
+            ]
+        },
+
+        steamedSiomai: {
+            name: "Steamed Siomai",
+            category: "Snack Detour",
+            choices: [
+                ["5 pcs", 25],
+                ["11 pcs", 50]
+            ]
+        },
+
+        japaneseSiomai: {
+            name: "Japanese Siomai",
+            category: "Snack Detour",
+            choices: [
+                ["1 pc", 10]
+            ]
+        },
+
+        tofu: {
+            name: "Tofu Squares",
+            category: "Snack Detour",
+            choices: [
+                ["4 pcs", 25],
+                ["11 pcs", 50]
+            ]
+        },
+
+        flyingSaucer: {
+            name: "Flying Saucer",
+            category: "Snack Detour",
+            choices: [
+                ["Ham & Cheese", 25],
+                ["Hotdog & Cheese", 25],
+                ["Egg & Cheese", 30],
+                ["Tuna & Cheese", 30]
+            ]
+        },
+
+        shanghai: {
+            name: "Shanghai",
+            category: "Snack Detour",
+            choices: [
+                ["1 pc", 10],
+                ["11 pcs", 100]
+            ]
+        },
+
+        donuts: {
+            name: "Donuts",
+            category: "Snack Detour",
+            choices: [
+                ["1 pc", 10]
+            ],
+            flavors: [
+                "Vanilla",
+                "Caramel",
+                "Chocolate"
+            ]
+        }
+    };
+
+
+    const snack =
+        snacks[key];
+
+
+    if (!snack) {
+
+        console.error(
+            "Unknown snack key:",
+            key
+        );
+
+        return;
+    }
+
+
+    openSnack(
+        snack.name,
+        snack.category,
+        snack.choices,
+        snack.flavors || []
     );
 }
 
@@ -2218,6 +2654,55 @@ function getSnackQuantity() {
 
 
     return value;
+}
+
+
+/* =====================================================
+   CHANGE SNACK QUANTITY
+===================================================== */
+
+function changeSnackQuantity(amount) {
+
+    const input =
+        document.getElementById(
+            "snackQuantity"
+        );
+
+
+    if (!input) {
+        return;
+    }
+
+
+    let value =
+        parseInt(
+            input.value,
+            10
+        );
+
+
+    if (
+        isNaN(value)
+    ) {
+
+        value = 1;
+    }
+
+
+    value +=
+        Number(amount) || 0;
+
+
+    if (value < 1) {
+        value = 1;
+    }
+
+
+    input.value =
+        value;
+
+    snackQuantity =
+        value;
 }
 
 
@@ -2527,6 +3012,81 @@ function openMeal(
 
 
 /* =====================================================
+   MEAL KEY SYSTEM
+===================================================== */
+
+function openMealByKey(key) {
+
+    const meals = {
+
+        chickenMeal: {
+            name: "Chicken Rice Meal",
+            choices: [
+                ["1 pc Chicken", 50],
+                ["2 pcs Chicken", 80]
+            ]
+        },
+
+        shanghaiMeal: {
+            name: "Shanghai Rice Meal",
+            choices: [
+                ["4 pcs Shanghai", 50]
+            ]
+        },
+
+        siomaiMeal: {
+            name: "Siomai Rice Meal",
+            choices: [
+                ["6 pcs Steamed Siomai", 45]
+            ]
+        },
+
+        hotdogMeal: {
+            name: "Hotdog Rice Meal",
+            choices: [
+                ["2 pcs Hotdog", 50]
+            ]
+        },
+
+        meatloafMeal: {
+            name: "Meatloaf Rice Meal",
+            choices: [
+                ["3 pcs Meatloaf", 55]
+            ]
+        },
+
+        longganisaMeal: {
+            name: "Skinless Longganisa",
+            choices: [
+                ["2 pcs", 55]
+            ]
+        }
+    };
+
+
+    const meal =
+        meals[key];
+
+
+    if (!meal) {
+
+        console.error(
+            "Unknown meal key:",
+            key
+        );
+
+        return;
+    }
+
+
+    openMeal(
+        meal.name,
+        meal.choices
+    );
+}
+
+
+/* =====================================================
    MEAL CHOICE
 ===================================================== */
 
@@ -2561,9 +3121,19 @@ function selectMealChoice(index) {
 
 /* =====================================================
    MEAL COOLER
+   Supports:
+
+   selectMealCooler("None", 0)
+
+   selectMealCooler("Highway Cooler 16oz", 35)
+
+   selectMealCooler("Highway Cooler 22oz", 55)
 ===================================================== */
 
-function selectMealCooler(name) {
+function selectMealCooler(
+    name,
+    price = 0
+) {
 
     let coolerName =
         "None";
@@ -2572,22 +3142,28 @@ function selectMealCooler(name) {
         0;
 
 
-    if (name === "16oz") {
+    if (
+        name === "Highway Cooler 16oz" ||
+        name === "16oz"
+    ) {
 
         coolerName =
             "Highway Cooler 16oz";
 
         coolerPrice =
-            35;
+            Number(price) || 35;
     }
 
-    else if (name === "22oz") {
+    else if (
+        name === "Highway Cooler 22oz" ||
+        name === "22oz"
+    ) {
 
         coolerName =
             "Highway Cooler 22oz";
 
         coolerPrice =
-            55;
+            Number(price) || 55;
     }
 
 
@@ -2811,6 +3387,104 @@ function getMealQuantity() {
 
 
     return value;
+}
+
+
+/* =====================================================
+   CHANGE MEAL QUANTITY
+===================================================== */
+
+function changeMealQuantity(amount) {
+
+    const input =
+        document.getElementById(
+            "mealQuantity"
+        );
+
+
+    if (!input) {
+        return;
+    }
+
+
+    let value =
+        parseInt(
+            input.value,
+            10
+        );
+
+
+    if (
+        isNaN(value)
+    ) {
+
+        value = 1;
+    }
+
+
+    value +=
+        Number(amount) || 0;
+
+
+    if (value < 1) {
+        value = 1;
+    }
+
+
+    input.value =
+        value;
+
+    mealQuantity =
+        value;
+}
+
+
+/* =====================================================
+   CHANGE PRODUCT QUANTITY
+===================================================== */
+
+function changeQuantity(amount) {
+
+    const input =
+        document.getElementById(
+            "quantity"
+        );
+
+
+    if (!input) {
+        return;
+    }
+
+
+    let value =
+        parseInt(
+            input.value,
+            10
+        );
+
+
+    if (
+        isNaN(value)
+    ) {
+
+        value = 1;
+    }
+
+
+    value +=
+        Number(amount) || 0;
+
+
+    if (value < 1) {
+        value = 1;
+    }
+
+
+    input.value =
+        value;
+
+    quantity =
+        value;
 }
 
 
@@ -3787,7 +4461,7 @@ function createOrderedItemsText() {
     cart.forEach(
         function(item) {
 
-            const quantity =
+            const itemQuantity =
                 Number(
                     item.quantity || 1
                 );
@@ -3797,11 +4471,11 @@ function createOrderedItemsText() {
                 Number(
                     item.price || 0
                 ) *
-                quantity;
+                itemQuantity;
 
 
             text +=
-                quantity +
+                itemQuantity +
                 " x " +
                 item.name;
 
@@ -4694,10 +5368,6 @@ async function placeOrder() {
             }
 
 
-            /*
-               Show the improved confirmation.
-            */
-
             showOrderConfirmation(
                 orderNumber,
                 orderSummary,
@@ -4733,12 +5403,6 @@ async function placeOrder() {
                 "Place Order";
         }
 
-
-        /*
-           If Supabase successfully saved the order,
-           don't falsely tell the customer that
-           nothing was submitted.
-        */
 
         if (supabaseOrderSaved) {
 
@@ -4872,11 +5536,6 @@ function showOrderConfirmation(
     }
 
 
-    /*
-       Scroll the confirmation into view
-       on mobile and desktop.
-    */
-
     if (confirmationOverlay) {
 
         setTimeout(
@@ -4952,7 +5611,7 @@ function finishOrder() {
 
 
     /*
-       Return the customer to the top.
+       Return customer to top.
     */
 
     window.scrollTo({
@@ -4972,12 +5631,6 @@ function finishOrder() {
 ===================================================== */
 
 function closeOrderConfirmation() {
-
-    /*
-       We use the same behavior as finishOrder
-       so the cart doesn't remain after a
-       completed order.
-    */
 
     finishOrder();
 }
@@ -5136,11 +5789,6 @@ document.addEventListener(
                 "click",
                 function(event) {
 
-                    /*
-                       Only close if the customer
-                       clicks the dark background.
-                    */
-
                     if (
                         event.target ===
                         confirmationOverlay
@@ -5164,11 +5812,6 @@ document.addEventListener(
 
 
         if (addToCartButton) {
-
-            /*
-               Remove any previous listener
-               installed by inline/older code.
-            */
 
             addToCartButton.addEventListener(
                 "click",
