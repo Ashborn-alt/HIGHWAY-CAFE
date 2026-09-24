@@ -4858,7 +4858,7 @@ function showOrderConfirmation(
     if (totalDisplay) {
 
         totalDisplay.textContent =
-            "₱" + total;
+             total;
     }
 
 
