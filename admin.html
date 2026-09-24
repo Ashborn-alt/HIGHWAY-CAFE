@@ -420,6 +420,68 @@
            MANUAL ORDER
         ========================= */
 
+        .manual-cart-box {
+            background: #fffdfb;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 18px;
+            text-align: left;
+        }
+
+
+        .manual-cart-box h3 {
+            margin-top: 0;
+        }
+
+
+        .manual-cart-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+
+        .manual-cart-item:last-child {
+            border-bottom: none;
+        }
+
+
+        .manual-cart-item-details {
+            flex: 1;
+        }
+
+
+        .manual-cart-remove {
+            background: #b00020;
+            color: white;
+            padding: 7px 10px;
+            font-size: 12px;
+        }
+
+
+        .manual-cart-empty {
+            color: #777;
+            padding: 5px 0;
+        }
+
+
+        .manual-add-product-button {
+            background: #856404;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+
+        .manual-place-order-button {
+            background: #2e7d32;
+            color: white;
+        }
+
+
         .manual-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -1111,6 +1173,19 @@
 
         <!-- TOTAL -->
 
+        <div class="manual-cart-box">
+
+            <h3>🛒 Current Manual Order</h3>
+
+            <div id="manualCartItems">
+                <div class="manual-cart-empty">
+                    No products added yet. Select a product above and click ADD PRODUCT.
+                </div>
+            </div>
+
+        </div>
+
+
         <div class="manual-total-box">
 
             <span>
@@ -1125,10 +1200,23 @@
 
 
         <button
+            type="button"
+            class="manual-add-product-button"
+            id="addManualProductButton"
+            onclick="addManualItem()">
+
+            ➕ ADD PRODUCT TO ORDER
+
+        </button>
+
+
+        <button
+            type="button"
+            class="manual-place-order-button"
             id="addManualOrderButton"
             onclick="addManualOrder()">
 
-            ➕ ADD MANUAL ORDER
+            ✅ PLACE MANUAL ORDER
 
         </button>
 
@@ -1435,6 +1523,8 @@ let currentReportOrders = [];
 let currentReportDate = "";
 
 let menuItems = [];
+
+let manualOrderItems = [];
 
 
 /* =====================================================
@@ -4076,39 +4166,37 @@ function getManualOrderData() {
 
 function updateManualTotal() {
 
-    const data =
+    const currentItem =
         getManualOrderData();
 
 
-    const totalElement =
-        document.getElementById(
-            "manualTotal"
+    let total =
+        manualOrderItems.reduce(
+            function(sum, item) {
+                return sum + Number(item.total || 0);
+            },
+            0
         );
 
 
-    if (!data) {
-
-        totalElement.textContent =
-            "₱0.00";
-
-        return;
-
+    if (currentItem) {
+        total += currentItem.total;
     }
 
 
-    totalElement.textContent =
-        formatMoney(
-            data.total
-        );
+    document
+        .getElementById("manualTotal")
+        .textContent =
+        formatMoney(total);
 
 }
 
 
 /* =====================================================
-   ADD MANUAL ORDER
+   ADD CURRENT PRODUCT TO MANUAL ORDER
 ===================================================== */
 
-async function addManualOrder() {
+function addManualItem() {
 
     const data =
         getManualOrderData();
@@ -4117,37 +4205,12 @@ async function addManualOrder() {
     if (!data) {
 
         alert(
-            "Please select a category, menu item, and size/variant."
+            "Please select a category, menu item, and size/variant first."
         );
 
         return;
 
     }
-
-
-    const customerName =
-        document
-            .getElementById(
-                "manualCustomerName"
-            )
-            .value
-            .trim();
-
-
-    const orderType =
-        document
-            .getElementById(
-                "manualOrderType"
-            )
-            .value;
-
-
-    const paymentMethod =
-        document
-            .getElementById(
-                "manualPayment"
-            )
-            .value;
 
 
     let itemDescription =
@@ -4176,25 +4239,215 @@ async function addManualOrder() {
             " — Add-ons: " +
             data.addons
                 .map(function(addon) {
-
                     return (
                         addon.name +
                         " (+" +
-                        formatMoney(
-                            addon.price
-                        ) +
+                        formatMoney(addon.price) +
                         ")"
                     );
-
                 })
                 .join(", ");
 
     }
 
 
+    manualOrderItems.push({
+        description: itemDescription,
+        total: data.total
+    });
+
+
+    renderManualCart();
+
+
+    // Clear only the product selection so another product can be added.
+    document.getElementById("manualCategory").value = "";
+
+
+    const itemSelect =
+        document.getElementById("manualItem");
+
+    const variantSelect =
+        document.getElementById("manualVariant");
+
+
+    itemSelect.innerHTML =
+        "<option value=''>Select Menu Item</option>";
+
+    variantSelect.innerHTML =
+        "<option value=''>Select Size / Variant</option>";
+
+
+    itemSelect.disabled = true;
+    variantSelect.disabled = true;
+
+
+    hideManualExtras();
+    updateManualTotal();
+
+}
+
+
+/* =====================================================
+   RENDER MANUAL CART
+===================================================== */
+
+function renderManualCart() {
+
+    const container =
+        document.getElementById("manualCartItems");
+
+
+    if (!manualOrderItems.length) {
+
+        container.innerHTML =
+            "<div class='manual-cart-empty'>" +
+            "No products added yet. Select a product above and click ADD PRODUCT." +
+            "</div>";
+
+        updateManualTotal();
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    manualOrderItems.forEach(function(item, index) {
+
+        const row =
+            document.createElement("div");
+
+        row.className =
+            "manual-cart-item";
+
+
+        const details =
+            document.createElement("div");
+
+        details.className =
+            "manual-cart-item-details";
+
+        details.innerHTML =
+            "<strong>" +
+            escapeHtml(item.description) +
+            "</strong><br>" +
+            formatMoney(item.total);
+
+
+        const removeButton =
+            document.createElement("button");
+
+        removeButton.type = "button";
+        removeButton.className = "manual-cart-remove";
+        removeButton.textContent = "REMOVE";
+        removeButton.onclick = function() {
+            removeManualItem(index);
+        };
+
+
+        row.appendChild(details);
+        row.appendChild(removeButton);
+        container.appendChild(row);
+
+    });
+
+
+    updateManualTotal();
+
+}
+
+
+/* =====================================================
+   REMOVE PRODUCT FROM MANUAL CART
+===================================================== */
+
+function removeManualItem(index) {
+
+    manualOrderItems.splice(index, 1);
+
+    renderManualCart();
+
+}
+
+
+/* =====================================================
+   PLACE COMPLETE MANUAL ORDER
+===================================================== */
+
+async function addManualOrder() {
+
+    // If the user selected a product but has not added it yet,
+    // automatically add it so they don't accidentally lose it.
+    const currentItem =
+        getManualOrderData();
+
+
+    if (currentItem) {
+
+        const addCurrent =
+            confirm(
+                "You have a product selected that has not been added to the order.\n\n" +
+                "Add it to the order before placing it?"
+            );
+
+        if (addCurrent) {
+            addManualItem();
+        }
+
+    }
+
+
+    if (!manualOrderItems.length) {
+
+        alert(
+            "Please add at least one product to the manual order."
+        );
+
+        return;
+
+    }
+
+
+    const customerName =
+        document
+            .getElementById("manualCustomerName")
+            .value
+            .trim();
+
+
+    const orderType =
+        document
+            .getElementById("manualOrderType")
+            .value;
+
+
+    const paymentMethod =
+        document
+            .getElementById("manualPayment")
+            .value;
+
+
     const orderNumber =
-        "MANUAL-" +
-        Date.now();
+        "MANUAL-" + Date.now();
+
+
+    const grandTotal =
+        manualOrderItems.reduce(
+            function(sum, item) {
+                return sum + Number(item.total || 0);
+            },
+            0
+        );
+
+
+    const itemDescription =
+        manualOrderItems
+            .map(function(item, index) {
+                return (index + 1) + ". " + item.description;
+            })
+            .join("\n");
 
 
     const orderData = {
@@ -4203,8 +4456,7 @@ async function addManualOrder() {
             orderNumber,
 
         customer_name:
-            customerName ||
-            "Walk-in Customer",
+            customerName || "Walk-in Customer",
 
         phone:
             "",
@@ -4231,13 +4483,13 @@ async function addManualOrder() {
             "Manual / Personal Order",
 
         subtotal:
-            data.total,
+            grandTotal,
 
         delivery_fee:
             0,
 
         grand_total:
-            data.total,
+            grandTotal,
 
         status:
             "New"
@@ -4246,33 +4498,21 @@ async function addManualOrder() {
 
 
     const button =
-        document.getElementById(
-            "addManualOrderButton"
-        );
+        document.getElementById("addManualOrderButton");
 
 
-    button.disabled =
-        true;
-
-
-    button.textContent =
-        "ADDING ORDER...";
+    button.disabled = true;
+    button.textContent = "PLACING ORDER...";
 
 
     const { error } =
         await supabaseClient
             .from("orders")
-            .insert([
-                orderData
-            ]);
+            .insert([orderData]);
 
 
-    button.disabled =
-        false;
-
-
-    button.textContent =
-        "➕ ADD MANUAL ORDER";
+    button.disabled = false;
+    button.textContent = "✅ PLACE MANUAL ORDER";
 
 
     if (error) {
@@ -4291,24 +4531,17 @@ async function addManualOrder() {
 
     alert(
         "✓ Manual order added successfully!\n\n" +
-        "Order: " +
-        orderNumber +
+        "Order: " + orderNumber +
         "\n" +
-        "Total: " +
-        formatMoney(
-            data.total
-        )
+        "Products: " + manualOrderItems.length +
+        "\n" +
+        "Total: " + formatMoney(grandTotal)
     );
 
 
     resetManualOrder();
 
     await loadOrders();
-
-
-    /* Automatically go to reports
-       if desired later; currently
-       stays in manual order section. */
 
 }
 
@@ -4319,87 +4552,61 @@ async function addManualOrder() {
 
 function resetManualOrder() {
 
-    document
-        .getElementById(
-            "manualCustomerName"
-        )
-        .value =
-        "";
+    manualOrderItems = [];
 
 
     document
-        .getElementById(
-            "manualOrderType"
-        )
-        .value =
-        "Walk-in";
+        .getElementById("manualCustomerName")
+        .value = "";
 
 
     document
-        .getElementById(
-            "manualPayment"
-        )
-        .value =
-        "Cash";
+        .getElementById("manualOrderType")
+        .value = "Walk-in";
 
 
     document
-        .getElementById(
-            "manualQuantity"
-        )
-        .value =
-        "1";
+        .getElementById("manualPayment")
+        .value = "Cash";
 
 
     document
-        .getElementById(
-            "manualCategory"
-        )
-        .value =
-        "";
+        .getElementById("manualQuantity")
+        .value = "1";
+
+
+    document
+        .getElementById("manualCategory")
+        .value = "";
 
 
     const item =
-        document.getElementById(
-            "manualItem"
-        );
-
+        document.getElementById("manualItem");
 
     const variant =
-        document.getElementById(
-            "manualVariant"
-        );
+        document.getElementById("manualVariant");
 
 
     item.innerHTML =
-        "<option value=''>" +
-        "Select Menu Item" +
-        "</option>";
-
+        "<option value=''>Select Menu Item</option>";
 
     variant.innerHTML =
-        "<option value=''>" +
-        "Select Size / Variant" +
-        "</option>";
+        "<option value=''>Select Size / Variant</option>";
 
 
-    item.disabled =
-        true;
-
-
-    variant.disabled =
-        true;
+    item.disabled = true;
+    variant.disabled = true;
 
 
     hideManualExtras();
 
 
     document
-        .getElementById(
-            "manualTotal"
-        )
-        .textContent =
-        "₱0.00";
+        .getElementById("manualTotal")
+        .textContent = "₱0.00";
+
+
+    renderManualCart();
 
 }
 
