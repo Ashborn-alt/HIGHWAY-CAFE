@@ -1,14 +1,12 @@
-// ============================================================
+// =====================================================
 // HIGHWAY CAFE
 // COMPLETE CUSTOMER ORDERING SYSTEM
-// NEW SCRIPT.JS
-// Designed specifically for the current index.html
-// ============================================================
+// =====================================================
 
 
-// ============================================================
+// =====================================================
 // SUPABASE CONFIGURATION
-// ============================================================
+// =====================================================
 
 const SUPABASE_URL =
     "https://qfnjegsbyxxqsdaelqqa.supabase.co";
@@ -17,11 +15,12 @@ const SUPABASE_KEY =
     "sb_publishable_ttu1AyOaylp3J4x7iTqaNg_1VLOdHoE";
 
 let supabaseClient = null;
+let supabaseReadyPromise = null;
 
 
-// ============================================================
-// GENERAL SETTINGS
-// ============================================================
+// =====================================================
+// PRICES
+// =====================================================
 
 const DELIVERY_FEE = 20;
 
@@ -33,16 +32,16 @@ const EXTRA_EGG_PRICE = 10;
 const EXTRA_RICE_PRICE = 15;
 
 
-// ============================================================
+// =====================================================
 // CART
-// ============================================================
+// =====================================================
 
 let cart = [];
 
 
-// ============================================================
+// =====================================================
 // PRODUCT STATE
-// ============================================================
+// =====================================================
 
 let selectedProduct = "";
 let selectedCategory = "";
@@ -65,9 +64,9 @@ let extraChocolate = false;
 let quantity = 1;
 
 
-// ============================================================
+// =====================================================
 // SNACK STATE
-// ============================================================
+// =====================================================
 
 let selectedSnackName = "";
 let selectedSnackCategory = "";
@@ -81,15 +80,14 @@ let selectedSnackFlavor = "";
 let snackQuantity = 1;
 
 
-// ============================================================
+// =====================================================
 // MEAL STATE
-// ============================================================
+// =====================================================
 
 let selectedMealName = "";
 let selectedMealCategory = "Pit Stop Plates";
 
 let mealChoices = [];
-
 let selectedMealChoice = null;
 
 let mealQuantity = 1;
@@ -101,9 +99,9 @@ let extraEgg = false;
 let extraRice = false;
 
 
-// ============================================================
+// =====================================================
 // CHECKOUT STATE
-// ============================================================
+// =====================================================
 
 let selectedOrderType = "delivery";
 let selectedPaymentMethodValue = "cash";
@@ -111,27 +109,22 @@ let selectedPaymentMethodValue = "cash";
 let currentOrderNumber = "";
 
 
-// ============================================================
-// SHOP STATE
-// ============================================================
+// =====================================================
+// SHOP / MENU STATE
+// =====================================================
 
 let shopIsOpen = true;
-
 let menuAvailability = {};
 
 
-// ============================================================
-// SAFE DOM HELPER
-// ============================================================
+// =====================================================
+// BASIC HELPERS
+// =====================================================
 
 function $(id) {
     return document.getElementById(id);
 }
 
-
-// ============================================================
-// NUMBER HELPER
-// ============================================================
 
 function money(value) {
 
@@ -145,18 +138,28 @@ function money(value) {
 }
 
 
-// ============================================================
-// FORMAT MONEY
-// ============================================================
-
 function formatMoney(value) {
     return money(value).toFixed(2);
 }
 
 
-// ============================================================
+// =====================================================
+// SAFE TEXT HELPER
+// =====================================================
+
+function safeText(value) {
+
+    if (value === null || value === undefined) {
+        return "";
+    }
+
+    return String(value);
+}
+
+
+// =====================================================
 // INITIALIZATION
-// ============================================================
+// =====================================================
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -167,23 +170,16 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-// ============================================================
-// CUSTOMER PAGE INITIALIZATION
-// ============================================================
-
 function initializeCustomerPage() {
 
-    // Hide popups when page loads
     hideAllPopups();
 
-    // Default checkout state
     selectOrderType("delivery");
+
     selectPaymentMethod("cash");
 
-    // Render empty cart
     updateCart();
 
-    // Try loading shop information
     setTimeout(function () {
 
         loadShopStatusForCustomer();
@@ -191,273 +187,348 @@ function initializeCustomerPage() {
         loadMenuAvailabilityForCustomer();
 
     }, 500);
+
 }
 
 
-// ============================================================
-// HIDE ALL POPUPS
-// ============================================================
-
-function hideAllPopups() {
-
-    const overlays = [
-        "productOverlay",
-        "checkoutOverlay"
-    ];
-
-    overlays.forEach(function (id) {
-
-        const element = $(id);
-
-        if (element) {
-            element.style.display = "none";
-        }
-
-    });
-
-    const popupIds = [
-        "productPopup",
-        "snackPopupContent",
-        "mealPopupContent",
-        "checkoutPopup",
-        "orderConfirmationPopup"
-    ];
-
-    popupIds.forEach(function (id) {
-
-        const element = $(id);
-
-        if (element) {
-            element.style.display = "none";
-        }
-
-    });
-}
-
-
-// ============================================================
+// =====================================================
 // SUPABASE INITIALIZATION
-// ============================================================
+// =====================================================
 
 function loadSupabaseLibrary() {
 
-    return new Promise(function (resolve) {
+    return new Promise(function (resolve, reject) {
 
         if (window.supabase) {
-            resolve(true);
+
+            resolve();
+
             return;
         }
 
-        const existing =
+
+        const existingScript =
             document.querySelector(
-                'script[src*="supabase-js"]'
+                'script[src*="supabase"]'
             );
 
-        if (existing) {
 
-            existing.addEventListener(
+        if (existingScript) {
+
+            existingScript.addEventListener(
                 "load",
                 function () {
-                    resolve(!!window.supabase);
+
+                    if (window.supabase) {
+                        resolve();
+                    } else {
+                        reject(
+                            new Error(
+                                "Supabase library loaded but was not found."
+                            )
+                        );
+                    }
+
                 }
             );
 
-            existing.addEventListener(
+
+            existingScript.addEventListener(
                 "error",
                 function () {
-                    resolve(false);
+
+                    reject(
+                        new Error(
+                            "Unable to load Supabase library."
+                        )
+                    );
+
                 }
             );
+
 
             return;
         }
 
-        const script =
-            document.createElement("script");
+
+        const script = document.createElement("script");
 
         script.src =
             "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 
+        script.async = true;
+
+
         script.onload = function () {
-            resolve(!!window.supabase);
+
+            if (window.supabase) {
+
+                resolve();
+
+            } else {
+
+                reject(
+                    new Error(
+                        "Supabase library was not found."
+                    )
+                );
+
+            }
+
         };
+
 
         script.onerror = function () {
-            console.warn(
-                "Supabase library could not be loaded."
+
+            reject(
+                new Error(
+                    "Unable to load Supabase library."
+                )
             );
 
-            resolve(false);
         };
+
 
         document.head.appendChild(script);
 
     });
+
 }
 
-
-// ============================================================
-// INITIALIZE SUPABASE
-// ============================================================
 
 async function initializeSupabase() {
 
-    try {
+    if (supabaseClient) {
+        return supabaseClient;
+    }
 
-        const loaded =
+
+    if (supabaseReadyPromise) {
+        return supabaseReadyPromise;
+    }
+
+
+    supabaseReadyPromise = (async function () {
+
+        try {
+
             await loadSupabaseLibrary();
 
-        if (
-            !loaded ||
-            !window.supabase ||
-            !window.supabase.createClient
-        ) {
-            console.warn(
-                "Supabase is unavailable."
+
+            supabaseClient =
+                window.supabase.createClient(
+                    SUPABASE_URL,
+                    SUPABASE_KEY
+                );
+
+
+            console.log(
+                "HIGHWAY CAFE: Supabase initialized."
             );
 
-            return;
+
+            return supabaseClient;
+
+        } catch (error) {
+
+            console.error(
+                "HIGHWAY CAFE: Supabase initialization failed:",
+                error
+            );
+
+
+            supabaseClient = null;
+
+            return null;
+
         }
 
-        supabaseClient =
-            window.supabase.createClient(
-                SUPABASE_URL,
-                SUPABASE_KEY
-            );
+    })();
 
-        console.log(
-            "Highway Cafe Supabase initialized."
-        );
 
-    } catch (error) {
-
-        console.error(
-            "Supabase initialization error:",
-            error
-        );
-
-    }
+    return supabaseReadyPromise;
 }
 
 
-// ============================================================
+// =====================================================
 // SHOP STATUS
-// ============================================================
+// =====================================================
 
 async function loadShopStatusForCustomer() {
 
-    if (!supabaseClient) {
+    const client = await initializeSupabase();
+
+    if (!client) {
         return;
     }
+
 
     try {
 
         const result =
-            await supabaseClient
+            await client
                 .from("shop_settings")
                 .select("*")
                 .limit(1)
                 .maybeSingle();
 
+
         if (result.error) {
+
             console.warn(
-                "Shop status could not be loaded:",
+                "Unable to load shop status:",
                 result.error
             );
 
             return;
         }
 
-        if (!result.data) {
-            return;
+
+        if (result.data) {
+
+            const data = result.data;
+
+
+            if (
+                typeof data.is_open !== "undefined"
+            ) {
+
+                shopIsOpen =
+                    Boolean(data.is_open);
+
+            }
+
+
+            if (
+                typeof data.shop_is_open !== "undefined"
+            ) {
+
+                shopIsOpen =
+                    Boolean(data.shop_is_open);
+
+            }
+
+
+            if (
+                typeof data.status !== "undefined"
+            ) {
+
+                const status =
+                    String(data.status)
+                        .toLowerCase();
+
+
+                if (
+                    status === "open" ||
+                    status === "opened"
+                ) {
+
+                    shopIsOpen = true;
+
+                }
+
+
+                if (
+                    status === "closed" ||
+                    status === "close"
+                ) {
+
+                    shopIsOpen = false;
+
+                }
+
+            }
+
+
+            updateCustomerShopDisplay();
+
         }
-
-        const data = result.data;
-
-        if (
-            typeof data.is_open !== "undefined"
-        ) {
-
-            shopIsOpen =
-                data.is_open === true;
-
-        }
-
-        updateCustomerShopDisplay();
 
     } catch (error) {
 
-        console.warn(
+        console.error(
             "Shop status error:",
             error
         );
 
     }
+
 }
 
-
-// ============================================================
-// UPDATE SHOP DISPLAY
-// ============================================================
 
 function updateCustomerShopDisplay() {
 
-    const orderButton =
+    const startButton =
         document.querySelector(
-            'header button[onclick="startOrder()"]'
+            'button[onclick="startOrder()"]'
         );
 
-    if (!orderButton) {
+
+    if (!startButton) {
         return;
     }
 
+
     if (shopIsOpen) {
 
-        orderButton.disabled = false;
-        orderButton.textContent = "Order Now";
+        startButton.disabled = false;
+
+        startButton.textContent =
+            "Order Now";
+
+        startButton.style.opacity = "1";
+
+        startButton.style.cursor =
+            "pointer";
 
     } else {
 
-        orderButton.disabled = true;
-        orderButton.textContent = "Shop Closed";
+        startButton.disabled = true;
+
+        startButton.textContent =
+            "Shop Closed";
+
+        startButton.style.opacity = "0.6";
+
+        startButton.style.cursor =
+            "not-allowed";
 
     }
+
 }
 
-
-// ============================================================
-// SHOP OPEN CHECK
-// ============================================================
 
 function isShopOpenForOrdering() {
 
-    if (!shopIsOpen) {
+    return shopIsOpen !== false;
 
-        alert(
-            "Highway Cafe is currently closed."
-        );
-
-        return false;
-    }
-
-    return true;
 }
 
 
-// ============================================================
+// =====================================================
 // START ORDER
-// ============================================================
+// =====================================================
 
 function startOrder() {
 
     if (!isShopOpenForOrdering()) {
+
+        alert(
+            "Sorry, HIGHWAY CAFE is currently closed."
+        );
+
         return;
     }
+
 
     const menu =
         $("menu");
 
+
     if (menu) {
+
+        menu.style.display = "block";
+
 
         menu.scrollIntoView({
             behavior: "smooth",
@@ -465,37 +536,44 @@ function startOrder() {
         });
 
     }
+
 }
 
 
-// ============================================================
+// =====================================================
 // MENU AVAILABILITY
-// ============================================================
+// =====================================================
 
 async function loadMenuAvailabilityForCustomer() {
 
-    if (!supabaseClient) {
+    const client = await initializeSupabase();
+
+    if (!client) {
         return;
     }
+
 
     try {
 
         const result =
-            await supabaseClient
+            await client
                 .from("menu_availability")
                 .select("*");
+
 
         if (result.error) {
 
             console.warn(
-                "Menu availability could not be loaded:",
+                "Unable to load menu availability:",
                 result.error
             );
 
             return;
         }
 
+
         menuAvailability = {};
+
 
         if (Array.isArray(result.data)) {
 
@@ -503,44 +581,48 @@ async function loadMenuAvailabilityForCustomer() {
 
                 const key =
                     makeMenuKey(
-                        item.name,
-                        item.category
+                        item.category,
+                        item.item_name ||
+                        item.name ||
+                        item.product_name
                     );
 
-                menuAvailability[key] =
-                    item.is_available !== false;
+
+                if (key) {
+
+                    menuAvailability[key] =
+                        item.is_available !== false;
+
+                }
 
             });
 
         }
 
+
         applyCustomerAvailability();
 
     } catch (error) {
 
-        console.warn(
+        console.error(
             "Menu availability error:",
             error
         );
 
     }
+
 }
 
 
-// ============================================================
-// MAKE MENU KEY
-// ============================================================
-
-function makeMenuKey(name, category) {
+function makeMenuKey(category, name) {
 
     return (
-        String(category || "")
+        safeText(category)
             .trim()
             .toLowerCase()
-            .replace(/\s+/g, " ")
-        +
-        "::" +
-        String(name || "")
+            .replace(/\s+/g, " ") +
+        "|" +
+        safeText(name)
             .trim()
             .toLowerCase()
             .replace(/\s+/g, " ")
@@ -549,14 +631,11 @@ function makeMenuKey(name, category) {
 }
 
 
-// ============================================================
-// CHECK ITEM AVAILABILITY
-// ============================================================
-
-function isMenuItemAvailable(name, category) {
+function isMenuItemAvailable(category, name) {
 
     const key =
-        makeMenuKey(name, category);
+        makeMenuKey(category, name);
+
 
     if (
         Object.prototype.hasOwnProperty.call(
@@ -564,99 +643,125 @@ function isMenuItemAvailable(name, category) {
             key
         )
     ) {
-        return menuAvailability[key];
+
+        return menuAvailability[key] !== false;
+
     }
 
+
     return true;
+
 }
 
 
-// ============================================================
-// APPLY AVAILABILITY
-// ============================================================
-
 function applyCustomerAvailability() {
-
-    // Availability is also checked directly
-    // when the customer clicks an item.
 
     const buttons =
         document.querySelectorAll(
             ".menu-item"
         );
 
+
     buttons.forEach(function (button) {
 
         button.disabled = false;
+
+        button.style.opacity = "1";
+
+        button.style.cursor =
+            "pointer";
 
     });
 
 }
 
 
-// ============================================================
-// REFRESH AVAILABILITY
-// ============================================================
-
 async function refreshCustomerAvailability() {
+
+    await loadShopStatusForCustomer();
 
     await loadMenuAvailabilityForCustomer();
 
 }
 
 
-// ============================================================
-// POPUP HELPER
-// ============================================================
+// =====================================================
+// POPUP HELPERS
+// =====================================================
 
-function showPopup(
-    overlayId,
-    popupId
-) {
+function hideAllPopups() {
 
-    const overlay = $(overlayId);
-
-    const popup = $(popupId);
-
-    if (!overlay) {
-        return;
-    }
-
-    overlay.style.display = "flex";
-
-    if (popup) {
-        popup.style.display = "block";
-    }
-
-}
+    const ids = [
+        "productPopup",
+        "snackPopup",
+        "mealPopup",
+        "checkoutPopup",
+        "orderConfirmationPopup"
+    ];
 
 
-// ============================================================
-// CLOSE PRODUCT
-// ============================================================
+    ids.forEach(function (id) {
 
-function closeProduct() {
+        const element = $(id);
+
+        if (element) {
+            element.style.display = "none";
+        }
+
+    });
+
 
     const overlay =
         $("productOverlay");
+
 
     if (overlay) {
         overlay.style.display = "none";
     }
 
-    const popup =
-        $("productPopup");
 
-    if (popup) {
-        popup.style.display = "none";
+    const checkoutOverlay =
+        $("checkoutOverlay");
+
+
+    if (checkoutOverlay) {
+        checkoutOverlay.style.display = "none";
     }
 
 }
 
 
-// ============================================================
+function showPopup(overlayId, popupId) {
+
+    hideAllPopups();
+
+
+    const overlay = $(overlayId);
+
+    const popup = $(popupId);
+
+
+    if (overlay) {
+
+        overlay.style.display =
+            "flex";
+
+    }
+
+
+    if (popup) {
+
+        popup.style.display =
+            "block";
+
+    }
+
+}
+
+
+// =====================================================
 // DRINK DATA
-// ============================================================
+// =====================================================
 
 const DRINKS = {
 
@@ -689,10 +794,7 @@ const DRINKS = {
         category: "Iced Coffee",
         p16: 75,
         p22: 89,
-        addons: [
-            "espresso",
-            "chocolate"
-        ]
+        addons: ["espresso", "chocolate"]
     },
 
     dirtyMatcha: {
@@ -700,10 +802,7 @@ const DRINKS = {
         category: "Iced Coffee",
         p16: 85,
         p22: 100,
-        addons: [
-            "espresso",
-            "matcha"
-        ]
+        addons: ["espresso", "matcha"]
     },
 
     saltedCaramel: {
@@ -723,7 +822,9 @@ const DRINKS = {
     },
 
 
+    // -------------------------------
     // HOT COFFEE
+    // -------------------------------
 
     hotChoco: {
         name: "Hot Choco",
@@ -754,7 +855,9 @@ const DRINKS = {
     },
 
 
-    // SODA
+    // -------------------------------
+    // SODA SERIES
+    // -------------------------------
 
     greenApple: {
         name: "Green Apple",
@@ -793,7 +896,9 @@ const DRINKS = {
     },
 
 
+    // -------------------------------
     // MILK SERIES
+    // -------------------------------
 
     strawberryMilk: {
         name: "Strawberry Milk",
@@ -838,48 +943,58 @@ const DRINKS = {
 };
 
 
-// ============================================================
+// =====================================================
 // OPEN DRINK
-// ============================================================
+// =====================================================
 
 function openDrink(key) {
 
     if (!isShopOpenForOrdering()) {
+
+        alert(
+            "Sorry, HIGHWAY CAFE is currently closed."
+        );
+
         return;
     }
 
-    const drink =
-        DRINKS[key];
+
+    const drink = DRINKS[key];
+
 
     if (!drink) {
 
         console.error(
-            "Drink key not found:",
+            "Drink not found:",
             key
         );
 
         return;
     }
 
+
     if (
         !isMenuItemAvailable(
-            drink.name,
-            drink.category
+            drink.category,
+            drink.name
         )
     ) {
 
         alert(
-            `${drink.name} is currently unavailable.`
+            drink.name +
+            " is currently unavailable."
         );
 
         return;
     }
+
 
     selectedProduct =
         drink.name;
 
     selectedCategory =
         drink.category;
+
 
     price8 =
         money(drink.p8);
@@ -893,49 +1008,25 @@ function openDrink(key) {
     price22 =
         money(drink.p22);
 
-    selectedSize =
-        16;
 
-    quantity =
-        1;
+    extraEspresso = false;
+    extraMatcha = false;
+    extraChocolate = false;
 
-    extraEspresso =
-        false;
+    quantity = 1;
 
-    extraMatcha =
-        false;
-
-    extraChocolate =
-        false;
-
-
-    // HOT COFFEE
 
     if (drink.category === "Hot Coffee") {
 
-        if (price8 <= 0) {
-            price8 = price16;
-        }
-
         selectedSize = 8;
 
-    }
-
-
-    // SODA
-
-    else if (
+    } else if (
         drink.category === "Soda Series"
     ) {
 
         selectedSize = 12;
 
-    }
-
-
-    // NORMAL ICED / MILK
-
-    else {
+    } else {
 
         selectedSize = 16;
 
@@ -962,21 +1053,30 @@ function openDrink(key) {
 }
 
 
-// ============================================================
-// UPDATE PRODUCT POPUP
-// ============================================================
+// =====================================================
+// PRODUCT POPUP
+// =====================================================
 
 function updateProductPopup() {
 
-    if ($("selectedProduct")) {
-        $("selectedProduct").textContent =
+    const product =
+        $("selectedProduct");
+
+    const category =
+        $("selectedCategory");
+
+
+    if (product) {
+        product.textContent =
             selectedProduct;
     }
 
-    if ($("selectedCategory")) {
-        $("selectedCategory").textContent =
+
+    if (category) {
+        category.textContent =
             selectedCategory;
     }
+
 
     updateSizeButtons();
 
@@ -989,58 +1089,47 @@ function updateProductPopup() {
 }
 
 
-// ============================================================
-// SIZE BUTTONS
-// ============================================================
-
 function updateSizeButtons() {
 
-    const size12 =
+    const button12 =
         $("size12Button");
 
-    const size16 =
+    const button16 =
         $("size16Button");
 
-    const size22 =
+    const button22 =
         $("size22Button");
 
-    const sizeTitle =
+    const title =
         $("sizeTitle");
 
 
     if (selectedCategory === "Hot Coffee") {
 
-        if (sizeTitle) {
-            sizeTitle.textContent =
+        if (button12) {
+            button12.style.display = "none";
+        }
+
+        if (button16) {
+            button16.style.display = "none";
+        }
+
+        if (button22) {
+            button22.style.display = "none";
+        }
+
+        if (title) {
+            title.textContent =
                 "Size: 8oz";
         }
 
-        if (size12) {
-            size12.style.display = "none";
-        }
-
-        if (size16) {
-            size16.style.display = "none";
-        }
-
-        if (size22) {
-            size22.style.display = "none";
-        }
-
         return;
-
     }
 
 
-    if (sizeTitle) {
-        sizeTitle.textContent =
-            "Choose Size";
-    }
+    if (button12) {
 
-
-    if (size12) {
-
-        size12.style.display =
+        button12.style.display =
             price12 > 0
                 ? "inline-block"
                 : "none";
@@ -1048,9 +1137,9 @@ function updateSizeButtons() {
     }
 
 
-    if (size16) {
+    if (button16) {
 
-        size16.style.display =
+        button16.style.display =
             price16 > 0
                 ? "inline-block"
                 : "none";
@@ -1058,9 +1147,9 @@ function updateSizeButtons() {
     }
 
 
-    if (size22) {
+    if (button22) {
 
-        size22.style.display =
+        button22.style.display =
             price22 > 0
                 ? "inline-block"
                 : "none";
@@ -1068,74 +1157,143 @@ function updateSizeButtons() {
     }
 
 
-    if (size12) {
-        size12.classList.toggle(
-            "selected-size",
-            selectedSize === 12
-        );
+    if (title) {
+        title.textContent =
+            "Choose Size";
     }
 
-    if (size16) {
-        size16.classList.toggle(
-            "selected-size",
-            selectedSize === 16
-        );
-    }
 
-    if (size22) {
-        size22.classList.toggle(
-            "selected-size",
-            selectedSize === 22
-        );
-    }
+    updateSizeSelectionOutline();
 
 }
 
 
-// ============================================================
-// SELECT SIZE
-// ============================================================
+function updateSizeSelectionOutline() {
+
+    const buttons = [
+        $("size12Button"),
+        $("size16Button"),
+        $("size22Button")
+    ];
+
+
+    buttons.forEach(function (button) {
+
+        if (!button) {
+            return;
+        }
+
+
+        button.classList.remove(
+            "selected-size"
+        );
+
+
+        button.style.outline = "";
+
+        button.style.outlineOffset = "";
+
+        button.style.fontWeight = "";
+
+
+        const buttonSize =
+            Number(
+                button.dataset.size ||
+                (
+                    button.id === "size12Button"
+                        ? 12
+                        : button.id === "size16Button"
+                            ? 16
+                            : 22
+                )
+            );
+
+
+        if (
+            buttonSize ===
+            Number(selectedSize)
+        ) {
+
+            button.classList.add(
+                "selected-size"
+            );
+
+
+            // Force the selection outline
+            // even if CSS is not loaded correctly.
+
+            button.style.outline =
+                "3px solid #8B4513";
+
+            button.style.outlineOffset =
+                "3px";
+
+            button.style.fontWeight =
+                "bold";
+
+        }
+
+    });
+
+}
+
 
 function selectSize(size) {
 
-    size =
+    const number =
         Number(size);
 
-    if (
-        selectedCategory === "Hot Coffee"
-    ) {
-        selectedSize = 8;
-        updateSelectedProductPrice();
+
+    if (![8, 12, 16, 22].includes(number)) {
         return;
     }
 
-    if (size === 12 && price12 > 0) {
-        selectedSize = 12;
-    }
 
-    else if (
-        size === 16 &&
-        price16 > 0
+    if (
+        number === 8 &&
+        selectedCategory !== "Hot Coffee"
     ) {
-        selectedSize = 16;
+        return;
     }
 
-    else if (
-        size === 22 &&
-        price22 > 0
+
+    if (
+        number === 12 &&
+        price12 <= 0
     ) {
-        selectedSize = 22;
+        return;
     }
 
-    updateSizeButtons();
+
+    if (
+        number === 16 &&
+        price16 <= 0
+    ) {
+        return;
+    }
+
+
+    if (
+        number === 22 &&
+        price22 <= 0
+    ) {
+        return;
+    }
+
+
+    selectedSize = number;
+
+
+    updateSizeSelectionOutline();
+
     updateSelectedProductPrice();
 
 }
 
 
-// ============================================================
-// GET SELECTED PRODUCT BASE PRICE
-// ============================================================
+// =====================================================
+// PRODUCT PRICE
+// =====================================================
 
 function getSelectedProductBasePrice() {
 
@@ -1147,106 +1305,107 @@ function getSelectedProductBasePrice() {
         return price12;
     }
 
+    if (selectedSize === 16) {
+        return price16;
+    }
+
     if (selectedSize === 22) {
         return price22;
     }
 
-    return price16;
+    return 0;
+
 }
 
-
-// ============================================================
-// PRODUCT ADD-ON TOTAL
-// ============================================================
 
 function getProductAddonTotal() {
 
     let total = 0;
 
+
     if (extraEspresso) {
         total += ESPRESSO_PRICE;
     }
+
 
     if (extraMatcha) {
         total += MATCHA_PRICE;
     }
 
+
     if (extraChocolate) {
         total += CHOCOLATE_PRICE;
     }
 
+
     return total;
+
 }
 
-
-// ============================================================
-// PRODUCT UNIT PRICE
-// ============================================================
 
 function getSelectedProductUnitPrice() {
 
     return (
-        getSelectedProductBasePrice()
-        +
+        getSelectedProductBasePrice() +
         getProductAddonTotal()
     );
 
 }
 
 
-// ============================================================
-// PRODUCT TOTAL
-// ============================================================
-
 function getSelectedProductTotal() {
 
     return (
-        getSelectedProductUnitPrice()
-        *
+        getSelectedProductUnitPrice() *
         quantity
     );
 
 }
 
 
-// ============================================================
-// UPDATE PRODUCT PRICE
-// ============================================================
-
 function updateSelectedProductPrice() {
 
-    // There is no dedicated price element in the current
-    // HTML, so we only update the button text.
-
-    const addButton =
+    const button =
         $("addToCartButton");
 
-    if (addButton) {
 
-        addButton.textContent =
-            `Add to Cart - ₱${formatMoney(
-                getSelectedProductTotal()
-            )}`;
-
+    if (!button) {
+        return;
     }
+
+
+    button.textContent =
+        "Add to Cart - ₱" +
+        formatMoney(
+            getSelectedProductTotal()
+        );
 
 }
 
 
-// ============================================================
-// ADDON BUTTON DISPLAY
-// ============================================================
+// =====================================================
+// PRODUCT ADDONS
+// =====================================================
 
 function updateAddonButtons() {
 
     const espressoOption =
         $("espressoOption");
 
+    const espressoButton =
+        $("espressoButton");
+
     const matchaOption =
         $("matchaOption");
 
+    const matchaButton =
+        $("matchaButton");
+
     const chocolateOption =
         $("chocolateOption");
+
+    const chocolateButton =
+        $("chocolateButton");
 
 
     if (espressoOption) {
@@ -1279,51 +1438,80 @@ function updateAddonButtons() {
     }
 
 
-    const espressoButton =
-        $("espressoButton");
-
-    const matchaButton =
-        $("matchaButton");
-
-    const chocolateButton =
-        $("chocolateButton");
+    updateAddonButton(
+        espressoButton,
+        extraEspresso,
+        "Extra Espresso +₱30"
+    );
 
 
-    if (espressoButton) {
+    updateAddonButton(
+        matchaButton,
+        extraMatcha,
+        "Extra Matcha +₱30"
+    );
 
-        espressoButton.classList.toggle(
-            "selected",
-            extraEspresso
-        );
 
+    updateAddonButton(
+        chocolateButton,
+        extraChocolate,
+        "Extra Chocolate +₱30"
+    );
+
+}
+
+
+function updateAddonButton(
+    button,
+    selected,
+    defaultText
+) {
+
+    if (!button) {
+        return;
     }
 
 
-    if (matchaButton) {
+    button.classList.remove(
+        "selected-size"
+    );
 
-        matchaButton.classList.toggle(
-            "selected",
-            extraMatcha
+
+    button.style.outline = "";
+
+    button.style.outlineOffset = "";
+
+    button.style.fontWeight = "";
+
+
+    if (selected) {
+
+        button.classList.add(
+            "selected-size"
         );
 
-    }
 
+        button.style.outline =
+            "3px solid #8B4513";
 
-    if (chocolateButton) {
+        button.style.outlineOffset =
+            "3px";
 
-        chocolateButton.classList.toggle(
-            "selected",
-            extraChocolate
-        );
+        button.style.fontWeight =
+            "bold";
+
+        button.textContent =
+            "✓ " + defaultText;
+
+    } else {
+
+        button.textContent =
+            defaultText;
 
     }
 
 }
 
-
-// ============================================================
-// TOGGLE ESPRESSO
-// ============================================================
 
 function toggleEspresso() {
 
@@ -1331,18 +1519,17 @@ function toggleEspresso() {
         return;
     }
 
+
     extraEspresso =
         !extraEspresso;
 
+
     updateAddonButtons();
+
     updateSelectedProductPrice();
 
 }
 
-
-// ============================================================
-// TOGGLE MATCHA
-// ============================================================
 
 function toggleMatcha() {
 
@@ -1350,18 +1537,17 @@ function toggleMatcha() {
         return;
     }
 
+
     extraMatcha =
         !extraMatcha;
 
+
     updateAddonButtons();
+
     updateSelectedProductPrice();
 
 }
 
-
-// ============================================================
-// TOGGLE CHOCOLATE
-// ============================================================
 
 function toggleChocolate() {
 
@@ -1369,29 +1555,37 @@ function toggleChocolate() {
         return;
     }
 
+
     extraChocolate =
         !extraChocolate;
 
+
     updateAddonButtons();
+
     updateSelectedProductPrice();
 
 }
 
 
-// ============================================================
+// =====================================================
 // PRODUCT QUANTITY
-// ============================================================
+// =====================================================
 
-function changeQuantity(delta) {
+function changeQuantity(amount) {
 
-    delta =
-        Number(delta) || 0;
+    quantity +=
+        Number(amount);
 
-    quantity += delta;
 
     if (quantity < 1) {
         quantity = 1;
     }
+
+
+    if (quantity > 99) {
+        quantity = 99;
+    }
+
 
     updateQuantityDisplay();
 
@@ -1400,40 +1594,36 @@ function changeQuantity(delta) {
 }
 
 
-// ============================================================
-// PRODUCT QUANTITY DISPLAY
-// ============================================================
-
 function updateQuantityDisplay() {
 
     const element =
         $("quantity");
 
+
     if (element) {
+
         element.textContent =
-            quantity;
+            String(quantity);
+
     }
 
 }
 
 
-// ============================================================
-// ADD SELECTED PRODUCT
-// ============================================================
+// =====================================================
+// ADD DRINK TO CART
+// =====================================================
 
 function addSelectedProduct() {
 
-    if (!selectedProduct) {
-        return;
-    }
+    const unitPrice =
+        getSelectedProductUnitPrice();
 
-    const basePrice =
-        getSelectedProductBasePrice();
 
-    if (basePrice <= 0) {
+    if (unitPrice <= 0) {
 
         alert(
-            "Please choose a valid size."
+            "Please select a valid product size."
         );
 
         return;
@@ -1442,49 +1632,43 @@ function addSelectedProduct() {
 
     const addons = [];
 
+
     if (extraEspresso) {
         addons.push("Extra Espresso");
     }
 
+
     if (extraMatcha) {
         addons.push("Extra Matcha");
     }
+
 
     if (extraChocolate) {
         addons.push("Extra Chocolate");
     }
 
 
-    const addonText =
-        addons.length > 0
-            ? addons.join(", ")
-            : "";
-
-
     let sizeText = "";
+
 
     if (selectedSize === 8) {
         sizeText = "8oz";
     }
 
-    else if (selectedSize === 12) {
+    if (selectedSize === 12) {
         sizeText = "12oz";
     }
 
-    else if (selectedSize === 16) {
+    if (selectedSize === 16) {
         sizeText = "16oz";
     }
 
-    else if (selectedSize === 22) {
+    if (selectedSize === 22) {
         sizeText = "22oz";
     }
 
 
-    const unitPrice =
-        getSelectedProductUnitPrice();
-
-
-    addCartItem({
+    const item = {
 
         type: "drink",
 
@@ -1498,7 +1682,8 @@ function addSelectedProduct() {
 
         addons: addons,
 
-        addonsText: addonText,
+        addonsText:
+            addons.join(", "),
 
         quantity: quantity,
 
@@ -1507,8 +1692,10 @@ function addSelectedProduct() {
         total:
             unitPrice * quantity
 
-    });
+    };
 
+
+    addCartItem(item);
 
     closeProduct();
 
@@ -1517,277 +1704,237 @@ function addSelectedProduct() {
 }
 
 
-// ============================================================
+// =====================================================
+// CLOSE PRODUCT
+// =====================================================
+
+function closeProduct() {
+
+    const popup =
+        $("productPopup");
+
+    if (popup) {
+        popup.style.display =
+            "none";
+    }
+
+
+    const overlay =
+        $("productOverlay");
+
+    if (overlay) {
+        overlay.style.display =
+            "none";
+    }
+
+}
+
+
+// =====================================================
 // SNACK DATA
-// ============================================================
+// =====================================================
 
 const SNACKS = {
 
     nachos: {
-
         name: "Nacho's",
-
         category: "Snack Detour",
-
         choices: [
-
             {
                 name: "Regular",
                 price: 75
             },
-
             {
                 name: "Overload",
                 price: 125
             }
-
         ],
-
         flavors: []
-
     },
 
 
     fries: {
-
         name: "French Fries",
-
         category: "Snack Detour",
-
         choices: [
-
             {
                 name: "Regular",
                 price: 25
             },
-
             {
                 name: "Large",
                 price: 40
             }
-
         ],
-
         flavors: [
             "BBQ",
             "Sour Cream",
             "Cheese"
         ]
-
     },
 
 
     hashbrown: {
-
         name: "Hashbrown",
-
         category: "Snack Detour",
-
         choices: [
-
             {
                 name: "1 pc",
                 price: 25
             },
-
             {
                 name: "3 pcs",
                 price: 65
             }
-
         ],
-
         flavors: []
-
     },
 
 
     steamedSiomai: {
-
         name: "Steamed Siomai",
-
         category: "Snack Detour",
-
         choices: [
-
             {
                 name: "5 pcs",
                 price: 25
             },
-
             {
                 name: "11 pcs",
                 price: 50
             }
-
         ],
-
         flavors: []
-
     },
 
 
     japaneseSiomai: {
-
         name: "Japanese Siomai",
-
         category: "Snack Detour",
-
         choices: [],
-
         flavors: []
-
     },
 
 
     tofu: {
-
         name: "Tofu Squares",
-
         category: "Snack Detour",
-
         choices: [
-
             {
                 name: "4 pcs",
                 price: 25
             },
-
             {
                 name: "11 pcs",
                 price: 50
             }
-
         ],
-
         flavors: []
-
     },
 
 
     flyingSaucer: {
-
         name: "Flying Saucer",
-
         category: "Snack Detour",
-
         choices: [
-
             {
                 name: "Ham & Cheese",
                 price: 25
             },
-
             {
                 name: "Hotdog & Cheese",
                 price: 25
             },
-
             {
                 name: "Egg & Cheese",
                 price: 30
             },
-
             {
                 name: "Tuna & Cheese",
                 price: 30
             }
-
         ],
-
         flavors: []
-
     },
 
 
     shanghai: {
-
         name: "Shanghai",
-
         category: "Snack Detour",
-
         choices: [
-
             {
                 name: "1 pc",
                 price: 10
             },
-
             {
                 name: "11 pcs",
                 price: 100
             }
-
         ],
-
         flavors: []
-
     },
 
 
     donuts: {
-
         name: "Donuts",
-
         category: "Snack Detour",
-
         choices: [
-
             {
                 name: "1 pc",
                 price: 10
             }
-
         ],
-
         flavors: [
             "Vanilla",
             "Caramel",
             "Chocolate"
         ]
-
     },
 
 
+    // =================================================
+    // TUBE ICE
+    // =================================================
+
     tubeIce: {
-
         name: "Tube Ice",
-
         category: "Snack Detour",
-
         choices: [
-
             {
                 name: "1 pc",
                 price: 15
             }
-
         ],
-
         flavors: []
-
     }
 
 };
 
 
-// ============================================================
+// =====================================================
 // OPEN SNACK BY KEY
-// ============================================================
+// =====================================================
 
 function openSnackByKey(key) {
 
     if (!isShopOpenForOrdering()) {
+
+        alert(
+            "Sorry, HIGHWAY CAFE is currently closed."
+        );
+
         return;
     }
+
 
     const snack =
         SNACKS[key];
 
+
     if (!snack) {
 
         console.error(
-            "Snack key not found:",
+            "Snack not found:",
             key
         );
 
@@ -1797,13 +1944,14 @@ function openSnackByKey(key) {
 
     if (
         !isMenuItemAvailable(
-            snack.name,
-            snack.category
+            snack.category,
+            snack.name
         )
     ) {
 
         alert(
-            `${snack.name} is currently unavailable.`
+            snack.name +
+            " is currently unavailable."
         );
 
         return;
@@ -1820,14 +1968,13 @@ function openSnackByKey(key) {
 }
 
 
-// ============================================================
+// =====================================================
 // OPEN SNACK
-//
-// Supports both:
+// Supports BOTH:
 // openSnack(name, category, choices, flavors)
-// AND:
+// and
 // openSnack(name, category, "choice", choices)
-// ============================================================
+// =====================================================
 
 function openSnack(
     snackName,
@@ -1837,6 +1984,31 @@ function openSnack(
 ) {
 
     if (!isShopOpenForOrdering()) {
+
+        alert(
+            "Sorry, HIGHWAY CAFE is currently closed."
+        );
+
+        return;
+    }
+
+
+    // -----------------------------------------------
+    // Availability check
+    // -----------------------------------------------
+
+    if (
+        !isMenuItemAvailable(
+            category,
+            snackName
+        )
+    ) {
+
+        alert(
+            snackName +
+            " is currently unavailable."
+        );
+
         return;
     }
 
@@ -1845,11 +2017,68 @@ function openSnack(
         snackName;
 
     selectedSnackCategory =
-        category || "Snack Detour";
+        category;
 
 
-    snackQuantity =
-        1;
+    // -----------------------------------------------
+    // Support Tube Ice's current HTML:
+    //
+    // openSnack(
+    //   'Tube Ice',
+    //   'Snack Detour',
+    //   'choice',
+    //   [{ name:'1 pc', price:15 }]
+    // )
+    // -----------------------------------------------
+
+    if (
+        choicesOrType === "choice" &&
+        Array.isArray(flavorsOrChoices)
+    ) {
+
+        snackChoices =
+            flavorsOrChoices.slice();
+
+        snackFlavors = [];
+
+    } else {
+
+        snackChoices =
+            Array.isArray(
+                choicesOrType
+            )
+                ? choicesOrType.slice()
+                : [];
+
+
+        snackFlavors =
+            Array.isArray(
+                flavorsOrChoices
+            )
+                ? flavorsOrChoices.slice()
+                : [];
+
+    }
+
+
+    // -----------------------------------------------
+    // Japanese Siomai special case
+    // -----------------------------------------------
+
+    if (
+        snackName === "Japanese Siomai" &&
+        snackChoices.length === 0
+    ) {
+
+        snackChoices = [
+            {
+                name: "1 pc",
+                price: 10
+            }
+        ];
+
+    }
+
 
     selectedSnackChoice =
         null;
@@ -1857,54 +2086,7 @@ function openSnack(
     selectedSnackFlavor =
         "";
 
-
-    // New Tube Ice format
-    if (
-        choicesOrType === "choice" &&
-        Array.isArray(flavorsOrChoices)
-    ) {
-
-        snackChoices =
-            flavorsOrChoices;
-
-        snackFlavors =
-            [];
-
-    }
-
-    // Normal format
-    else {
-
-        snackChoices =
-            Array.isArray(choicesOrType)
-                ? choicesOrType
-                : [];
-
-        snackFlavors =
-            Array.isArray(flavorsOrChoices)
-                ? flavorsOrChoices
-                : [];
-
-    }
-
-
-    // Japanese Siomai special case
-    if (
-        selectedSnackName ===
-        "Japanese Siomai" &&
-        snackChoices.length === 0
-    ) {
-
-        snackChoices = [
-
-            {
-                name: "1 pc",
-                price: 10
-            }
-
-        ];
-
-    }
+    snackQuantity = 1;
 
 
     renderSnackPopup();
@@ -1917,22 +2099,30 @@ function openSnack(
 }
 
 
-// ============================================================
-// RENDER SNACK POPUP
-// ============================================================
+// =====================================================
+// SNACK POPUP
+// =====================================================
 
 function renderSnackPopup() {
 
-    if ($("selectedSnack")) {
+    const name =
+        $("selectedSnack");
 
-        $("selectedSnack").textContent =
+    const category =
+        $("selectedSnackCategory");
+
+
+    if (name) {
+
+        name.textContent =
             selectedSnackName;
 
     }
 
-    if ($("selectedSnackCategory")) {
 
-        $("selectedSnackCategory").textContent =
+    if (category) {
+
+        category.textContent =
             selectedSnackCategory;
 
     }
@@ -1947,14 +2137,15 @@ function renderSnackPopup() {
 }
 
 
-// ============================================================
-// RENDER SNACK CHOICES
-// ============================================================
+// =====================================================
+// SNACK CHOICES
+// =====================================================
 
 function renderSnackChoices() {
 
     const container =
         $("snackChoiceButtons");
+
 
     if (!container) {
         return;
@@ -1964,19 +2155,39 @@ function renderSnackChoices() {
     container.innerHTML = "";
 
 
+    if (snackChoices.length === 0) {
+
+        container.style.display =
+            "none";
+
+        return;
+    }
+
+
+    container.style.display =
+        "flex";
+
+
     snackChoices.forEach(
         function (choice, index) {
 
             const button =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
+
 
             button.type =
                 "button";
 
+
             button.textContent =
-                `${choice.name} - ₱${formatMoney(
+                choice.name +
+                " - ₱" +
+                formatMoney(
                     choice.price
-                )}`;
+                );
+
 
             button.onclick =
                 function () {
@@ -1989,6 +2200,10 @@ function renderSnackChoices() {
                 };
 
 
+            button.dataset.index =
+                String(index);
+
+
             container.appendChild(
                 button
             );
@@ -1996,30 +2211,61 @@ function renderSnackChoices() {
         }
     );
 
+
+    updateSnackChoiceButtons();
+
 }
 
 
-// ============================================================
-// UPDATE SNACK CHOICE BUTTONS
-// ============================================================
+// =====================================================
+// SNACK CHOICE OUTLINE
+// =====================================================
 
 function updateSnackChoiceButtons() {
 
+    const container =
+        $("snackChoiceButtons");
+
+
+    if (!container) {
+        return;
+    }
+
+
     const buttons =
-        document.querySelectorAll(
-            "#snackChoiceButtons button"
+        container.querySelectorAll(
+            "button"
         );
+
 
     buttons.forEach(
         function (button, index) {
 
-            const choice =
+            const isSelected =
+                selectedSnackChoice ===
                 snackChoices[index];
 
+
             button.classList.toggle(
-                "selected",
-                selectedSnackChoice === choice
+                "selected-size",
+                isSelected
             );
+
+
+            button.style.outline =
+                isSelected
+                    ? "3px solid #8B4513"
+                    : "";
+
+            button.style.outlineOffset =
+                isSelected
+                    ? "3px"
+                    : "";
+
+            button.style.fontWeight =
+                isSelected
+                    ? "bold"
+                    : "";
 
         }
     );
@@ -2027,24 +2273,22 @@ function updateSnackChoiceButtons() {
 }
 
 
-// ============================================================
-// RENDER SNACK FLAVORS
-// ============================================================
+// =====================================================
+// SNACK FLAVORS
+// =====================================================
 
 function renderSnackFlavors() {
 
-    const wrapper =
+    const container =
         $("snackFlavors");
 
-    const container =
+    const buttonsContainer =
         $("snackFlavorButtons");
 
-    if (!wrapper || !container) {
+
+    if (!container) {
         return;
     }
-
-
-    container.innerHTML = "";
 
 
     if (
@@ -2052,28 +2296,47 @@ function renderSnackFlavors() {
         snackFlavors.length === 0
     ) {
 
-        wrapper.style.display =
+        container.style.display =
             "none";
+
+        if (buttonsContainer) {
+            buttonsContainer.innerHTML =
+                "";
+        }
 
         return;
     }
 
 
-    wrapper.style.display =
+    container.style.display =
         "block";
+
+
+    if (!buttonsContainer) {
+        return;
+    }
+
+
+    buttonsContainer.innerHTML =
+        "";
 
 
     snackFlavors.forEach(
         function (flavor) {
 
             const button =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
+
 
             button.type =
                 "button";
 
+
             button.textContent =
                 flavor;
+
 
             button.onclick =
                 function () {
@@ -2086,35 +2349,68 @@ function renderSnackFlavors() {
                 };
 
 
-            container.appendChild(
+            buttonsContainer.appendChild(
                 button
             );
 
         }
     );
 
+
+    updateSnackFlavorButtons();
+
 }
 
 
-// ============================================================
-// UPDATE SNACK FLAVOR BUTTONS
-// ============================================================
+// =====================================================
+// SNACK FLAVOR OUTLINE
+// =====================================================
 
 function updateSnackFlavorButtons() {
 
+    const container =
+        $("snackFlavorButtons");
+
+
+    if (!container) {
+        return;
+    }
+
+
     const buttons =
-        document.querySelectorAll(
-            "#snackFlavorButtons button"
+        container.querySelectorAll(
+            "button"
         );
+
 
     buttons.forEach(
         function (button) {
 
-            button.classList.toggle(
-                "selected",
+            const selected =
                 button.textContent ===
-                selectedSnackFlavor
+                selectedSnackFlavor;
+
+
+            button.classList.toggle(
+                "selected-size",
+                selected
             );
+
+
+            button.style.outline =
+                selected
+                    ? "3px solid #8B4513"
+                    : "";
+
+            button.style.outlineOffset =
+                selected
+                    ? "3px"
+                    : "";
+
+            button.style.fontWeight =
+                selected
+                    ? "bold"
+                    : "";
 
         }
     );
@@ -2122,48 +2418,50 @@ function updateSnackFlavorButtons() {
 }
 
 
-// ============================================================
+// =====================================================
 // SNACK QUANTITY
-// ============================================================
+// =====================================================
 
-function changeSnackQuantity(delta) {
+function changeSnackQuantity(amount) {
 
-    delta =
-        Number(delta) || 0;
+    snackQuantity +=
+        Number(amount);
 
-    snackQuantity += delta;
 
     if (snackQuantity < 1) {
         snackQuantity = 1;
     }
+
+
+    if (snackQuantity > 99) {
+        snackQuantity = 99;
+    }
+
 
     updateSnackQuantityDisplay();
 
 }
 
 
-// ============================================================
-// SNACK QUANTITY DISPLAY
-// ============================================================
-
 function updateSnackQuantityDisplay() {
 
     const element =
         $("snackQuantity");
 
+
     if (element) {
 
         element.textContent =
-            snackQuantity;
+            String(snackQuantity);
 
     }
 
 }
 
 
-// ============================================================
+// =====================================================
 // ADD SNACK TO CART
-// ============================================================
+// =====================================================
 
 function addSnackToCart() {
 
@@ -2190,33 +2488,31 @@ function addSnackToCart() {
     }
 
 
-    const addons = [];
-
-    if (selectedSnackFlavor) {
-        addons.push(
-            selectedSnackFlavor
-        );
-    }
-
-
-    const addonText =
-        addons.join(", ");
-
-
     const unitPrice =
         money(
             selectedSnackChoice.price
         );
 
 
-    addCartItem({
+    const addons = [];
+
+
+    if (selectedSnackFlavor) {
+
+        addons.push(
+            selectedSnackFlavor
+        );
+
+    }
+
+
+    const item = {
 
         type: "snack",
 
         name: selectedSnackName,
 
-        category:
-            selectedSnackCategory,
+        category: selectedSnackCategory,
 
         choice:
             selectedSnackChoice.name,
@@ -2227,11 +2523,10 @@ function addSnackToCart() {
         flavor:
             selectedSnackFlavor,
 
-        addons:
-            addons,
+        addons: addons,
 
         addonsText:
-            addonText,
+            addons.join(", "),
 
         quantity:
             snackQuantity,
@@ -2240,10 +2535,13 @@ function addSnackToCart() {
             unitPrice,
 
         total:
-            unitPrice * snackQuantity
+            unitPrice *
+            snackQuantity
 
-    });
+    };
 
+
+    addCartItem(item);
 
     closeSnack();
 
@@ -2252,59 +2550,60 @@ function addSnackToCart() {
 }
 
 
-// ============================================================
+// =====================================================
 // CLOSE SNACK
-// ============================================================
+// =====================================================
 
 function closeSnack() {
-
-    const overlay =
-        $("productOverlay");
-
-    if (overlay) {
-        overlay.style.display =
-            "none";
-    }
 
     const popup =
         $("snackPopupContent");
 
+
     if (popup) {
+
         popup.style.display =
             "none";
+
+    }
+
+
+    const overlay =
+        $("productOverlay");
+
+
+    if (overlay) {
+
+        overlay.style.display =
+            "none";
+
     }
 
 }
 
 
-// ============================================================
+// =====================================================
 // MEAL DATA
-// ============================================================
+// =====================================================
 
 const MEALS = {
 
     chickenMeal: {
 
-        name:
-            "Chicken Rice Meal",
+        name: "Chicken Rice Meal",
 
-        category:
-            "Pit Stop Plates",
+        category: "Pit Stop Plates",
 
         choices: [
 
             {
-                name:
-                    "1 pc Chicken",
-                price:
-                    50
+                name: "1 pc Chicken",
+                price: 50
             },
 
             {
-                name:
-                    "2 pcs Chicken",
-                price:
-                    80
+                name: "2 pcs Chicken",
+                price: 80
             }
 
         ]
@@ -2314,19 +2613,15 @@ const MEALS = {
 
     shanghaiMeal: {
 
-        name:
-            "Shanghai Rice Meal",
+        name: "Shanghai Rice Meal",
 
-        category:
-            "Pit Stop Plates",
+        category: "Pit Stop Plates",
 
         choices: [
 
             {
-                name:
-                    "4 pcs Shanghai",
-                price:
-                    50
+                name: "4 pcs Shanghai",
+                price: 50
             }
 
         ]
@@ -2336,19 +2631,15 @@ const MEALS = {
 
     siomaiMeal: {
 
-        name:
-            "Siomai Rice Meal",
+        name: "Siomai Rice Meal",
 
-        category:
-            "Pit Stop Plates",
+        category: "Pit Stop Plates",
 
         choices: [
 
             {
-                name:
-                    "6 pcs Steamed Siomai",
-                price:
-                    45
+                name: "6 pcs Steamed Siomai",
+                price: 45
             }
 
         ]
@@ -2358,19 +2649,15 @@ const MEALS = {
 
     hotdogMeal: {
 
-        name:
-            "Hotdog Rice Meal",
+        name: "Hotdog Rice Meal",
 
-        category:
-            "Pit Stop Plates",
+        category: "Pit Stop Plates",
 
         choices: [
 
             {
-                name:
-                    "2 pcs Hotdog",
-                price:
-                    50
+                name: "2 pcs Hotdog",
+                price: 50
             }
 
         ]
@@ -2380,19 +2667,15 @@ const MEALS = {
 
     meatloafMeal: {
 
-        name:
-            "Meatloaf Rice Meal",
+        name: "Meatloaf Rice Meal",
 
-        category:
-            "Pit Stop Plates",
+        category: "Pit Stop Plates",
 
         choices: [
 
             {
-                name:
-                    "3 pcs Meatloaf",
-                price:
-                    55
+                name: "3 pcs Meatloaf",
+                price: 55
             }
 
         ]
@@ -2402,19 +2685,15 @@ const MEALS = {
 
     longganisaMeal: {
 
-        name:
-            "Skinless Longganisa",
+        name: "Skinless Longganisa",
 
-        category:
-            "Pit Stop Plates",
+        category: "Pit Stop Plates",
 
         choices: [
 
             {
-                name:
-                    "2 pcs Skinless Longganisa",
-                price:
-                    55
+                name: "2 pcs Skinless Longganisa",
+                price: 55
             }
 
         ]
@@ -2424,13 +2703,18 @@ const MEALS = {
 };
 
 
-// ============================================================
+// =====================================================
 // OPEN MEAL BY KEY
-// ============================================================
+// =====================================================
 
 function openMealByKey(key) {
 
     if (!isShopOpenForOrdering()) {
+
+        alert(
+            "Sorry, HIGHWAY CAFE is currently closed."
+        );
+
         return;
     }
 
@@ -2438,10 +2722,11 @@ function openMealByKey(key) {
     const meal =
         MEALS[key];
 
+
     if (!meal) {
 
         console.error(
-            "Meal key not found:",
+            "Meal not found:",
             key
         );
 
@@ -2451,13 +2736,14 @@ function openMealByKey(key) {
 
     if (
         !isMenuItemAvailable(
-            meal.name,
-            meal.category
+            meal.category,
+            meal.name
         )
     ) {
 
         alert(
-            `${meal.name} is currently unavailable.`
+            meal.name +
+            " is currently unavailable."
         );
 
         return;
@@ -2470,14 +2756,17 @@ function openMealByKey(key) {
     selectedMealCategory =
         meal.category;
 
-    mealChoices =
-        meal.choices || [];
 
-    mealQuantity =
-        1;
+    mealChoices =
+        meal.choices.slice();
+
 
     selectedMealChoice =
         null;
+
+
+    mealQuantity = 1;
+
 
     selectedMealCoolerName =
         "None";
@@ -2485,14 +2774,14 @@ function openMealByKey(key) {
     selectedMealCoolerPrice =
         0;
 
-    extraEgg =
-        false;
 
-    extraRice =
-        false;
+    extraEgg = false;
+
+    extraRice = false;
 
 
     renderMealPopup();
+
 
     showPopup(
         "productOverlay",
@@ -2502,14 +2791,24 @@ function openMealByKey(key) {
 }
 
 
-// ============================================================
-// OLD COMPATIBILITY OPEN MEAL
-// ============================================================
+// =====================================================
+// COMPATIBILITY MEAL FUNCTION
+// =====================================================
 
 function openMeal(
     mealName,
     choices
 ) {
+
+    if (!isShopOpenForOrdering()) {
+
+        alert(
+            "Sorry, HIGHWAY CAFE is currently closed."
+        );
+
+        return;
+    }
+
 
     selectedMealName =
         mealName;
@@ -2517,16 +2816,19 @@ function openMeal(
     selectedMealCategory =
         "Pit Stop Plates";
 
+
     mealChoices =
         Array.isArray(choices)
-            ? choices
+            ? choices.slice()
             : [];
 
-    mealQuantity =
-        1;
 
     selectedMealChoice =
         null;
+
+
+    mealQuantity = 1;
+
 
     selectedMealCoolerName =
         "None";
@@ -2534,14 +2836,14 @@ function openMeal(
     selectedMealCoolerPrice =
         0;
 
-    extraEgg =
-        false;
 
-    extraRice =
-        false;
+    extraEgg = false;
+
+    extraRice = false;
 
 
     renderMealPopup();
+
 
     showPopup(
         "productOverlay",
@@ -2551,66 +2853,25 @@ function openMeal(
 }
 
 
-// ============================================================
-// RENDER MEAL POPUP
-// ============================================================
+// =====================================================
+// MEAL POPUP
+// =====================================================
 
 function renderMealPopup() {
 
-    if ($("selectedMeal")) {
+    const name =
+        $("selectedMeal");
 
-        $("selectedMeal").textContent =
+
+    if (name) {
+
+        name.textContent =
             selectedMealName;
 
     }
 
 
-    const container =
-        $("mealChoiceButtons");
-
-    if (container) {
-
-        container.innerHTML =
-            "";
-
-        mealChoices.forEach(
-            function (choice) {
-
-                const button =
-                    document.createElement("button");
-
-                button.type =
-                    "button";
-
-                button.textContent =
-                    `${choice.name} - ₱${formatMoney(
-                        choice.price
-                    )}`;
-
-                button.onclick =
-                    function () {
-
-                        selectedMealChoice =
-                            choice;
-
-                        updateMealChoiceButtons();
-
-                        updateMealTotal();
-
-                    };
-
-
-                container.appendChild(
-                    button
-                );
-
-            }
-        );
-
-    }
-
-
-    updateMealChoiceButtons();
+    renderMealChoices();
 
     updateMealCoolerButtons();
 
@@ -2623,25 +2884,177 @@ function renderMealPopup() {
 }
 
 
-// ============================================================
-// UPDATE MEAL CHOICE BUTTONS
-// ============================================================
+// =====================================================
+// MEAL CHOICES
+// =====================================================
+
+function renderMealChoices() {
+
+    const container =
+        $("mealChoiceButtons");
+
+
+    if (!container) {
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    mealChoices.forEach(
+        function (choice, index) {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.type =
+                "button";
+
+
+            button.textContent =
+                choice.name +
+                " - ₱" +
+                formatMoney(
+                    choice.price
+                );
+
+
+            button.dataset.index =
+                String(index);
+
+
+            button.onclick =
+                function () {
+
+                    selectMealChoice(index);
+
+                };
+
+
+            container.appendChild(
+                button
+            );
+
+        }
+    );
+
+
+    updateMealChoiceButtons();
+
+}
+
+
+// =====================================================
+// FIXED MEAL CHOICE FUNCTION
+// =====================================================
+
+function selectMealChoice(indexOrChoice) {
+
+    if (
+        typeof indexOrChoice ===
+        "number"
+    ) {
+
+        if (
+            mealChoices[indexOrChoice]
+        ) {
+
+            selectedMealChoice =
+                mealChoices[indexOrChoice];
+
+        }
+
+    } else if (
+        typeof indexOrChoice ===
+        "string"
+    ) {
+
+        const index =
+            Number(indexOrChoice);
+
+
+        if (
+            Number.isInteger(index) &&
+            mealChoices[index]
+        ) {
+
+            selectedMealChoice =
+                mealChoices[index];
+
+        }
+
+    } else if (
+        indexOrChoice &&
+        typeof indexOrChoice ===
+        "object"
+    ) {
+
+        selectedMealChoice =
+            indexOrChoice;
+
+    }
+
+
+    updateMealChoiceButtons();
+
+    updateMealTotal();
+
+}
+
+
+// =====================================================
+// MEAL CHOICE OUTLINE
+// =====================================================
 
 function updateMealChoiceButtons() {
 
+    const container =
+        $("mealChoiceButtons");
+
+
+    if (!container) {
+        return;
+    }
+
+
     const buttons =
-        document.querySelectorAll(
-            "#mealChoiceButtons button"
+        container.querySelectorAll(
+            "button"
         );
+
 
     buttons.forEach(
         function (button, index) {
 
+            const selected =
+                selectedMealChoice ===
+                mealChoices[index];
+
+
             button.classList.toggle(
-                "selected",
-                mealChoices[index] ===
-                selectedMealChoice
+                "selected-size",
+                selected
             );
+
+
+            button.style.outline =
+                selected
+                    ? "3px solid #8B4513"
+                    : "";
+
+            button.style.outlineOffset =
+                selected
+                    ? "3px"
+                    : "";
+
+            button.style.fontWeight =
+                selected
+                    ? "bold"
+                    : "";
 
         }
     );
@@ -2649,22 +3062,24 @@ function updateMealChoiceButtons() {
 }
 
 
-// ============================================================
-// SELECT MEAL COOLER
-// ============================================================
+// =====================================================
+// MEAL COOLER
+// =====================================================
 
 function selectMealCooler(
     name,
     price = 0
 ) {
 
-    name =
-        String(name || "None");
+    const value =
+        safeText(name)
+            .trim();
 
 
     if (
-        name === "16oz" ||
-        name === "Highway Cooler 16oz"
+        value === "16oz" ||
+        value ===
+        "Highway Cooler 16oz"
     ) {
 
         selectedMealCoolerName =
@@ -2673,11 +3088,10 @@ function selectMealCooler(
         selectedMealCoolerPrice =
             35;
 
-    }
-
-    else if (
-        name === "22oz" ||
-        name === "Highway Cooler 22oz"
+    } else if (
+        value === "22oz" ||
+        value ===
+        "Highway Cooler 22oz"
     ) {
 
         selectedMealCoolerName =
@@ -2686,9 +3100,7 @@ function selectMealCooler(
         selectedMealCoolerPrice =
             55;
 
-    }
-
-    else {
+    } else {
 
         selectedMealCoolerName =
             "None";
@@ -2706,10 +3118,6 @@ function selectMealCooler(
 }
 
 
-// ============================================================
-// UPDATE MEAL COOLER BUTTONS
-// ============================================================
-
 function updateMealCoolerButtons() {
 
     const noneButton =
@@ -2722,103 +3130,111 @@ function updateMealCoolerButtons() {
         $("cooler22Button");
 
 
-    if (noneButton) {
+    const buttons = [
+        {
+            element: noneButton,
+            selected:
+                selectedMealCoolerName ===
+                "None"
+        },
+        {
+            element: button16,
+            selected:
+                selectedMealCoolerName ===
+                "Highway Cooler 16oz"
+        },
+        {
+            element: button22,
+            selected:
+                selectedMealCoolerName ===
+                "Highway Cooler 22oz"
+        }
+    ];
 
-        noneButton.classList.toggle(
-            "selected",
-            selectedMealCoolerName ===
-            "None"
-        );
 
-    }
+    buttons.forEach(
+        function (item) {
 
-
-    if (button16) {
-
-        button16.classList.toggle(
-            "selected",
-            selectedMealCoolerName ===
-            "Highway Cooler 16oz"
-        );
-
-    }
+            if (!item.element) {
+                return;
+            }
 
 
-    if (button22) {
+            item.element.classList.toggle(
+                "selected-size",
+                item.selected
+            );
 
-        button22.classList.toggle(
-            "selected",
-            selectedMealCoolerName ===
-            "Highway Cooler 22oz"
-        );
 
-    }
+            item.element.style.outline =
+                item.selected
+                    ? "3px solid #8B4513"
+                    : "";
+
+            item.element.style.outlineOffset =
+                item.selected
+                    ? "3px"
+                    : "";
+
+            item.element.style.fontWeight =
+                item.selected
+                    ? "bold"
+                    : "";
+
+        }
+    );
 
 }
 
 
-// ============================================================
-// TOGGLE EXTRA EGG
-// ============================================================
+// =====================================================
+// MEAL EXTRAS
+// =====================================================
 
 function toggleExtraEgg() {
 
     extraEgg =
         !extraEgg;
 
+
     updateMealExtraButtons();
 
     updateMealTotal();
 
 }
 
-
-// ============================================================
-// TOGGLE EXTRA RICE
-// ============================================================
 
 function toggleExtraRice() {
 
     extraRice =
         !extraRice;
 
+
     updateMealExtraButtons();
 
     updateMealTotal();
 
 }
 
-
-// ============================================================
-// COMPATIBILITY TOGGLE MEAL EXTRA
-// ============================================================
 
 function toggleMealExtra(type) {
 
     if (type === "egg") {
 
-        extraEgg =
-            !extraEgg;
+        toggleExtraEgg();
 
+        return;
     }
 
-    else if (type === "rice") {
 
-        extraRice =
-            !extraRice;
+    if (type === "rice") {
+
+        toggleExtraRice();
 
     }
-
-    updateMealExtraButtons();
-
-    updateMealTotal();
 
 }
 
-
-// ============================================================
-// UPDATE MEAL EXTRA BUTTONS
-// ============================================================
 
 function updateMealExtraButtons() {
 
@@ -2829,52 +3245,41 @@ function updateMealExtraButtons() {
         $("extraRiceButton");
 
 
-    if (eggButton) {
-
-        eggButton.classList.toggle(
-            "selected",
-            extraEgg
-        );
-
-        eggButton.textContent =
-            extraEgg
-                ? "✓ Extra Egg +₱10"
-                : "Extra Egg +₱10";
-
-    }
+    updateAddonButton(
+        eggButton,
+        extraEgg,
+        "Extra Egg +₱10"
+    );
 
 
-    if (riceButton) {
-
-        riceButton.classList.toggle(
-            "selected",
-            extraRice
-        );
-
-        riceButton.textContent =
-            extraRice
-                ? "✓ Extra Rice +₱15"
-                : "Extra Rice +₱15";
-
-    }
+    updateAddonButton(
+        riceButton,
+        extraRice,
+        "Extra Rice +₱15"
+    );
 
 }
 
 
-// ============================================================
+// =====================================================
 // MEAL QUANTITY
-// ============================================================
+// =====================================================
 
-function changeMealQuantity(delta) {
+function changeMealQuantity(amount) {
 
-    delta =
-        Number(delta) || 0;
+    mealQuantity +=
+        Number(amount);
 
-    mealQuantity += delta;
 
     if (mealQuantity < 1) {
         mealQuantity = 1;
     }
+
+
+    if (mealQuantity > 99) {
+        mealQuantity = 99;
+    }
+
 
     updateMealQuantityDisplay();
 
@@ -2883,109 +3288,113 @@ function changeMealQuantity(delta) {
 }
 
 
-// ============================================================
-// MEAL QUANTITY DISPLAY
-// ============================================================
-
 function updateMealQuantityDisplay() {
 
     const element =
         $("mealQuantity");
 
+
     if (element) {
 
         element.textContent =
-            mealQuantity;
+            String(mealQuantity);
 
     }
 
 }
 
 
-// ============================================================
-// GET MEAL UNIT PRICE
-// ============================================================
+// =====================================================
+// MEAL PRICE
+// =====================================================
 
 function getMealUnitPrice() {
 
-    let total = 0;
+    if (!selectedMealChoice) {
+        return 0;
+    }
 
 
-    if (selectedMealChoice) {
+    let price =
+        money(
+            selectedMealChoice.price
+        );
 
-        total +=
-            money(
-                selectedMealChoice.price
-            );
+
+    if (extraEgg) {
+
+        price +=
+            EXTRA_EGG_PRICE;
 
     }
 
 
-    total +=
+    if (extraRice) {
+
+        price +=
+            EXTRA_RICE_PRICE;
+
+    }
+
+
+    price +=
         money(
             selectedMealCoolerPrice
         );
 
 
-    if (extraEgg) {
-        total += EXTRA_EGG_PRICE;
-    }
-
-
-    if (extraRice) {
-        total += EXTRA_RICE_PRICE;
-    }
-
-
-    return total;
+    return price;
 
 }
 
 
-// ============================================================
-// MEAL TOTAL
-// ============================================================
-
 function getMealTotal() {
 
     return (
-        getMealUnitPrice()
-        *
+        getMealUnitPrice() *
         mealQuantity
     );
 
 }
 
 
-// ============================================================
-// UPDATE MEAL TOTAL
-// ============================================================
-
 function updateMealTotal() {
 
-    // Current HTML does not contain a dedicated
-    // mealTotal element. This function is kept safe
-    // for compatibility.
-
     const total =
-        getMealTotal();
-
-    const totalElement =
         $("mealTotal");
 
-    if (totalElement) {
 
-        totalElement.textContent =
-            `₱${formatMoney(total)}`;
+    const button =
+        $("addMealToCartButton");
+
+
+    if (total) {
+
+        total.textContent =
+            "₱" +
+            formatMoney(
+                getMealTotal()
+            );
+
+    }
+
+
+    if (button) {
+
+        button.textContent =
+            "Add to Cart - ₱" +
+            formatMoney(
+                getMealTotal()
+            );
 
     }
 
 }
 
 
-// ============================================================
+// =====================================================
 // ADD MEAL TO CART
-// ============================================================
+// =====================================================
 
 function addMealToCart() {
 
@@ -2999,19 +3408,21 @@ function addMealToCart() {
     }
 
 
-    const addons = [];
+    const unitPrice =
+        getMealUnitPrice();
 
 
-    if (
-        selectedMealCoolerName !==
-        "None"
-    ) {
+    if (unitPrice <= 0) {
 
-        addons.push(
-            selectedMealCoolerName
+        alert(
+            "Unable to calculate meal price."
         );
 
+        return;
     }
+
+
+    const addons = [];
 
 
     if (extraEgg) {
@@ -3032,15 +3443,19 @@ function addMealToCart() {
     }
 
 
-    const addonText =
-        addons.join(", ");
+    if (
+        selectedMealCoolerName !==
+        "None"
+    ) {
+
+        addons.push(
+            selectedMealCoolerName
+        );
+
+    }
 
 
-    const unitPrice =
-        getMealUnitPrice();
-
-
-    addCartItem({
+    const item = {
 
         type: "meal",
 
@@ -3060,7 +3475,7 @@ function addMealToCart() {
             addons,
 
         addonsText:
-            addonText,
+            addons.join(", "),
 
         quantity:
             mealQuantity,
@@ -3069,10 +3484,13 @@ function addMealToCart() {
             unitPrice,
 
         total:
-            unitPrice * mealQuantity
+            unitPrice *
+            mealQuantity
 
-    });
+    };
 
+
+    addCartItem(item);
 
     closeMeal();
 
@@ -3081,25 +3499,15 @@ function addMealToCart() {
 }
 
 
-// ============================================================
+// =====================================================
 // CLOSE MEAL
-// ============================================================
+// =====================================================
 
 function closeMeal() {
 
-    const overlay =
-        $("productOverlay");
-
-    if (overlay) {
-
-        overlay.style.display =
-            "none";
-
-    }
-
-
     const popup =
         $("mealPopupContent");
+
 
     if (popup) {
 
@@ -3108,12 +3516,24 @@ function closeMeal() {
 
     }
 
+
+    const overlay =
+        $("productOverlay");
+
+
+    if (overlay) {
+
+        overlay.style.display =
+            "none";
+
+    }
+
 }
 
 
-// ============================================================
-// CART ITEM KEY
-// ============================================================
+// =====================================================
+// CART KEY
+// =====================================================
 
 function getCartItemKey(item) {
 
@@ -3136,38 +3556,30 @@ function getCartItemKey(item) {
 }
 
 
-// ============================================================
-// ADD CART ITEM
-// ============================================================
+// =====================================================
+// ADD ITEM TO CART
+// =====================================================
 
 function addCartItem(item) {
 
-    const newItem = {
+    item.quantity =
+        Math.max(
+            1,
+            Number(item.quantity) || 1
+        );
 
-        ...item,
 
-        quantity:
-            Math.max(
-                1,
-                Number(item.quantity) || 1
-            ),
+    item.unitPrice =
+        money(item.unitPrice);
 
-        unitPrice:
-            money(item.unitPrice),
 
-        total:
-            money(item.unitPrice)
-            *
-            Math.max(
-                1,
-                Number(item.quantity) || 1
-            )
-
-    };
+    item.total =
+        item.unitPrice *
+        item.quantity;
 
 
     const newKey =
-        getCartItemKey(newItem);
+        getCartItemKey(item);
 
 
     const existingIndex =
@@ -3175,32 +3587,28 @@ function addCartItem(item) {
             function (cartItem) {
 
                 return (
-                    getCartItemKey(cartItem)
-                    ===
-                    newKey
+                    getCartItemKey(
+                        cartItem
+                    ) === newKey
                 );
 
             }
         );
 
 
-    if (existingIndex !== -1) {
+    if (existingIndex >= 0) {
 
         cart[existingIndex].quantity +=
-            newItem.quantity;
+            item.quantity;
+
 
         cart[existingIndex].total =
-            cart[existingIndex].unitPrice
-            *
+            cart[existingIndex].unitPrice *
             cart[existingIndex].quantity;
 
-    }
+    } else {
 
-    else {
-
-        cart.push(
-            newItem
-        );
+        cart.push(item);
 
     }
 
@@ -3210,9 +3618,9 @@ function addCartItem(item) {
 }
 
 
-// ============================================================
+// =====================================================
 // UPDATE CART
-// ============================================================
+// =====================================================
 
 function updateCart() {
 
@@ -3225,6 +3633,7 @@ function updateCart() {
     const totalElement =
         $("sideCartTotal");
 
+
     if (!container) {
         return;
     }
@@ -3233,17 +3642,24 @@ function updateCart() {
     if (cart.length === 0) {
 
         container.innerHTML =
-            "<p>Your cart is empty.</p>";
+            "Your cart is empty.";
+
 
         if (countElement) {
+
             countElement.textContent =
                 "0 items";
+
         }
 
+
         if (totalElement) {
+
             totalElement.textContent =
-                "0";
+                "₱0.00";
+
         }
+
 
         updateCheckoutButton();
 
@@ -3251,19 +3667,27 @@ function updateCart() {
     }
 
 
-    let total =
-        0;
-
-    let itemCount =
-        0;
-
-
     container.innerHTML =
         "";
 
 
+    let itemCount = 0;
+
+    let cartTotal = 0;
+
+
     cart.forEach(
         function (item, index) {
+
+            itemCount +=
+                Number(item.quantity) || 0;
+
+
+            const unitPrice =
+                money(
+                    item.unitPrice
+                );
+
 
             const quantity =
                 Math.max(
@@ -3271,23 +3695,14 @@ function updateCart() {
                     Number(item.quantity) || 1
                 );
 
-            const itemTotal =
-                money(
-                    item.unitPrice
-                )
-                *
+
+            const lineTotal =
+                unitPrice *
                 quantity;
 
 
-            item.total =
-                itemTotal;
-
-
-            total +=
-                itemTotal;
-
-            itemCount +=
-                quantity;
+            cartTotal +=
+                lineTotal;
 
 
             const wrapper =
@@ -3295,204 +3710,98 @@ function updateCart() {
                     "div"
                 );
 
+
             wrapper.className =
                 "cart-item";
 
 
-            const name =
-                document.createElement(
-                    "strong"
-                );
-
-            name.textContent =
-                item.name;
-
-
-            wrapper.appendChild(
-                name
-            );
-
-
-            const details =
-                document.createElement(
-                    "div"
-                );
-
-
-            let detailsText =
-                "";
+            const details = [];
 
 
             if (item.choice) {
 
-                detailsText +=
-                    item.choice;
+                details.push(
+                    item.choice
+                );
 
-            }
+            } else if (
+                item.size
+            ) {
 
-            else if (item.size) {
-
-                detailsText +=
-                    item.size;
+                details.push(
+                    item.size
+                );
 
             }
 
 
             if (item.flavor) {
 
-                if (detailsText) {
-                    detailsText += " • ";
-                }
-
-                detailsText +=
-                    item.flavor;
+                details.push(
+                    item.flavor
+                );
 
             }
 
 
             if (item.addonsText) {
 
-                if (detailsText) {
-                    detailsText += " • ";
-                }
-
-                detailsText +=
-                    item.addonsText;
+                details.push(
+                    item.addonsText
+                );
 
             }
 
 
-            details.textContent =
-                detailsText;
+            wrapper.innerHTML = `
 
+                <div class="cart-item-name">
+                    ${safeText(item.name)}
+                </div>
 
-            wrapper.appendChild(
-                details
-            );
+                <div class="cart-item-details">
+                    ${safeText(details.join(" • "))}
+                </div>
 
+                <div class="cart-item-price">
+                    ₱${formatMoney(unitPrice)}
+                    x ${quantity}
+                </div>
 
-            const price =
-                document.createElement(
-                    "div"
-                );
+                <div class="cart-item-controls">
 
+                    <button
+                        type="button"
+                        onclick="changeCartQuantity(${index}, -1)"
+                    >
+                        −
+                    </button>
 
-            price.textContent =
-                `₱${formatMoney(
-                    item.unitPrice
-                )} x ${quantity}`;
+                    <span>
+                        ${quantity}
+                    </span>
 
+                    <button
+                        type="button"
+                        onclick="changeCartQuantity(${index}, 1)"
+                    >
+                        +
+                    </button>
 
-            wrapper.appendChild(
-                price
-            );
+                    <button
+                        type="button"
+                        onclick="removeCartItem(${index})"
+                    >
+                        Remove
+                    </button>
 
+                </div>
 
-            const controls =
-                document.createElement(
-                    "div"
-                );
+                <div class="cart-item-total">
+                    ₱${formatMoney(lineTotal)}
+                </div>
 
-            controls.className =
-                "cart-controls";
-
-
-            const minus =
-                document.createElement(
-                    "button"
-                );
-
-            minus.type =
-                "button";
-
-            minus.textContent =
-                "−";
-
-            minus.onclick =
-                function () {
-
-                    changeCartQuantity(
-                        index,
-                        -1
-                    );
-
-                };
-
-
-            const plus =
-                document.createElement(
-                    "button"
-                );
-
-            plus.type =
-                "button";
-
-            plus.textContent =
-                "+";
-
-            plus.onclick =
-                function () {
-
-                    changeCartQuantity(
-                        index,
-                        1
-                    );
-
-                };
-
-
-            const remove =
-                document.createElement(
-                    "button"
-                );
-
-            remove.type =
-                "button";
-
-            remove.textContent =
-                "Remove";
-
-            remove.onclick =
-                function () {
-
-                    removeCartItem(
-                        index
-                    );
-
-                };
-
-
-            controls.appendChild(
-                minus
-            );
-
-            controls.appendChild(
-                plus
-            );
-
-            controls.appendChild(
-                remove
-            );
-
-
-            wrapper.appendChild(
-                controls
-            );
-
-
-            const lineTotal =
-                document.createElement(
-                    "div"
-                );
-
-            lineTotal.textContent =
-                `₱${formatMoney(
-                    itemTotal
-                )}`;
-
-            wrapper.appendChild(
-                lineTotal
-            );
+            `;
 
 
             container.appendChild(
@@ -3506,11 +3815,12 @@ function updateCart() {
     if (countElement) {
 
         countElement.textContent =
-            `${itemCount} ${
+            itemCount +
+            (
                 itemCount === 1
-                    ? "item"
-                    : "items"
-            }`;
+                    ? " item"
+                    : " items"
+            );
 
     }
 
@@ -3518,7 +3828,10 @@ function updateCart() {
     if (totalElement) {
 
         totalElement.textContent =
-            formatMoney(total);
+            "₱" +
+            formatMoney(
+                cartTotal
+            );
 
     }
 
@@ -3528,9 +3841,9 @@ function updateCart() {
 }
 
 
-// ============================================================
-// CHANGE CART QUANTITY
-// ============================================================
+// =====================================================
+// CART QUANTITY
+// =====================================================
 
 function changeCartQuantity(
     index,
@@ -3543,23 +3856,22 @@ function changeCartQuantity(
 
 
     cart[index].quantity +=
-        Number(delta) || 0;
+        Number(delta);
 
 
-    if (cart[index].quantity <= 0) {
+    if (
+        cart[index].quantity <= 0
+    ) {
 
         cart.splice(
             index,
             1
         );
 
-    }
-
-    else {
+    } else {
 
         cart[index].total =
-            cart[index].unitPrice
-            *
+            cart[index].unitPrice *
             cart[index].quantity;
 
     }
@@ -3570,16 +3882,13 @@ function changeCartQuantity(
 }
 
 
-// ============================================================
+// =====================================================
 // REMOVE CART ITEM
-// ============================================================
+// =====================================================
 
 function removeCartItem(index) {
 
-    if (
-        index < 0 ||
-        index >= cart.length
-    ) {
+    if (!cart[index]) {
         return;
     }
 
@@ -3595,22 +3904,22 @@ function removeCartItem(index) {
 }
 
 
-// ============================================================
-// CART TOTAL
-// ============================================================
+// =====================================================
+// CART SUBTOTAL
+// =====================================================
 
 function getCartSubtotal() {
 
     return cart.reduce(
-        function (sum, item) {
+        function (total, item) {
 
             return (
-                sum
-                +
+                total +
                 (
-                    money(item.unitPrice)
-                    *
-                    Number(item.quantity || 0)
+                    money(item.unitPrice) *
+                    (
+                        Number(item.quantity) || 0
+                    )
                 )
             );
 
@@ -3621,14 +3930,15 @@ function getCartSubtotal() {
 }
 
 
-// ============================================================
-// UPDATE CHECKOUT BUTTON
-// ============================================================
+// =====================================================
+// CHECKOUT BUTTON
+// =====================================================
 
 function updateCheckoutButton() {
 
     const button =
         $("checkoutButton");
+
 
     if (!button) {
         return;
@@ -3638,21 +3948,38 @@ function updateCheckoutButton() {
     button.disabled =
         cart.length === 0;
 
+
+    button.style.opacity =
+        cart.length === 0
+            ? "0.5"
+            : "1";
+
+
+    button.style.cursor =
+        cart.length === 0
+            ? "not-allowed"
+            : "pointer";
+
 }
 
 
-// ============================================================
+// =====================================================
 // ORDER NOTICE
-// ============================================================
+// =====================================================
 
 function showOrderNotice() {
 
     const notice =
         $("orderNotice");
 
+
     if (!notice) {
         return;
     }
+
+
+    notice.textContent =
+        "✓ Order added to cart!";
 
 
     notice.style.display =
@@ -3672,16 +3999,11 @@ function showOrderNotice() {
 }
 
 
-// ============================================================
+// =====================================================
 // CHECKOUT
-// ============================================================
+// =====================================================
 
 function openCheckout() {
-
-    if (!isShopOpenForOrdering()) {
-        return;
-    }
-
 
     if (cart.length === 0) {
 
@@ -3693,39 +4015,7 @@ function openCheckout() {
     }
 
 
-    const overlay =
-        $("checkoutOverlay");
-
-    const checkout =
-        $("checkoutPopup");
-
-    const confirmation =
-        $("orderConfirmationPopup");
-
-
-    if (overlay) {
-
-        overlay.style.display =
-            "flex";
-
-    }
-
-
-    if (checkout) {
-
-        checkout.style.display =
-            "block";
-
-    }
-
-
-    if (confirmation) {
-
-        confirmation.style.display =
-            "none";
-
-    }
-
+    updateCheckoutSummary();
 
     selectOrderType(
         selectedOrderType
@@ -3736,19 +4026,40 @@ function openCheckout() {
     );
 
 
-    updateCheckoutSummary();
+    const overlay =
+        $("checkoutOverlay");
+
+    const popup =
+        $("checkoutPopup");
+
+
+    if (overlay) {
+
+        overlay.style.display =
+            "flex";
+
+    }
+
+
+    if (popup) {
+
+        popup.style.display =
+            "block";
+
+    }
 
 }
 
-
-// ============================================================
-// CLOSE CHECKOUT
-// ============================================================
 
 function closeCheckout() {
 
     const overlay =
         $("checkoutOverlay");
+
+
+    const popup =
+        $("checkoutPopup");
+
 
     if (overlay) {
 
@@ -3757,12 +4068,20 @@ function closeCheckout() {
 
     }
 
+
+    if (popup) {
+
+        popup.style.display =
+            "none";
+
+    }
+
 }
 
 
-// ============================================================
-// SELECT ORDER TYPE
-// ============================================================
+// =====================================================
+// ORDER TYPE
+// =====================================================
 
 function selectOrderType(type) {
 
@@ -3771,8 +4090,7 @@ function selectOrderType(type) {
         type !== "pickup"
     ) {
 
-        type =
-            "delivery";
+        type = "delivery";
 
     }
 
@@ -3787,32 +4105,23 @@ function selectOrderType(type) {
     const pickupButton =
         $("pickupButton");
 
-
-    if (deliveryButton) {
-
-        deliveryButton.classList.toggle(
-            "selected",
-            type === "delivery"
-        );
-
-    }
-
-
-    if (pickupButton) {
-
-        pickupButton.classList.toggle(
-            "selected",
-            type === "pickup"
-        );
-
-    }
-
-
     const deliveryDetails =
         $("deliveryDetails");
 
     const pickupDetails =
         $("pickupDetails");
+
+
+    setSelectionButton(
+        deliveryButton,
+        type === "delivery"
+    );
+
+
+    setSelectionButton(
+        pickupButton,
+        type === "pickup"
+    );
 
 
     if (deliveryDetails) {
@@ -3840,9 +4149,9 @@ function selectOrderType(type) {
 }
 
 
-// ============================================================
-// SELECT PAYMENT METHOD
-// ============================================================
+// =====================================================
+// PAYMENT METHOD
+// =====================================================
 
 function selectPaymentMethod(method) {
 
@@ -3851,8 +4160,7 @@ function selectPaymentMethod(method) {
         method !== "gcash"
     ) {
 
-        method =
-            "cash";
+        method = "cash";
 
     }
 
@@ -3867,29 +4175,20 @@ function selectPaymentMethod(method) {
     const gcashButton =
         $("gcashButton");
 
-
-    if (cashButton) {
-
-        cashButton.classList.toggle(
-            "selected",
-            method === "cash"
-        );
-
-    }
-
-
-    if (gcashButton) {
-
-        gcashButton.classList.toggle(
-            "selected",
-            method === "gcash"
-        );
-
-    }
-
-
     const gcashDetails =
         $("gcashDetails");
+
+
+    setSelectionButton(
+        cashButton,
+        method === "cash"
+    );
+
+
+    setSelectionButton(
+        gcashButton,
+        method === "gcash"
+    );
 
 
     if (gcashDetails) {
@@ -3907,164 +4206,133 @@ function selectPaymentMethod(method) {
 }
 
 
-// ============================================================
-// CHECKOUT TOTAL
-// ============================================================
+// =====================================================
+// GENERIC SELECTION BUTTON
+// =====================================================
 
-function getCheckoutTotal() {
+function setSelectionButton(
+    button,
+    selected
+) {
 
-    let total =
-        getCartSubtotal();
-
-
-    if (
-        selectedOrderType ===
-        "delivery"
-    ) {
-
-        total +=
-            DELIVERY_FEE;
-
+    if (!button) {
+        return;
     }
 
 
-    return total;
+    button.classList.toggle(
+        "selected-size",
+        selected
+    );
+
+
+    button.style.outline =
+        selected
+            ? "3px solid #8B4513"
+            : "";
+
+    button.style.outlineOffset =
+        selected
+            ? "3px"
+            : "";
+
+    button.style.fontWeight =
+        selected
+            ? "bold"
+            : "";
 
 }
 
 
-// ============================================================
-// UPDATE CHECKOUT SUMMARY
-// ============================================================
+// =====================================================
+// CHECKOUT TOTAL
+// =====================================================
+
+function getCheckoutTotal() {
+
+    const subtotal =
+        getCartSubtotal();
+
+
+    const deliveryFee =
+        selectedOrderType ===
+        "delivery"
+            ? DELIVERY_FEE
+            : 0;
+
+
+    return (
+        subtotal +
+        deliveryFee
+    );
+
+}
+
+
+// =====================================================
+// CHECKOUT SUMMARY
+// =====================================================
 
 function updateCheckoutSummary() {
 
     const summary =
         $("checkoutSummary");
 
-    const totalElement =
+    const total =
         $("checkoutTotal");
 
 
-    if (!summary) {
+    if (!summary && !total) {
         return;
     }
 
 
-    summary.innerHTML =
-        "";
-
-
-    cart.forEach(
-        function (item) {
-
-            const row =
-                document.createElement(
-                    "div"
-                );
-
-
-            const quantity =
-                Number(
-                    item.quantity || 0
-                );
-
-
-            let description =
-                item.name;
-
-
-            if (item.choice) {
-
-                description +=
-                    ` - ${item.choice}`;
-
-            }
-
-            else if (item.size) {
-
-                description +=
-                    ` - ${item.size}`;
-
-            }
-
-
-            if (item.flavor) {
-
-                description +=
-                    ` - ${item.flavor}`;
-
-            }
-
-
-            if (item.addonsText) {
-
-                description +=
-                    ` - ${item.addonsText}`;
-
-            }
-
-
-            row.textContent =
-                `${description} x ${quantity} - ₱${formatMoney(
-                    item.unitPrice * quantity
-                )}`;
-
-
-            summary.appendChild(
-                row
-            );
-
-        }
-    );
-
-
     const subtotal =
-        document.createElement(
-            "div"
-        );
+        getCartSubtotal();
 
 
-    subtotal.textContent =
-        `Subtotal: ₱${formatMoney(
-            getCartSubtotal()
-        )}`;
-
-
-    summary.appendChild(
-        subtotal
-    );
-
-
-    if (
+    const deliveryFee =
         selectedOrderType ===
         "delivery"
-    ) {
-
-        const delivery =
-            document.createElement(
-                "div"
-            );
+            ? DELIVERY_FEE
+            : 0;
 
 
-        delivery.textContent =
-            `Delivery Fee: ₱${formatMoney(
-                DELIVERY_FEE
-            )}`;
+    const grandTotal =
+        subtotal +
+        deliveryFee;
 
 
-        summary.appendChild(
-            delivery
-        );
+    if (summary) {
+
+        summary.innerHTML = `
+
+            <div>
+                <strong>Subtotal:</strong>
+                ₱${formatMoney(subtotal)}
+            </div>
+
+            <div>
+                <strong>Delivery Fee:</strong>
+                ₱${formatMoney(deliveryFee)}
+            </div>
+
+            <div>
+                <strong>Total:</strong>
+                ₱${formatMoney(grandTotal)}
+            </div>
+
+        `;
 
     }
 
 
-    if (totalElement) {
+    if (total) {
 
-        totalElement.textContent =
+        total.textContent =
+            "₱" +
             formatMoney(
-                getCheckoutTotal()
+                grandTotal
             );
 
     }
@@ -4072,38 +4340,61 @@ function updateCheckoutSummary() {
 }
 
 
-// ============================================================
-// VALIDATE CHECKOUT
-// ============================================================
+// =====================================================
+// CHECKOUT VALIDATION
+// =====================================================
 
 function validateCheckout() {
 
-    const name =
-        $("customerName")?.value.trim() || "";
+    if (cart.length === 0) {
 
-    const phone =
-        $("customerPhone")?.value.trim() || "";
+        alert(
+            "Your cart is empty."
+        );
+
+        return false;
+    }
 
 
-    if (!name) {
+    const customerName =
+        $("customerName");
+
+
+    const customerPhone =
+        $("customerPhone");
+
+
+    if (
+        !customerName ||
+        !customerName.value.trim()
+    ) {
 
         alert(
             "Please enter your name."
         );
 
-        return false;
+        if (customerName) {
+            customerName.focus();
+        }
 
+        return false;
     }
 
 
-    if (!phone) {
+    if (
+        !customerPhone ||
+        !customerPhone.value.trim()
+    ) {
 
         alert(
             "Please enter your phone number."
         );
 
-        return false;
+        if (customerPhone) {
+            customerPhone.focus();
+        }
 
+        return false;
     }
 
 
@@ -4113,17 +4404,23 @@ function validateCheckout() {
     ) {
 
         const address =
-            $("deliveryAddress")?.value.trim() || "";
+            $("deliveryAddress");
 
 
-        if (!address) {
+        if (
+            !address ||
+            !address.value.trim()
+        ) {
 
             alert(
                 "Please enter your delivery address."
             );
 
-            return false;
+            if (address) {
+                address.focus();
+            }
 
+            return false;
         }
 
     }
@@ -4135,17 +4432,23 @@ function validateCheckout() {
     ) {
 
         const pickupTime =
-            $("pickupTime")?.value || "";
+            $("pickupTime");
 
 
-        if (!pickupTime) {
+        if (
+            !pickupTime ||
+            !pickupTime.value
+        ) {
 
             alert(
-                "Please choose a preferred pickup time."
+                "Please select a pickup time."
             );
 
-            return false;
+            if (pickupTime) {
+                pickupTime.focus();
+            }
 
+            return false;
         }
 
     }
@@ -4157,29 +4460,24 @@ function validateCheckout() {
     ) {
 
         const reference =
-            $("paymentReference")?.value.trim() || "";
+            $("paymentReference");
 
 
-        if (!reference) {
+        if (
+            !reference ||
+            !reference.value.trim()
+        ) {
 
             alert(
                 "Please enter your GCash reference number."
             );
 
+            if (reference) {
+                reference.focus();
+            }
+
             return false;
-
         }
-
-    }
-
-
-    if (cart.length === 0) {
-
-        alert(
-            "Your cart is empty."
-        );
-
-        return false;
 
     }
 
@@ -4189,111 +4487,118 @@ function validateCheckout() {
 }
 
 
-// ============================================================
-// GENERATE ORDER NUMBER
-// ============================================================
+// =====================================================
+// ORDER NUMBER
+// =====================================================
 
 function generateOrderNumber() {
 
     const now =
         new Date();
 
-    const datePart =
-        String(
-            now.getFullYear()
-        ).slice(-2)
-        +
+
+    const year =
+        now.getFullYear();
+
+
+    const month =
         String(
             now.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        )
-        +
+        ).padStart(2, "0");
+
+
+    const day =
         String(
             now.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
+        ).padStart(2, "0");
 
 
     const random =
         Math.floor(
             1000 +
-            Math.random() * 9000
+            Math.random() *
+            9000
         );
 
 
     return (
-        "HC-"
-        +
-        datePart
-        +
-        "-"
-        +
+        "HC-" +
+        year +
+        month +
+        day +
+        "-" +
         random
     );
 
 }
 
 
-// ============================================================
-// BUILD ORDER ITEMS TEXT
-// ============================================================
+// =====================================================
+// ORDER ITEMS TEXT
+// =====================================================
 
 function buildOrderItemsText() {
 
     return cart.map(
         function (item) {
 
-            let text =
-                `${item.name}`;
+            const details = [];
 
 
             if (item.choice) {
 
-                text +=
-                    ` - ${item.choice}`;
+                details.push(
+                    item.choice
+                );
 
-            }
+            } else if (
+                item.size
+            ) {
 
-            else if (item.size) {
-
-                text +=
-                    ` - ${item.size}`;
+                details.push(
+                    item.size
+                );
 
             }
 
 
             if (item.flavor) {
 
-                text +=
-                    ` - ${item.flavor}`;
+                details.push(
+                    item.flavor
+                );
 
             }
 
 
             if (item.addonsText) {
 
-                text +=
-                    ` - ${item.addonsText}`;
+                details.push(
+                    item.addonsText
+                );
 
             }
 
 
-            text +=
-                ` x ${item.quantity}`;
+            const detailText =
+                details.length > 0
+                    ? " (" +
+                      details.join(", ") +
+                      ")"
+                    : "";
 
 
-            text +=
-                ` = ₱${formatMoney(
-                    item.unitPrice *
-                    item.quantity
-                )}`;
-
-
-            return text;
+            return (
+                item.name +
+                detailText +
+                " x " +
+                item.quantity +
+                " = ₱" +
+                formatMoney(
+                    money(item.unitPrice) *
+                    Number(item.quantity)
+                )
+            );
 
         }
     ).join("\n");
@@ -4301,29 +4606,34 @@ function buildOrderItemsText() {
 }
 
 
-// ============================================================
-// BUILD ORDER OBJECT
-// ============================================================
+// =====================================================
+// BUILD ORDER DATA
+// =====================================================
 
 function buildOrderData() {
 
-    const name =
-        $("customerName")?.value.trim() || "";
+    const customerName =
+        $("customerName");
 
-    const phone =
-        $("customerPhone")?.value.trim() || "";
 
-    const address =
-        $("deliveryAddress")?.value.trim() || "";
+    const customerPhone =
+        $("customerPhone");
+
+
+    const deliveryAddress =
+        $("deliveryAddress");
+
 
     const pickupTime =
-        $("pickupTime")?.value || "";
+        $("pickupTime");
 
-    const reference =
-        $("paymentReference")?.value.trim() || "";
 
-    const notes =
-        $("orderNotes")?.value.trim() || "";
+    const paymentReference =
+        $("paymentReference");
+
+
+    const orderNotes =
+        $("orderNotes");
 
 
     const subtotal =
@@ -4331,7 +4641,8 @@ function buildOrderData() {
 
 
     const deliveryFee =
-        selectedOrderType === "delivery"
+        selectedOrderType ===
+        "delivery"
             ? DELIVERY_FEE
             : 0;
 
@@ -4347,25 +4658,41 @@ function buildOrderData() {
             currentOrderNumber,
 
         customer_name:
-            name,
+            customerName
+                ? customerName.value.trim()
+                : "",
 
         customer_phone:
-            phone,
+            customerPhone
+                ? customerPhone.value.trim()
+                : "",
 
         order_type:
             selectedOrderType,
 
         delivery_address:
-            address,
+            selectedOrderType ===
+            "delivery" &&
+            deliveryAddress
+                ? deliveryAddress.value.trim()
+                : "",
 
         pickup_time:
-            pickupTime,
+            selectedOrderType ===
+            "pickup" &&
+            pickupTime
+                ? pickupTime.value
+                : "",
 
         payment_method:
             selectedPaymentMethodValue,
 
         payment_reference:
-            reference,
+            selectedPaymentMethodValue ===
+            "gcash" &&
+            paymentReference
+                ? paymentReference.value.trim()
+                : "",
 
         items:
             cart,
@@ -4383,7 +4710,9 @@ function buildOrderData() {
             total,
 
         order_notes:
-            notes,
+            orderNotes
+                ? orderNotes.value.trim()
+                : "",
 
         status:
             "Pending"
@@ -4393,23 +4722,31 @@ function buildOrderData() {
 }
 
 
-// ============================================================
+// =====================================================
 // SAVE ORDER TO SUPABASE
-// ============================================================
+// =====================================================
 
 async function saveOrderToSupabase(
     orderData
 ) {
 
-    if (!supabaseClient) {
+    const client =
+        await initializeSupabase();
 
-        console.warn(
-            "Supabase is not connected. Order will continue locally."
+
+    if (!client) {
+
+        console.error(
+            "Supabase is unavailable."
         );
+
 
         return {
             success: false,
-            error: "Supabase unavailable"
+            error:
+                new Error(
+                    "Supabase is unavailable."
+                )
         };
 
     }
@@ -4417,48 +4754,77 @@ async function saveOrderToSupabase(
 
     try {
 
+        console.log(
+            "Saving order to Supabase:",
+            orderData
+        );
+
+
         const result =
-            await supabaseClient
+            await client
                 .from("orders")
                 .insert([
                     orderData
-                ]);
+                ])
+                .select();
 
 
         if (result.error) {
 
             console.error(
-                "Supabase order insert error:",
+                "SUPABASE ORDER INSERT ERROR:",
                 result.error
             );
 
+
+            console.error(
+                "Supabase error message:",
+                result.error.message
+            );
+
+
+            console.error(
+                "Supabase error details:",
+                result.error.details
+            );
+
+
+            console.error(
+                "Supabase error hint:",
+                result.error.hint
+            );
+
+
             return {
                 success: false,
-                error:
-                    result.error
+                error: result.error
             };
 
         }
 
 
+        console.log(
+            "ORDER SAVED TO SUPABASE:",
+            result.data
+        );
+
+
         return {
             success: true,
-            data:
-                result.data
+            data: result.data
         };
-
 
     } catch (error) {
 
         console.error(
-            "Order save error:",
+            "Unexpected Supabase save error:",
             error
         );
 
+
         return {
             success: false,
-            error:
-                error
+            error: error
         };
 
     }
@@ -4466,129 +4832,104 @@ async function saveOrderToSupabase(
 }
 
 
-// ============================================================
+// =====================================================
 // SEND ORDER EMAIL
-// ============================================================
+// =====================================================
 
 function sendOrderEmail(
     orderData
 ) {
 
+    const form =
+        $("orderEmailForm");
+
+
+    if (!form) {
+
+        console.error(
+            "orderEmailForm not found."
+        );
+
+        return;
+
+    }
+
+
+    const fields = {
+
+        emailSubject:
+            "HIGHWAY CAFE Order " +
+            orderData.order_number,
+
+        emailOrderNumber:
+            orderData.order_number,
+
+        emailCustomerName:
+            orderData.customer_name,
+
+        emailCustomerPhone:
+            orderData.customer_phone,
+
+        emailOrderType:
+            orderData.order_type,
+
+        emailDeliveryAddress:
+            orderData.delivery_address,
+
+        emailPickupTime:
+            orderData.pickup_time,
+
+        emailPaymentMethod:
+            orderData.payment_method,
+
+        emailPaymentReference:
+            orderData.payment_reference,
+
+        emailItems:
+            orderData.items_text,
+
+        emailNotes:
+            orderData.order_notes,
+
+        emailTotal:
+            "₱" +
+            formatMoney(
+                orderData.total
+            )
+
+    };
+
+
+    Object.keys(fields).forEach(
+        function (id) {
+
+            const element =
+                $(id);
+
+
+            if (element) {
+
+                element.value =
+                    fields[id];
+
+            }
+
+        }
+    );
+
+
     try {
-
-        const form =
-            $("orderEmailForm");
-
-        if (!form) {
-            return;
-        }
-
-
-        if ($("emailSubject")) {
-
-            $("emailSubject").value =
-                `HIGHWAY CAFE ORDER ${orderData.order_number}`;
-
-        }
-
-
-        if ($("emailOrderNumber")) {
-
-            $("emailOrderNumber").value =
-                orderData.order_number;
-
-        }
-
-
-        if ($("emailCustomerName")) {
-
-            $("emailCustomerName").value =
-                orderData.customer_name;
-
-        }
-
-
-        if ($("emailCustomerPhone")) {
-
-            $("emailCustomerPhone").value =
-                orderData.customer_phone;
-
-        }
-
-
-        if ($("emailOrderType")) {
-
-            $("emailOrderType").value =
-                orderData.order_type;
-
-        }
-
-
-        if ($("emailDeliveryAddress")) {
-
-            $("emailDeliveryAddress").value =
-                orderData.delivery_address;
-
-        }
-
-
-        if ($("emailPickupTime")) {
-
-            $("emailPickupTime").value =
-                orderData.pickup_time;
-
-        }
-
-
-        if ($("emailPaymentMethod")) {
-
-            $("emailPaymentMethod").value =
-                orderData.payment_method;
-
-        }
-
-
-        if ($("emailPaymentReference")) {
-
-            $("emailPaymentReference").value =
-                orderData.payment_reference;
-
-        }
-
-
-        if ($("emailItems")) {
-
-            $("emailItems").value =
-                orderData.items_text;
-
-        }
-
-
-        if ($("emailNotes")) {
-
-            $("emailNotes").value =
-                orderData.order_notes;
-
-        }
-
-
-        if ($("emailTotal")) {
-
-            $("emailTotal").value =
-                `₱${formatMoney(
-                    orderData.total
-                )}`;
-
-        }
-
 
         form.submit();
 
+        console.log(
+            "Order email submitted."
+        );
 
     } catch (error) {
 
-        console.warn(
-            "Email form could not be submitted:",
+        console.error(
+            "Order email submission failed:",
             error
         );
 
@@ -4597,9 +4938,9 @@ function sendOrderEmail(
 }
 
 
-// ============================================================
+// =====================================================
 // PLACE ORDER
-// ============================================================
+// =====================================================
 
 async function placeOrder() {
 
@@ -4608,17 +4949,17 @@ async function placeOrder() {
     }
 
 
-    const button =
+    const placeButton =
         $("placeOrderButton");
 
 
-    if (button) {
+    if (placeButton) {
 
-        button.disabled =
+        placeButton.disabled =
             true;
 
-        button.textContent =
-            "Processing...";
+        placeButton.textContent =
+            "Processing Order...";
 
     }
 
@@ -4633,17 +4974,79 @@ async function placeOrder() {
             buildOrderData();
 
 
-        // Save to Supabase
-        await saveOrderToSupabase(
+        console.log(
+            "Preparing order:",
             orderData
         );
 
 
-        // Send email
+        // -------------------------------------------
+        // SAVE TO ADMIN DASHBOARD / SUPABASE
+        // -------------------------------------------
+
+        const saveResult =
+            await saveOrderToSupabase(
+                orderData
+            );
+
+
+        // -------------------------------------------
+        // IMPORTANT:
+        // If Supabase fails, do not silently pretend
+        // the admin dashboard received the order.
+        // -------------------------------------------
+
+        if (!saveResult.success) {
+
+            console.error(
+                "Order was NOT saved to the admin dashboard.",
+                saveResult.error
+            );
+
+
+            const errorMessage =
+                saveResult.error &&
+                saveResult.error.message
+                    ? saveResult.error.message
+                    : "Unknown Supabase error.";
+
+
+            alert(
+                "The order could not be saved to the admin dashboard.\n\n" +
+                "Please try again.\n\n" +
+                "Technical error:\n" +
+                errorMessage
+            );
+
+
+            if (placeButton) {
+
+                placeButton.disabled =
+                    false;
+
+                placeButton.textContent =
+                    "Place Order";
+
+            }
+
+
+            return;
+
+        }
+
+
+        // -------------------------------------------
+        // SEND EMAIL AFTER SUPABASE SUCCESS
+        // -------------------------------------------
+
         sendOrderEmail(
             orderData
         );
 
+
+        // -------------------------------------------
+        // SHOW CONFIRMATION
+        // -------------------------------------------
 
         showOrderConfirmation(
             orderData
@@ -4653,25 +5056,25 @@ async function placeOrder() {
     } catch (error) {
 
         console.error(
-            "Place order error:",
+            "PLACE ORDER ERROR:",
             error
         );
 
+
         alert(
-            "There was a problem processing your order. Please try again."
+            "Something went wrong while placing your order.\n\n" +
+            "Please try again."
         );
 
-    }
 
+    } finally {
 
-    finally {
+        if (placeButton) {
 
-        if (button) {
-
-            button.disabled =
+            placeButton.disabled =
                 false;
 
-            button.textContent =
+            placeButton.textContent =
                 "Place Order";
 
         }
@@ -4681,152 +5084,135 @@ async function placeOrder() {
 }
 
 
-// ============================================================
-// SHOW ORDER CONFIRMATION
-// ============================================================
+// =====================================================
+// ORDER CONFIRMATION
+// =====================================================
 
 function showOrderConfirmation(
     orderData
 ) {
 
-    const checkout =
-        $("checkoutPopup");
+    closeCheckout();
 
-    const confirmation =
+
+    const popup =
         $("orderConfirmationPopup");
 
 
-    if (checkout) {
-
-        checkout.style.display =
-            "none";
-
+    if (!popup) {
+        return;
     }
 
 
-    if (confirmation) {
-
-        confirmation.style.display =
-            "block";
-
-    }
+    const orderNumber =
+        $("confirmationOrderNumber");
 
 
-    if ($("confirmationOrderNumber")) {
+    const total =
+        $("confirmationTotal");
 
-        $("confirmationOrderNumber").textContent =
+
+    const summary =
+        $("confirmationOrderSummary");
+
+
+    if (orderNumber) {
+
+        orderNumber.textContent =
             orderData.order_number;
 
     }
 
 
-    if ($("confirmationTotal")) {
+    if (total) {
 
-        $("confirmationTotal").textContent =
-            `₱${formatMoney(
+        total.textContent =
+            "₱" +
+            formatMoney(
                 orderData.total
-            )}`;
+            );
 
     }
 
 
-    if ($("confirmationOrderSummary")) {
+    if (summary) {
 
-        let summary =
-            "";
-
-
-        summary +=
-            `Customer: ${orderData.customer_name}\n`;
-
-        summary +=
-            `Order Type: ${orderData.order_type}\n`;
-
-        summary +=
-            `Payment: ${orderData.payment_method}\n\n`;
-
-
-        summary +=
+        summary.textContent =
             orderData.items_text;
 
-
-        if (
-            orderData.order_type ===
-            "delivery"
-        ) {
-
-            summary +=
-                `\n\nDelivery Fee: ₱${formatMoney(
-                    orderData.delivery_fee
-                )}`;
-
-        }
-
-
-        summary +=
-            `\n\nTOTAL: ₱${formatMoney(
-                orderData.total
-            )}`;
-
-
-        $("confirmationOrderSummary").textContent =
-            summary;
-
     }
+
+
+    popup.style.display =
+        "block";
 
 }
 
 
-// ============================================================
+// =====================================================
 // FINISH ORDER
-// ============================================================
+// =====================================================
 
 function finishOrder() {
 
     cart = [];
 
-    currentOrderNumber =
-        "";
-
 
     updateCart();
 
 
-    // Reset customer information
+    const fields = [
 
-    if ($("customerName")) {
-        $("customerName").value = "";
-    }
+        "customerName",
 
-    if ($("customerPhone")) {
-        $("customerPhone").value = "";
-    }
+        "customerPhone",
 
-    if ($("deliveryAddress")) {
-        $("deliveryAddress").value = "";
-    }
+        "deliveryAddress",
 
-    if ($("pickupTime")) {
-        $("pickupTime").value = "";
-    }
+        "pickupTime",
 
-    if ($("paymentReference")) {
-        $("paymentReference").value = "";
-    }
+        "gcashNumber",
 
-    if ($("orderNotes")) {
-        $("orderNotes").value = "";
-    }
+        "paymentReference",
+
+        "orderNotes"
+
+    ];
+
+
+    fields.forEach(
+        function (id) {
+
+            const element =
+                $(id);
+
+
+            if (!element) {
+                return;
+            }
+
+
+            if (
+                element.tagName ===
+                "SELECT"
+            ) {
+
+                element.selectedIndex =
+                    0;
+
+            } else {
+
+                element.value =
+                    "";
+
+            }
+
+        }
+    );
 
 
     const confirmation =
         $("orderConfirmationPopup");
-
-    const checkout =
-        $("checkoutPopup");
-
-    const overlay =
-        $("checkoutOverlay");
 
 
     if (confirmation) {
@@ -4837,12 +5223,8 @@ function finishOrder() {
     }
 
 
-    if (checkout) {
-
-        checkout.style.display =
-            "none";
-
-    }
+    const overlay =
+        $("productOverlay");
 
 
     if (overlay) {
@@ -4853,7 +5235,17 @@ function finishOrder() {
     }
 
 
-    // Return to top
+    const checkoutOverlay =
+        $("checkoutOverlay");
+
+
+    if (checkoutOverlay) {
+
+        checkoutOverlay.style.display =
+            "none";
+
+    }
+
 
     window.scrollTo({
         top: 0,
@@ -4863,16 +5255,17 @@ function finishOrder() {
 }
 
 
-// ============================================================
+// =====================================================
 // GLOBAL FUNCTION EXPORTS
+// =====================================================
 //
-// VERY IMPORTANT:
-// The HTML uses onclick="functionName()"
-// so every function must be available on window.
-// ============================================================
+// Your HTML uses inline onclick="..." handlers.
+// These functions MUST be available globally.
+// =====================================================
 
 window.startOrder =
     startOrder;
+
 
 window.openDrink =
     openDrink;
@@ -4946,6 +5339,13 @@ window.addMealToCart =
     addMealToCart;
 
 
+window.changeCartQuantity =
+    changeCartQuantity;
+
+window.removeCartItem =
+    removeCartItem;
+
+
 window.openCheckout =
     openCheckout;
 
@@ -4965,10 +5365,10 @@ window.finishOrder =
     finishOrder;
 
 
-// ============================================================
-// END OF SCRIPT
-// ============================================================
+// =====================================================
+// FINAL DEBUG MESSAGE
+// =====================================================
 
 console.log(
-    "HIGHWAY CAFE script.js loaded successfully."
+    "HIGHWAY CAFE customer script loaded successfully."
 );
