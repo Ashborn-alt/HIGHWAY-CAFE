@@ -3129,6 +3129,202 @@ function closeMeal() {
 
 
 /* =====================================================
+   FLOATING CART
+===================================================== */
+
+function toggleCart() {
+
+    const cartPanel =
+        document.getElementById(
+            "sideCart"
+        );
+
+    const cartBubble =
+        document.getElementById(
+            "cartBubble"
+        );
+
+    if (!cartPanel) {
+        return;
+    }
+
+
+    const isOpen =
+        cartPanel.classList.contains(
+            "cart-open"
+        );
+
+
+    if (isOpen) {
+
+        cartPanel.classList.remove(
+            "cart-open"
+        );
+
+        if (cartBubble) {
+
+            cartBubble.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+        }
+
+    }
+
+    else {
+
+        cartPanel.classList.add(
+            "cart-open"
+        );
+
+        if (cartBubble) {
+
+            cartBubble.setAttribute(
+                "aria-expanded",
+                "true"
+            );
+        }
+    }
+}
+
+
+/* =====================================================
+   CLOSE CART
+===================================================== */
+
+function closeCart() {
+
+    const cartPanel =
+        document.getElementById(
+            "sideCart"
+        );
+
+    const cartBubble =
+        document.getElementById(
+            "cartBubble"
+        );
+
+
+    if (cartPanel) {
+
+        cartPanel.classList.remove(
+            "cart-open"
+        );
+    }
+
+
+    if (cartBubble) {
+
+        cartBubble.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+    }
+}
+
+
+/* =====================================================
+   GCASH QR ZOOM
+===================================================== */
+
+function openQRZoom() {
+
+    const overlay =
+        document.getElementById(
+            "qrZoomOverlay"
+        );
+
+    const zoomImage =
+        document.getElementById(
+            "qrZoomImage"
+        );
+
+    const originalImage =
+        document.querySelector(
+            ".gcash-qr img"
+        );
+
+
+    if (!overlay) {
+        return;
+    }
+
+
+    if (
+        zoomImage &&
+        originalImage
+    ) {
+
+        zoomImage.src =
+            originalImage.src;
+    }
+
+
+    overlay.classList.add(
+        "active"
+    );
+
+
+    overlay.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+}
+
+
+/* =====================================================
+   CLOSE QR ZOOM
+===================================================== */
+
+function closeQRZoom(event) {
+
+    const overlay =
+        document.getElementById(
+            "qrZoomOverlay"
+        );
+
+
+    if (!overlay) {
+        return;
+    }
+
+
+    /*
+       If this function was triggered by
+       clicking the overlay itself, only close
+       when the dark background was clicked.
+    */
+
+    if (
+        event &&
+        event.target !== overlay
+    ) {
+
+        return;
+    }
+
+
+    overlay.classList.remove(
+        "active"
+    );
+
+
+    overlay.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.style.overflow =
+        "";
+}
+
+
+/* =====================================================
    CART DISPLAY
 ===================================================== */
 
@@ -3147,6 +3343,11 @@ function updateCart() {
     const cartTotal =
         document.getElementById(
             "sideCartTotal"
+        );
+
+    const cartBubbleCount =
+        document.getElementById(
+            "cartBubbleCount"
         );
 
 
@@ -3171,6 +3372,13 @@ function updateCart() {
         if (cartTotal) {
 
             cartTotal.textContent =
+                "0";
+        }
+
+
+        if (cartBubbleCount) {
+
+            cartBubbleCount.textContent =
                 "0";
         }
 
@@ -3335,6 +3543,13 @@ function updateCart() {
 
         cartTotal.textContent =
             total;
+    }
+
+
+    if (cartBubbleCount) {
+
+        cartBubbleCount.textContent =
+            totalItems;
     }
 }
 
@@ -5343,6 +5558,34 @@ document.addEventListener(
 
 
         /* ---------------------------------------------
+           GCASH QR ZOOM OVERLAY
+        --------------------------------------------- */
+
+        const qrZoomOverlay =
+            document.getElementById(
+                "qrZoomOverlay"
+            );
+
+
+        if (qrZoomOverlay) {
+
+            qrZoomOverlay.addEventListener(
+                "click",
+                function(event) {
+
+                    if (
+                        event.target ===
+                        qrZoomOverlay
+                    ) {
+
+                        closeQRZoom();
+                    }
+                }
+            );
+        }
+
+
+        /* ---------------------------------------------
            ADD TO CART BUTTON
         --------------------------------------------- */
 
@@ -5371,6 +5614,13 @@ document.addEventListener(
         --------------------------------------------- */
 
         updateCart();
+
+
+        /* ---------------------------------------------
+           INITIAL FLOATING CART STATE
+        --------------------------------------------- */
+
+        closeCart();
 
 
         /* ---------------------------------------------
