@@ -2619,3 +2619,6 @@ input[type="number"]:focus {
         height: 35px;
     }
 }
+#qrZoomOverlay {
+    display: none;
+}
