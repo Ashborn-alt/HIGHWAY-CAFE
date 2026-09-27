@@ -2327,3 +2327,295 @@ input[type="number"]:focus {
         font-size: 15px;
     }
 }
+
+
+/* =====================================================
+   FLOATING CART BUBBLE
+===================================================== */
+
+#cartBubble {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+
+    width: 64px;
+    height: 64px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #4b2e1f;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.35);
+
+    z-index: 1500;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#cartBubble:hover {
+    transform: scale(1.08);
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+#cartBubble:active {
+    transform: scale(0.95);
+}
+
+.cart-bubble-icon {
+    font-size: 27px;
+    line-height: 1;
+}
+
+#cartBubbleCount {
+    position: absolute;
+
+    top: -5px;
+    right: -5px;
+
+    min-width: 23px;
+    height: 23px;
+
+    padding: 0 5px;
+
+    border-radius: 50%;
+
+    background: #d33;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   FLOATING CART PANEL
+===================================================== */
+
+#sideCart {
+    display: none;
+
+    position: fixed;
+
+    top: auto;
+    right: 25px;
+    bottom: 100px;
+
+    width: 320px;
+    max-width: calc(100vw - 40px);
+
+    max-height: calc(100vh - 125px);
+
+    overflow-y: auto;
+
+    margin: 0;
+
+    z-index: 1400;
+}
+
+#sideCart.cart-open {
+    display: block;
+}
+
+
+/* =====================================================
+   GCASH QR ZOOM
+===================================================== */
+
+#qrZoomOverlay {
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.82);
+
+    z-index: 6000;
+
+    box-sizing: border-box;
+
+    cursor: pointer;
+}
+
+#qrZoomOverlay.active {
+    display: flex;
+}
+
+.qr-zoom-container {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    max-width: 90vw;
+    max-height: 90vh;
+
+    padding: 18px;
+
+    background: white;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 15px 50px rgba(0, 0, 0, 0.55);
+
+    cursor: default;
+
+    box-sizing: border-box;
+}
+
+#qrZoomImage {
+    display: block;
+
+    width: min(520px, 82vw);
+    height: min(520px, 82vw);
+
+    max-width: 82vw;
+    max-height: 75vh;
+
+    object-fit: contain;
+
+    background: white;
+
+    border-radius: 8px;
+}
+
+.qr-zoom-close {
+    position: absolute;
+
+    top: 8px;
+    right: 8px;
+
+    width: 38px;
+    height: 38px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #4b2e1f;
+    color: white;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 2;
+}
+
+.qr-zoom-close:hover {
+    transform: scale(1.08);
+}
+
+.qr-zoom-container p {
+    margin: 10px 0 0;
+
+    font-size: 13px;
+
+    color: #666;
+
+    text-align: center;
+}
+
+
+/* =====================================================
+   CLICKABLE GCASH QR
+===================================================== */
+
+.gcash-qr img {
+    cursor: zoom-in;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.gcash-qr img:hover {
+    transform: scale(1.03);
+
+    box-shadow:
+        0 5px 18px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =====================================================
+   FLOATING CART - MOBILE
+===================================================== */
+
+@media (max-width: 520px) {
+
+    #cartBubble {
+        right: 18px;
+        bottom: 18px;
+
+        width: 58px;
+        height: 58px;
+    }
+
+    .cart-bubble-icon {
+        font-size: 24px;
+    }
+
+    #sideCart {
+        right: 15px;
+        bottom: 88px;
+
+        width: calc(100vw - 30px);
+        max-width: none;
+
+        max-height: calc(100vh - 110px);
+    }
+
+    .qr-zoom-container {
+        padding: 12px;
+
+        max-width: 94vw;
+        max-height: 94vh;
+    }
+
+    #qrZoomImage {
+        width: 82vw;
+        height: 82vw;
+
+        max-width: 82vw;
+        max-height: 75vh;
+    }
+
+    .qr-zoom-close {
+        top: 5px;
+        right: 5px;
+
+        width: 35px;
+        height: 35px;
+    }
+}
