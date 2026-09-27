@@ -484,11 +484,6 @@ function isMenuItemAvailable(
         return menuAvailability[key];
     }
 
-    /*
-       Items not yet registered in Supabase
-       remain available.
-    */
-
     return true;
 }
 
@@ -866,18 +861,6 @@ function openProduct(
         Number(p22) || 0;
 
 
-    /*
-       HOT BREWS PROTECTION
-
-       Some older menu buttons may send the
-       8oz price as the third argument (p16)
-       instead of the final p8 argument.
-
-       If that happens, use the supplied
-       p16 value as the 8oz price instead
-       of showing ₱0.
-    */
-
     if (
         category === "Hot Coffee" &&
         price8 === 0 &&
@@ -909,11 +892,6 @@ function openProduct(
 
         selectedSize =
             12;
-
-        /*
-           If HTML does not provide the 12oz price,
-           use the Highway Cooler base price.
-        */
 
         if (price12 === 0) {
             price12 = 29;
@@ -1171,23 +1149,7 @@ function openProduct(
     }
 
 
-    /*
-       =================================================
-       ADD-ONS HEADING FIX
-
-       Hide the "Add-ons" heading when the selected
-       product has no available add-ons.
-
-       The individual add-on buttons were already
-       being hidden correctly. This additionally
-       hides the heading/container so products such
-       as Highway Coolers and most Creamline Express
-       items do not show the word "Add-ons".
-       =================================================
-    */
-
     updateAddonSectionVisibility();
-
 
     resetAddonButtons();
 
@@ -1229,11 +1191,6 @@ function updateAddonSectionVisibility() {
         chocolateAvailable;
 
 
-    /*
-       First try to find an element specifically
-       containing all three add-on options.
-    */
-
     const options = [
         espressoOption,
         matchaOption,
@@ -1244,11 +1201,6 @@ function updateAddonSectionVisibility() {
         }
     );
 
-
-    /*
-       Find a common parent that contains all
-       available add-on option elements.
-    */
 
     let addonContainer = null;
 
@@ -1286,11 +1238,6 @@ function updateAddonSectionVisibility() {
 
             if (containsAll) {
 
-                /*
-                   Stop at a reasonable container
-                   instead of hiding the entire popup.
-                */
-
                 if (
                     current.id ===
                         "productPopup"
@@ -1313,11 +1260,6 @@ function updateAddonSectionVisibility() {
     }
 
 
-    /*
-       If a suitable common container was found,
-       hide it when there are no add-ons.
-    */
-
     if (addonContainer) {
 
         addonContainer.style.display =
@@ -1327,15 +1269,6 @@ function updateAddonSectionVisibility() {
     }
 
 
-    /*
-       Also find a heading whose text is exactly
-       "Add-ons" / "Add-ons:" and hide it when
-       there are no add-ons.
-
-       This makes the fix work even if the heading
-       is outside the option container.
-    */
-
     const headingCandidates =
         document.querySelectorAll(
             "h1, h2, h3, h4, h5, h6, p, strong, label, span, div"
@@ -1344,12 +1277,6 @@ function updateAddonSectionVisibility() {
 
     headingCandidates.forEach(
         function(element) {
-
-            /*
-               Only target simple text headings.
-               This prevents hiding a large container
-               just because it contains the word.
-            */
 
             if (
                 element.children.length === 0 &&
@@ -3250,6 +3177,11 @@ function openQRZoom() {
     }
 
 
+    /*
+       Copy the normal GCash QR image
+       into the enlarged QR image.
+    */
+
     if (
         zoomImage &&
         originalImage
@@ -3260,9 +3192,16 @@ function openQRZoom() {
     }
 
 
+    /*
+       Open the QR zoom overlay.
+    */
+
     overlay.classList.add(
         "active"
     );
+
+    overlay.style.display =
+        "flex";
 
 
     overlay.setAttribute(
@@ -3270,6 +3209,11 @@ function openQRZoom() {
         "false"
     );
 
+
+    /*
+       Prevent the page behind the
+       QR overlay from scrolling.
+    */
 
     document.body.style.overflow =
         "hidden";
@@ -3294,9 +3238,9 @@ function closeQRZoom(event) {
 
 
     /*
-       If this function was triggered by
-       clicking the overlay itself, only close
-       when the dark background was clicked.
+       If the click came from inside the
+       QR container or the close button,
+       do not use the background-click logic.
     */
 
     if (
@@ -3308,9 +3252,16 @@ function closeQRZoom(event) {
     }
 
 
+    /*
+       Close QR zoom.
+    */
+
     overlay.classList.remove(
         "active"
     );
+
+    overlay.style.display =
+        "none";
 
 
     overlay.setAttribute(
@@ -3318,6 +3269,10 @@ function closeQRZoom(event) {
         "true"
     );
 
+
+    /*
+       Restore page scrolling.
+    */
 
     document.body.style.overflow =
         "";
@@ -5098,10 +5053,6 @@ async function placeOrder() {
             }
 
 
-            /*
-               Show the improved confirmation.
-            */
-
             showOrderConfirmation(
                 orderNumber,
                 orderSummary,
@@ -5137,12 +5088,6 @@ async function placeOrder() {
                 "Place Order";
         }
 
-
-        /*
-           If Supabase successfully saved the order,
-           don't falsely tell the customer that
-           nothing was submitted.
-        */
 
         if (supabaseOrderSaved) {
 
@@ -5276,11 +5221,6 @@ function showOrderConfirmation(
     }
 
 
-    /*
-       Scroll the confirmation into view
-       on mobile and desktop.
-    */
-
     if (confirmationOverlay) {
 
         setTimeout(
@@ -5315,11 +5255,6 @@ function finishOrder() {
     }
 
 
-    /*
-       Clear cart only after the customer
-       has successfully reached confirmation.
-    */
-
     cart =
         [];
 
@@ -5338,10 +5273,6 @@ function finishOrder() {
     clearCheckoutInputs();
 
 
-    /*
-       Reset checkout display.
-    */
-
     const checkoutOverlay =
         document.getElementById(
             "checkoutOverlay"
@@ -5356,8 +5287,12 @@ function finishOrder() {
 
 
     /*
-       Return the customer to the top.
+       Make absolutely sure the QR zoom
+       is also closed after an order.
     */
+
+    closeQRZoom();
+
 
     window.scrollTo({
         top: 0,
@@ -5376,12 +5311,6 @@ function finishOrder() {
 ===================================================== */
 
 function closeOrderConfirmation() {
-
-    /*
-       We use the same behavior as finishOrder
-       so the cart doesn't remain after a
-       completed order.
-    */
 
     finishOrder();
 }
@@ -5540,11 +5469,6 @@ document.addEventListener(
                 "click",
                 function(event) {
 
-                    /*
-                       Only close if the customer
-                       clicks the dark background.
-                    */
-
                     if (
                         event.target ===
                         confirmationOverlay
@@ -5568,6 +5492,33 @@ document.addEventListener(
 
 
         if (qrZoomOverlay) {
+
+            /*
+               IMPORTANT:
+               Always force the QR zoom overlay
+               to be hidden when the page loads.
+
+               This prevents the enlarged QR from
+               appearing automatically.
+            */
+
+            qrZoomOverlay.classList.remove(
+                "active"
+            );
+
+            qrZoomOverlay.style.display =
+                "none";
+
+            qrZoomOverlay.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+
+            /*
+               Clicking the dark background
+               closes the QR zoom.
+            */
 
             qrZoomOverlay.addEventListener(
                 "click",
@@ -5597,11 +5548,6 @@ document.addEventListener(
 
         if (addToCartButton) {
 
-            /*
-               Remove any previous listener
-               installed by inline/older code.
-            */
-
             addToCartButton.addEventListener(
                 "click",
                 addSelectedProduct
@@ -5621,6 +5567,33 @@ document.addEventListener(
         --------------------------------------------- */
 
         closeCart();
+
+
+        /* ---------------------------------------------
+           INITIAL QR STATE
+        --------------------------------------------- */
+
+        /*
+           Extra safety:
+           Make sure the QR zoom is closed even
+           if another script or browser state
+           has changed its display.
+        */
+
+        if (qrZoomOverlay) {
+
+            qrZoomOverlay.classList.remove(
+                "active"
+            );
+
+            qrZoomOverlay.style.display =
+                "none";
+
+            qrZoomOverlay.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+        }
 
 
         /* ---------------------------------------------
