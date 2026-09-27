@@ -71,6 +71,21 @@
 
     </div>
 
+        <!-- =====================================================
+        FLOATING CART BUBBLE
+        ====================================================== -->
+
+        <button
+        id="cartBubble"
+        type="button"
+        onclick="toggleCart()"
+        aria-label="Open shopping cart"
+        aria-expanded="false"
+        >
+        <span class="cart-bubble-icon">🛒</span>
+        <span id="cartBubbleCount">0</span>
+        </button>
+
 
     <!-- =====================================================
          MENU
@@ -1022,12 +1037,11 @@
 
 
                         <div class="gcash-qr">
-
                             <img
-                                src="gcash-qr.png"
+                             src="gcash-qr.png"
                                 alt="Highway Cafe GCash QR Code"
+                             onclick="openQRZoom()"
                             >
-
                         </div>
 
 
@@ -1152,6 +1166,42 @@
     <div id="orderNotice">
         ✓ Order added to cart!
     </div>
+
+    <!-- =====================================================
+     GCASH QR ZOOM OVERLAY
+====================================================== -->
+
+<div
+    id="qrZoomOverlay"
+    onclick="closeQRZoom(event)"
+    aria-hidden="true"
+>
+    <div
+        class="qr-zoom-container"
+        onclick="event.stopPropagation()"
+    >
+
+        <button
+            type="button"
+            class="qr-zoom-close"
+            onclick="closeQRZoom()"
+            aria-label="Close QR code"
+        >
+            ✕
+        </button>
+
+        <img
+            id="qrZoomImage"
+            src="gcash-qr.png"
+            alt="Highway Cafe GCash QR Code - Enlarged"
+        >
+
+        <p>
+            Tap outside to close
+        </p>
+
+    </div>
+</div>
 
 
     <!-- =====================================================
