@@ -1088,7 +1088,7 @@ input[type="number"]:focus {
 
 #deliveryDetails,
 #pickupDetails,
-#gcashDetails {
+#GotymeDetails {
     margin-top: 15px;
 }
 
@@ -1110,10 +1110,10 @@ input[type="number"]:focus {
 
 
 /* =====================================================
-   GCASH
+   Gotyme
 ===================================================== */
 
-.gcash-payment-box {
+.Gotyme-payment-box {
     background: #f8f8f8;
 
     border: 1px solid #ddd;
@@ -1127,19 +1127,19 @@ input[type="number"]:focus {
     text-align: center;
 }
 
-.gcash-payment-box h3 {
+.Gotyme-payment-box h3 {
     margin-top: 0;
 
     margin-bottom: 10px;
 }
 
-.gcash-number {
+.Gotyme-number {
     font-size: 20px;
 
     margin: 10px 0 18px;
 }
 
-.gcash-qr {
+.Gotyme-qr {
     display: flex;
 
     justify-content: center;
@@ -1147,7 +1147,7 @@ input[type="number"]:focus {
     margin: 15px 0;
 }
 
-.gcash-qr img {
+.Gotyme-qr img {
     width: 220px;
 
     height: 220px;
@@ -1165,7 +1165,7 @@ input[type="number"]:focus {
     border: 1px solid #ddd;
 }
 
-.gcash-instruction {
+.Gotyme-instruction {
     font-size: 14px;
 
     color: #666;
@@ -1173,7 +1173,7 @@ input[type="number"]:focus {
     margin-bottom: 18px;
 }
 
-.gcash-payment-box label {
+.Gotyme-payment-box label {
     display: block;
 
     font-weight: bold;
@@ -1181,7 +1181,7 @@ input[type="number"]:focus {
     margin-bottom: 8px;
 }
 
-.gcash-payment-box input {
+.Gotyme-payment-box input {
     width: 90%;
 
     max-width: 350px;
@@ -1676,35 +1676,35 @@ input[type="number"]:focus {
     }
 
 
-    /* GCASH */
+    /* Gotyme */
 
-    .gcash-payment-box {
+    .Gotyme-payment-box {
         padding: 14px;
 
         border-radius: 10px;
     }
 
-    .gcash-number {
+    .Gotyme-number {
         font-size: 18px;
     }
 
-    .gcash-qr {
+    .Gotyme-qr {
         margin: 12px 0;
     }
 
-    .gcash-qr img {
+    .Gotyme-qr img {
         width: min(220px, 75vw);
 
         height: min(220px, 75vw);
     }
 
-    .gcash-instruction {
+    .Gotyme-instruction {
         font-size: 13px;
 
         line-height: 1.5;
     }
 
-    .gcash-payment-box input {
+    .Gotyme-payment-box input {
         width: 100%;
 
         max-width: none;
@@ -2437,7 +2437,7 @@ input[type="number"]:focus {
 
 
 /* =====================================================
-   GCASH QR ZOOM
+   Gotyme QR ZOOM
 ===================================================== */
 
 #qrZoomOverlay {
@@ -2549,10 +2549,10 @@ input[type="number"]:focus {
 
 
 /* =====================================================
-   CLICKABLE GCASH QR
+   CLICKABLE Gotyme QR
 ===================================================== */
 
-.gcash-qr img {
+.Gotyme-qr img {
     cursor: zoom-in;
 
     transition:
@@ -2560,7 +2560,7 @@ input[type="number"]:focus {
         box-shadow 0.2s ease;
 }
 
-.gcash-qr img:hover {
+.Gotyme-qr img:hover {
     transform: scale(1.03);
 
     box-shadow:
