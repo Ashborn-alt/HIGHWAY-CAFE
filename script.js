@@ -3151,7 +3151,7 @@ function closeCart() {
 
 
 /* =====================================================
-   GCASH QR ZOOM
+   Gotyme QR ZOOM
 ===================================================== */
 
 function openQRZoom() {
@@ -3168,7 +3168,7 @@ function openQRZoom() {
 
     const originalImage =
         document.querySelector(
-            ".gcash-qr img"
+            ".Gotyme-qr img"
         );
 
 
@@ -3178,7 +3178,7 @@ function openQRZoom() {
 
 
     /*
-       Copy the normal GCash QR image
+       Copy the normal Gotyme QR image
        into the enlarged QR image.
     */
 
@@ -3842,7 +3842,7 @@ function selectPaymentMethod(
 
     if (
         method !== "cash" &&
-        method !== "gcash"
+        method !== "Gotyme"
     ) {
 
         method =
@@ -3859,14 +3859,14 @@ function selectPaymentMethod(
             "cashButton"
         );
 
-    const gcashButton =
+    const GotymeButton =
         document.getElementById(
-            "gcashButton"
+            "GotymeButton"
         );
 
-    const gcashDetails =
+    const GotymeDetails =
         document.getElementById(
-            "gcashDetails"
+            "GotymeDetails"
         );
 
 
@@ -3878,29 +3878,29 @@ function selectPaymentMethod(
     }
 
 
-    if (gcashButton) {
+    if (GotymeButton) {
 
-        gcashButton.classList.remove(
+        GotymeButton.classList.remove(
             "selected-checkout"
         );
     }
 
 
     if (
-        method === "gcash"
+        method === "Gotyme"
     ) {
 
-        if (gcashButton) {
+        if (GotymeButton) {
 
-            gcashButton.classList.add(
+            GotymeButton.classList.add(
                 "selected-checkout"
             );
         }
 
 
-        if (gcashDetails) {
+        if (GotymeDetails) {
 
-            gcashDetails.style.display =
+            GotymeDetails.style.display =
                 "block";
         }
 
@@ -3916,9 +3916,9 @@ function selectPaymentMethod(
         }
 
 
-        if (gcashDetails) {
+        if (GotymeDetails) {
 
-            gcashDetails.style.display =
+            GotymeDetails.style.display =
                 "none";
         }
     }
@@ -4438,12 +4438,12 @@ async function placeOrder() {
 
 
     if (
-        paymentMethod === "gcash" &&
+        paymentMethod === "Gotyme" &&
         !paymentReference
     ) {
 
         alert(
-            "Please enter your GCash reference number."
+            "Please enter your Gotyme reference number."
         );
 
         if (paymentReferenceInput) {
@@ -4543,15 +4543,15 @@ async function placeOrder() {
     orderSummary +=
         "Payment: " +
         (
-            paymentMethod === "gcash"
-                ? "GCash / Online Payment"
+            paymentMethod === "Gotyme"
+                ? "Gotyme / Online Payment"
                 : "Cash"
         ) +
         "\n";
 
 
     if (
-        paymentMethod === "gcash"
+        paymentMethod === "Gotyme"
     ) {
 
         orderSummary +=
@@ -4708,11 +4708,11 @@ async function placeOrder() {
 
 
     if (
-        paymentMethod === "gcash"
+        paymentMethod === "Gotyme"
     ) {
 
         orderSummary +=
-            "\nPayment Status: Waiting for GCash confirmation.";
+            "\nPayment Status: Waiting for Gotyme confirmation.";
 
     }
 
@@ -4788,12 +4788,12 @@ async function placeOrder() {
                     : null,
 
             payment_method:
-                paymentMethod === "gcash"
-                    ? "GCash / Online Payment"
+                paymentMethod === "Gotyme"
+                    ? "Gotyme / Online Payment"
                     : "Cash",
 
-            gcash_reference:
-                paymentMethod === "gcash"
+            Gotyme_reference:
+                paymentMethod === "Gotyme"
                     ? paymentReference
                     : null,
 
@@ -4935,15 +4935,15 @@ async function placeOrder() {
 
     formData.append(
         "PAYMENT METHOD",
-        paymentMethod === "gcash"
-            ? "GCash / Online Payment"
+        paymentMethod === "Gotyme"
+            ? "Gotyme / Online Payment"
             : "Cash"
     );
 
 
     formData.append(
-        "GCASH REFERENCE",
-        paymentMethod === "gcash"
+        "Gotyme REFERENCE",
+        paymentMethod === "Gotyme"
             ? paymentReference
             : "N/A"
     );
@@ -4983,8 +4983,8 @@ async function placeOrder() {
 
     formData.append(
         "PAYMENT STATUS",
-        paymentMethod === "gcash"
-            ? "Waiting for GCash confirmation."
+        paymentMethod === "Gotyme"
+            ? "Waiting for Gotyme confirmation."
             : (
                 "Cash upon " +
                 (
@@ -5482,7 +5482,7 @@ document.addEventListener(
 
 
         /* ---------------------------------------------
-           GCASH QR ZOOM OVERLAY
+           GoCASH QR ZOOM OVERLAY
         --------------------------------------------- */
 
         const qrZoomOverlay =
