@@ -1136,11 +1136,11 @@ select {
                 <select id="manualPayment">
 
                     <option value="Cash">
-                        Cash
+                        CASH
                     </option>
 
-                    <option value="GCash / Online Payment">
-                        GCash
+                    <option value="Gotyme / Online Payment">
+                        ONLINE PAYMENT
                     </option>
 
                 </select>
@@ -1400,12 +1400,12 @@ select {
             <div class="stat-card">
 
                 <div class="stat-title">
-                    GCASH SALES
+                    ONLINE PAYMENT SALES
                 </div>
 
                 <div
                     class="stat-value"
-                    id="reportGcashSales">
+                    id="reportGotymeSales">
 
                     ₱0.00
 
@@ -1658,12 +1658,12 @@ select {
             <div class="analytics-card">
 
                 <div class="analytics-card-title">
-                    GCASH SALES
+                    ONLINE PAYMENT SALES
                 </div>
 
                 <div
                     class="analytics-card-value"
-                    id="monthlyGcashSales">
+                    id="monthlyGotymeSales">
 
                     ₱0.00
 
@@ -1938,12 +1938,12 @@ select {
             <div class="analytics-card">
 
                 <div class="analytics-card-title">
-                    GCASH SALES
+                    ONLINE PAYMENT SALES
                 </div>
 
                 <div
                     class="analytics-card-value"
-                    id="yearlyGcashSales">
+                    id="yearlyGotymeSales">
 
                     ₱0.00
 
@@ -4383,7 +4383,7 @@ async function addManualOrder() {
         payment_method:
             paymentMethod,
 
-        gcash_reference:
+        Gotyme_reference:
             "",
 
         ordered_items:
@@ -4735,7 +4735,7 @@ function renderDailyReport() {
     let cashSales =
         0;
 
-    let gcashSales =
+    let GotymeSales =
         0;
 
     orders.forEach(
@@ -4775,11 +4775,11 @@ function renderDailyReport() {
 
             if (
                 payment.includes(
-                    "gcash"
+                    "Gotyme"
                 )
             ) {
 
-                gcashSales +=
+                GotymeSales +=
                     total;
 
             } else {
@@ -4833,11 +4833,11 @@ function renderDailyReport() {
 
     document
         .getElementById(
-            "reportGcashSales"
+            "reportGotymeSales"
         )
         .textContent =
         formatMoney(
-            gcashSales
+            GotymeSales
         );
 
     renderReportTable();
@@ -5719,7 +5719,7 @@ function renderMonthlyReport(
     let cashSales =
         0;
 
-    let gcashSales =
+    let GotymeSales =
         0;
 
     orders.forEach(function(order) {
@@ -5758,11 +5758,11 @@ function renderMonthlyReport(
 
         if (
             payment.includes(
-                "gcash"
+                "Gotyme"
             )
         ) {
 
-            gcashSales +=
+            GotymeSales +=
                 total;
 
         } else {
@@ -5897,10 +5897,10 @@ function renderMonthlyReport(
         );
 
     document.getElementById(
-        "monthlyGcashSales"
+        "monthlyGotymeSales"
     ).textContent =
         formatMoney(
-            gcashSales
+            GotymeSales
         );
 
 
@@ -6059,7 +6059,7 @@ function renderYearlyReport(
     let cashSales =
         0;
 
-    let gcashSales =
+    let GotymeSales =
         0;
 
     const monthlySales =
@@ -6112,11 +6112,11 @@ function renderYearlyReport(
 
         if (
             payment.includes(
-                "gcash"
+                "Gotyme"
             )
         ) {
 
-            gcashSales +=
+            GotymeSales +=
                 total;
 
         } else {
@@ -6213,10 +6213,10 @@ function renderYearlyReport(
         );
 
     document.getElementById(
-        "yearlyGcashSales"
+        "yearlyGotymeSales"
     ).textContent =
         formatMoney(
-            gcashSales
+            GotymeSales
         );
 
 
